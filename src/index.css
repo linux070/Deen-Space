@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────
+   DESIGN TOKENS
+   ─────────────────────────────────────────────── */
+@theme {
+  /* Dark mode — deep charcoal with gold accents */
+  --color-surface-0: #0c0f14;
+  --color-surface-1: #161a22;
+  --color-surface-2: #1e242d;
+  --color-surface-3: #2a333f;
+  --color-border: #2a333f;
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #b0b8c4;
+  --color-text-muted: #6b7280;
+  --color-accent: #c9a84c;
+  --color-accent-soft: #c9a84c1a;
+  --color-accent-glow: #c9a84c33;
+  --color-green: #38c97a;
+  --color-red: #e05656;
+
+  /* Light mode — slightly yellow/beige premium base */
+  --color-l-surface-0: #fbf8ef;
+  --color-l-surface-1: #f3efdf;
+  --color-l-surface-2: #ece6d0;
+  --color-l-surface-3: #e2dbc1;
+  --color-l-border: #dcd4b8;
+  --color-l-text-primary: #2d2616;
+  --color-l-text-secondary: #5a5035;
+  --color-l-text-muted: #8e8260;
+  --color-l-accent: #8a6d1b;
+  --color-l-accent-soft: #8a6d1b12;
+  --color-l-accent-glow: #8a6d1b20;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif-heading: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-serif-body: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-arabic: 'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --font-arabic-indopak: 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+}
+
+/* ───────────────────────────────────────────────
+   BASE
+   ─────────────────────────────────────────────── */
+:root {
+  --arabic-size: 1.75rem;
+  --arabic-line-height: 2.8;
+  --script-font: var(--font-arabic);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-surface-0);
+  color: var(--color-text-primary);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-3);
+  border-radius: 999px;
+}
+
+/* ───────────────────────────────────────────────
+   LIGHT MODE
+   ─────────────────────────────────────────────── */
+.light body,
+body.light {
+  background: var(--color-l-surface-0);
+  color: var(--color-l-text-primary);
+}
+
+/* ───────────────────────────────────────────────
+   REDUCED MOTION
+   ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ───────────────────────────────────────────────
+   UTILITIES & ANIMATIONS
+   ─────────────────────────────────────────────── */
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-modal-slide-up {
+  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

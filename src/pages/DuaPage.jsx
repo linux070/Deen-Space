@@ -1,0 +1,143 @@
+import { useNavigate } from 'react-router-dom'
+import { useSettings } from '../context/SettingsContext'
+import { t } from '../utils/theme'
+import {
+    IconHands,
+    IconBook,
+    IconStar,
+    IconClock,
+    IconMosque,
+    IconGrid,
+    IconDua,
+    IconTasbih
+} from '../components/Icons'
+import PageHeader from '../components/PageHeader'
+
+export default function DuaPage() {
+    const { theme } = useSettings()
+    const navigate = useNavigate()
+
+    const COLLECTIONS = [
+        {
+            id: 'library',
+            title: 'Dua Library',
+            subtitle: 'Explore Collections',
+            icon: IconHands,
+            action: () => navigate('/library')
+        },
+        {
+            id: 'daily',
+            title: 'Daily Adhkar',
+            subtitle: 'Morning & Evening',
+            icon: IconBook,
+            action: () => navigate('/daily')
+        },
+        {
+            id: 'rabbana',
+            title: '40 Robbana',
+            subtitle: 'Quranic Prayers',
+            icon: IconClock,
+            action: () => navigate('/library/rabbana')
+        },
+        {
+            id: 'general',
+            title: 'General Duas',
+            subtitle: 'Prophetic Prayers',
+            icon: IconDua,
+            action: () => navigate('/library/general')
+        },
+        {
+            id: 'names',
+            title: 'Asma-ul-Husna',
+            subtitle: '99 Names of Allah',
+            icon: IconStar,
+            action: () => navigate('/praise')
+        },
+        {
+            id: 'salawat',
+            title: 'Salawat',
+            subtitle: 'Prophetic Blessings',
+            icon: IconTasbih,
+            action: () => navigate('/library/salawat')
+        },
+        {
+            id: 'ramadan',
+            title: 'Ramadan Special',
+            subtitle: 'Spiritual Season',
+            icon: IconMosque,
+            action: () => navigate('/library/ramadan')
+        },
+    ]
+
+    return (
+        <div className="pb-32 flex flex-col gap-6 max-w-xl md:max-w-6xl mx-auto">
+            <PageHeader
+                title="Dhikr & Dua"
+                subtitle="Collections of Supplication"
+                showBack={false}
+                titleSerif={false}
+                titleWeight={400}
+                padding="px-6 pt-10 pb-10"
+                subtitleCase="title"
+            />
+
+            <section className="animate-fade-in px-6">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                    {COLLECTIONS.map((cat, idx) => (
+                        <QuickCard
+                            key={cat.id}
+                            title={cat.title}
+                            subtitle={cat.subtitle}
+                            icon={cat.icon}
+                            onClick={cat.action}
+                            theme={theme}
+                            delay={`${idx * 100}ms`}
+                        />
+                    ))}
+                </div>
+            </section>
+        </div>
+    )
+}
+
+/* ────────────────────────────────────────────
+   QuickCard — Synchronized with Home Page style
+   ──────────────────────────────────────────── */
+function QuickCard({ title, subtitle, icon: Icon, onClick, theme, delay }) {
+    const isDark = theme === 'dark'
+    return (
+        <button
+            onClick={onClick}
+            className="group relative flex flex-col items-start p-6 rounded-[2rem] overflow-hidden transition-all duration-300 text-left animate-fade-in"
+            style={{
+                background: t(theme, 'surface-1'),
+                boxShadow: `0 4px 20px rgba(0,0,0,${isDark ? '0.2' : '0.03'})`,
+                border: `1px solid ${t(theme, 'border')}`,
+                minHeight: '10.5rem',
+                animationDelay: delay
+            }}
+        >
+            <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-[2rem]"
+                style={{
+                    background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.6)',
+                }}
+            />
+
+            <div
+                className="relative w-14 h-14 flex items-center justify-center rounded-full mb-5 transition-transform duration-500 group-hover:scale-110"
+                style={{
+                    background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff',
+                    boxShadow: isDark ? 'none' : '0 4px 15px rgba(0,0,0,0.06)',
+                    color: t(theme, 'text-primary'),
+                }}
+            >
+                <Icon size={22} />
+            </div>
+
+            <h3 className="relative text-[15px] font-bold tracking-tight mb-0.5" style={{ color: t(theme, 'text-primary') }}>{title}</h3>
+            <p className="relative text-[12px] font-medium tracking-tight opacity-70" style={{ color: t(theme, 'text-muted') }}>{subtitle}</p>
+        </button>
+    )
+}
+
