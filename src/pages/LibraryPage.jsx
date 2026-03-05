@@ -64,6 +64,17 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 { id: 'trust', title: 'Trust in Allah', icon: IconHeart },
             ]
         }
+        if (activeSection === 'general') {
+            return [
+                { id: 'prophetic', title: 'Prophetic Duas', icon: IconStar },
+                { id: 'waking', title: 'Waking Up', icon: IconCompass },
+                { id: 'sleeping', title: 'Sleeping', icon: IconHeart },
+                { id: 'eating', title: 'Eating', icon: IconCompass },
+                { id: 'toilet', title: 'Restroom', icon: IconInfo },
+                { id: 'home', title: 'Leaving / Entering Home', icon: IconCompass },
+                { id: 'dressing', title: 'Dressing', icon: IconHeart },
+            ]
+        }
         return []
     }, [activeSection])
 
@@ -73,10 +84,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (activeSubSection) {
             result = result.filter(d => d.category === activeSubSection)
         } else if (activeSection) {
-            if (['situational', 'emotions'].includes(activeSection)) {
-                const subIds = activeSection === 'situational'
-                    ? ['travel', 'illness', 'istikhara']
-                    : ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust']
+            if (['situational', 'emotions', 'general'].includes(activeSection)) {
+                let subIds = []
+                if (activeSection === 'situational') subIds = ['travel', 'illness', 'istikhara']
+                else if (activeSection === 'emotions') subIds = ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust']
+                else if (activeSection === 'general') subIds = ['prophetic', 'waking', 'sleeping', 'eating', 'toilet', 'home', 'dressing']
                 result = result.filter(d => subIds.includes(d.category))
             } else {
                 result = result.filter(d => d.category === activeSection)
@@ -103,6 +115,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (idx !== selectedIndex) setSelectedIndex(idx)
     }
 
+    // Reset Tasbih count when swiping to a new dua
+    useEffect(() => {
+        setMiniTasbihCount(0)
+    }, [selectedIndex])
+
     // BACK NAVIGATION
     const goBack = () => {
         if (search) {
@@ -119,7 +136,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (initialSection && activeSection === initialSection) {
             const isAtDeepRoot =
                 (viewMode === 'sublist') ||
-                (viewMode === 'dualist' && !['situational', 'emotions'].includes(activeSection))
+                (viewMode === 'dualist' && !['situational', 'emotions', 'general'].includes(activeSection))
 
             if (isAtDeepRoot) {
                 navigate('/dua')
@@ -128,7 +145,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         }
 
         if (viewMode === 'dualist') {
-            if (['situational', 'emotions'].includes(activeSection)) {
+            if (['situational', 'emotions', 'general'].includes(activeSection)) {
                 setViewMode('sublist')
             } else {
                 setViewMode('landing')
@@ -225,7 +242,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 key={s.id}
                                 onClick={() => {
                                     setActiveSection(s.id)
-                                    setViewMode(['situational', 'emotions'].includes(s.id) ? 'sublist' : 'dualist')
+                                    setViewMode(['situational', 'emotions', 'general'].includes(s.id) ? 'sublist' : 'dualist')
                                 }}
                                 className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg"
                                 style={{
@@ -405,8 +422,8 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     ))}
                 </div>
 
-                {/* Only show MiniTasbih on specific dualist sections that have repeat counts (excluding rabbana/salawat as requested) */}
-                {filteredDuas[selectedIndex]?.repeat > 1 && !['rabbana', 'salawat'].includes(activeSection) && (
+                {/* Mounted mini tasbeeh whenever a Dua is to be read a certain amount of times */}
+                {filteredDuas[selectedIndex]?.repeat > 1 && (
                     <MiniTasbih
                         target={filteredDuas[selectedIndex].repeat}
                         count={miniTasbihCount}
