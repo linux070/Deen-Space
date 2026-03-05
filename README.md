@@ -4,20 +4,21 @@
 
 ## Features
 
-- **Daily Awrad Tracking:** Keep track of your daily recitations seamlessly.
+-  **Complete Awrad & Adhkar:** Authentic Morning, Evening, and post-Salah supplications (with Arabic, transliteration, and translation).
 - **Digital Tasbih:** A refined and highly responsive counter for Dhikr and praise.
+- **The 99 Names (Asma-ul-Husna):** A dedicated library featuring the names of Allah, their meanings, and spiritual benefits.
 - **Islamic Library:** Access a curated library of Duas, chapters, and resources to strengthen your faith.
-- **Progressive Web App (PWA):** Installable on mobile and desktop for an app-like experience anywhere, anytime, with offline support.
+- **100% Offline-First:** Installable directly to iOS and Android home screens as a PWA. Zero internet connection required after the initial load.
 - **Premium Monochrome Design:** An elegant, typography-focused UI designed from the ground up to prevent visual fatigue and keep you focused.
 - **Responsive & Accessible:** Fluid scaling across all screen sizes, with a commitment to mobile-first usability and accessibility standards.
 
+
 ## Tech Stack
 
-- **Framework:** [React 19](https://react.dev/)
-- **Build Tool:** [Vite](https://vitejs.dev/)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
-- **Routing:** [React Router v7](https://reactrouter.com/)
-- **PWA Capabilities:** [Vite PWA Plugin](https://vite-pwa-org.netlify.app/)
+- **Frontend:** React + Vite
+- **Styling:** Tailwind CSS- 
+- **PWA Integration:** `vite-plugin-pwa` (Service Workers & Manifest)
+- **Storage:** LocalStorage & Bundled JSON (Zero-cloud architecture)
 
 ## Getting Started
 
