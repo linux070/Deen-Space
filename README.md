@@ -1,4 +1,4 @@
-# my-awrad-space
+# Deen Space
 
 > A beautifully crafted, modern web application for digital Tasbih, Awrad, and Islamic resources.
 

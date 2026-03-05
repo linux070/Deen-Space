@@ -10,7 +10,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
-        'favicon.svg',
+        'favicon.png',
         'data/duas.json',
         'data/asma.json',
         'fonts/**/*',
@@ -40,8 +40,8 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'Dhikr & Dua — Islamic Remembrance',
-        short_name: 'Dhikr',
+        name: 'Deen Space',
+        short_name: 'Deen Space',
         description: 'Your pocket companion for Daily Adhkar, Duas, Tasbih, and the 99 Names of Allah. Works 100% offline.',
         theme_color: '#0c0f14',
         background_color: '#0c0f14',
@@ -51,9 +51,9 @@ export default defineConfig({
         start_url: '/',
         categories: ['lifestyle', 'education'],
         icons: [
-          { src: '/icons/icon-192.svg', sizes: '192x192', type: 'image/svg+xml' },
-          { src: '/icons/icon-512.svg', sizes: '512x512', type: 'image/svg+xml' },
-          { src: '/icons/icon-512.svg', sizes: '512x512', type: 'image/svg+xml', purpose: 'maskable' },
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
         screenshots: [],
       },
