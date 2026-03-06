@@ -1401,5 +1401,80 @@
     ],
     "category": "prophetic",
     "repeat": 10
+  },
+  {
+    "id": "ramadan-1",
+    "arabic_text": "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ",
+    "transliteration": "Dhahaba al-zamau wabtalat-al-urooq wa thabata-al-ajar in sha Allah.",
+    "translation": {
+      "en": "Thirst is gone, the veins are moistened, and the reward is certain if Allah wills."
+    },
+    "reference": "Abu Dawud",
+    "tags": [
+      "ramadan",
+      "fasting"
+    ],
+    "category": "ramadan",
+    "repeat": 1
+  },
+  {
+    "id": "ramadan-2",
+    "arabic_text": "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
+    "transliteration": "Allahumma innaka afuwwun tuhibb al-afwa fa’fu anni.",
+    "translation": {
+      "en": "O Allah, You are All-Forgiving, and You love forgiveness, so forgive me."
+    },
+    "reference": "At-Tirmidhi",
+    "tags": [
+      "ramadan",
+      "laylat-al-qadr"
+    ],
+    "category": "ramadan",
+    "repeat": 1
+  },
+  {
+    "id": "ramadan-3",
+    "arabic_text": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+    "transliteration": "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina adhab-an-nar.",
+    "translation": {
+      "en": "Our Lord! Grant us the good of this world and the Hereafter, and protect us from the torment of the Fire."
+    },
+    "reference": "Quran 2:201",
+    "tags": [
+      "ramadan",
+      "general"
+    ],
+    "category": "ramadan",
+    "repeat": 1
+  },
+  {
+    "id": "ramadan-4",
+    "arabic_text": "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِن ذُرِّيَّتِي رَبَّنَا وَتَقَبَّلْ دُعَاءِ",
+    "transliteration": "Rabbij’alni muqim-as-salati wa min dhurriyati, rabbana wa taqabbal dua.",
+    "translation": {
+      "en": "My Lord, make me steadfast in Salah, and my offspring as well. Our Lord, grant my prayer."
+    },
+    "reference": "Quran 14:40",
+    "tags": [
+      "ramadan",
+      "family"
+    ],
+    "category": "ramadan",
+    "repeat": 1
+  },
+  {
+    "id": "ramadan-5",
+    "arabic_text": "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+    "transliteration": "Allahumma a’inni ala dhikrika wa shukrika wa husni ibadatika.",
+    "translation": {
+      "en": "O Allah, aid me in remembering You, thanking You, and worshiping You properly."
+    },
+    "reference": "Abu Dawud",
+    "tags": [
+      "ramadan",
+      "dhikr"
+    ],
+    "category": "ramadan",
+    "repeat": 1
   }
 ]

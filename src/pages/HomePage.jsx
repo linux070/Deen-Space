@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getHijriDate } from '../utils/hijri.js'
 import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
-import { IconHands, IconBook, IconGrid, IconChevronRight, IconTasbih, IconCalendar, IconStar } from '../components/Icons'
+import { IconHands, IconBook, IconGrid, IconChevronRight, IconTasbih, IconCalendar, IconStar, IconCrescent } from '../components/Icons'
 import DailyPage from './DailyPage'
 import LibraryPage from './LibraryPage'
 import PageHeader from '../components/PageHeader'
@@ -316,7 +316,7 @@ export default function HomePage({ duas = [], asma = [] }) {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
                     <QuickCard
                         title="Dua Library"
-                        subtitle="Dua Collections "
+                        subtitle="Explore Collections"
                         icon={IconHands}
                         onClick={() => navigate('/library')}
                         theme={theme}
@@ -329,17 +329,17 @@ export default function HomePage({ duas = [], asma = [] }) {
                         theme={theme}
                     />
                     <QuickCard
-                        title="99 Names of Allah"
-                        subtitle="Asmaul Husna"
-                        icon={IconStar}
-                        onClick={() => navigate('/praise')}
+                        title="40 Robbana"
+                        subtitle="Quranic Prayers"
+                        icon={IconCrescent}
+                        onClick={() => navigate('/library/rabbana')}
                         theme={theme}
                     />
                     <QuickCard
-                        title="Tasbih"
-                        subtitle="Daily Dhikr"
-                        icon={IconTasbih}
-                        onClick={() => navigate('/tasbih')}
+                        title="99 Names"
+                        subtitle="Asmaul Husna"
+                        icon={IconStar}
+                        onClick={() => navigate('/praise')}
                         theme={theme}
                     />
                 </div>

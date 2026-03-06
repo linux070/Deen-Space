@@ -9,7 +9,8 @@ import {
     IconMosque,
     IconGrid,
     IconDua,
-    IconTasbih
+    IconTasbih,
+    IconCrescent
 } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 
@@ -36,15 +37,8 @@ export default function DuaPage() {
             id: 'rabbana',
             title: '40 Robbana',
             subtitle: 'Quranic Prayers',
-            icon: IconClock,
+            icon: IconCrescent,
             action: () => navigate('/library/rabbana')
-        },
-        {
-            id: 'general',
-            title: 'General Duas',
-            subtitle: 'Prophetic Prayers',
-            icon: IconDua,
-            action: () => navigate('/library/general')
         },
         {
             id: 'names',

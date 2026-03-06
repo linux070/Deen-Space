@@ -259,6 +259,14 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             const emotionTag = dua.tags?.find(t => ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust'].includes(t))
             return emotionTag ? `For ${toTitleCase(emotionTag)}` : 'For the Heart'
         }
+        if (cat === 'ramadan') {
+            if (dua.id === 'ramadan-1') return 'Dua for Opening Fast'
+            if (dua.id === 'ramadan-2') return 'Dua for Laylat-al-Qadr'
+            if (dua.id === 'ramadan-3') return 'Dua for Goodness'
+            if (dua.id === 'ramadan-4') return 'Dua for Steadfastness'
+            if (dua.id === 'ramadan-5') return 'Remembrance & Gratitude'
+            return 'Ramadan Special'
+        }
 
         return toTitleCase(cat)
     }
@@ -398,6 +406,16 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                         listDuas.map((dua, i) => {
                             // Helper to make title more "Institutional"
                             const getTitle = (d) => {
+                                if (activeSection === 'ramadan') {
+                                    const ramadanTitles = [
+                                        'Dua for Opening Fast',
+                                        'Dua for Laylat-al-Qadr',
+                                        'Dua for Goodness',
+                                        'Dua for Steadfastness',
+                                        'Remembrance & Gratitude'
+                                    ]
+                                    return ramadanTitles[i] || 'Ramadan Dua'
+                                }
                                 if (d.category === 'illness') return 'Dua for Sickness'
                                 if (d.category === 'travel') return 'Dua for Travel'
                                 if (d.category === 'istikhara') return 'Dua for Istikhara'
