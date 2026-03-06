@@ -197,7 +197,7 @@ export default function DailyPage({ duas }) {
                                     {i + 1}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="text-[15px] font-semibold text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                                    <h4 className="text-[15px] font-medium text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
                                         {activeCategory ? `${toTitleCase(activeCategory)} ${i + 1}` : (toTitleCase(dua.reference) || 'Supplication')}
                                     </h4>
                                 </div>

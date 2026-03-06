@@ -284,7 +284,7 @@ export default function HomePage({ duas = [], asma = [] }) {
 
                     <div className="flex items-center gap-2 mb-6 opacity-30">
                         <IconCalendar size={14} style={{ color: t(theme, 'text-primary') }} />
-                        <span className="text-[11px] font-black uppercase tracking-[0.2em]" style={{ color: t(theme, 'text-primary') }}>
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.2em]" style={{ color: t(theme, 'text-primary') }}>
                             Islamic Calendar
                         </span>
                     </div>
@@ -310,7 +310,7 @@ export default function HomePage({ duas = [], asma = [] }) {
 
             {/* ── Quick Hub ── */}
             <section className="animate-fade-in" style={{ animationDelay: '100ms' }}>
-                <span className="text-[11px] font-bold uppercase tracking-[0.2em] block mb-4 px-1 opacity-40" style={{ color: t(theme, 'text-muted') }}>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] block mb-4 px-1 opacity-40" style={{ color: t(theme, 'text-muted') }}>
                     Quick Hub
                 </span>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">

@@ -78,42 +78,19 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                         title="Asma-ul-Husna"
                         subtitle="99 Names of Allah"
                         onBack={goBack}
-                        padding="px-6 pt-16 pb-10"
+                        padding="px-6 pt-16 pb-4"
                         sticky={false}
                         titleSerif={false}
                         titleWeight={400}
                         subtitleCase="title"
                     />
 
-                    <div className="px-6 mt-10 relative animate-fade-in transition-all">
-                        <section className="relative group">
-                            <div
-                                className="absolute inset-0 rounded-2xl opacity-0 group-focus-within:opacity-100 transition-all duration-500 pointer-events-none"
-                                style={{ boxShadow: `0 0 0 2px ${t(theme, 'accent')}20` }}
-                            />
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
-                                <IconSearch size={18} className="opacity-50 group-focus-within:opacity-100 transition-opacity" style={{ color: t(theme, 'accent') }} />
-                            </div>
-                            <input
-                                type="search"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Search Names or Meanings..."
-                                className="w-full py-4 pl-12 pr-6 rounded-2xl text-[14px] font-medium outline-none transition-all border shadow-sm"
-                                style={{
-                                    background: t(theme, 'surface-1'),
-                                    color: t(theme, 'text-primary'),
-                                    borderColor: t(theme, 'border'),
-                                }}
-                            />
-                        </section>
-                    </div>
                 </div>
 
                 <main className="px-6 flex flex-col gap-4">
-                    <div className="flex flex-col items-center py-12 opacity-80 animate-fade-in">
+                    <div className="flex flex-col items-center py-6 opacity-80 animate-fade-in">
                         <p
-                            className="text-[1.75rem] md:text-4xl text-center mb-4 whitespace-nowrap overflow-hidden text-ellipsis"
+                            className="text-[1.5rem] md:text-3xl text-center mb-3 whitespace-nowrap overflow-hidden text-ellipsis"
                             style={{ fontFamily: 'var(--script-font)', color: t(theme, 'text-primary'), direction: 'rtl' }}
                         >
                             بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ
@@ -144,7 +121,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between gap-4">
-                                        <h4 className="text-[15px] font-bold text-primary truncate tracking-tight">{name.transliteration}</h4>
+                                        <h4 className="text-[15px] font-medium text-primary truncate tracking-tight">{name.transliteration}</h4>
                                         <span className="text-2xl" style={{ fontFamily: 'var(--script-font)', direction: 'rtl', color: t(theme, 'text-primary') }}>{name.arabic_name}</span>
                                     </div>
                                     <p className="text-[12px] font-medium truncate opacity-60 mt-1" style={{ color: t(theme, 'text-muted') }}>

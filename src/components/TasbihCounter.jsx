@@ -209,14 +209,14 @@ export default function TasbihCounter() {
                                 />
                                 <div className="flex flex-col items-center gap-1.5 relative w-full">
                                     <span
-                                        className="text-[15px] font-bold tracking-tight transition-all duration-300 text-center"
+                                        className="text-[15px] font-semibold tracking-tight transition-all duration-300 text-center"
                                         style={{ color: isActive ? '#ffffff' : t(theme, 'text-primary') }}
                                     >
                                         {opt.label}
                                     </span>
                                     <div className="flex items-center gap-2">
                                         <span
-                                            className="text-[10px] font-bold opacity-60 transition-colors"
+                                            className="text-[10px] font-semibold opacity-60 transition-colors"
                                             style={{ color: isActive ? '#ffffff' : t(theme, 'text-muted') }}
                                         >
                                             Goal: {opt.target}
@@ -246,7 +246,7 @@ export default function TasbihCounter() {
                         className="group flex flex-col items-center justify-center py-6 px-4 transition-all duration-300 active:scale-95"
                     >
                         <div className="flex flex-col items-center gap-1 opacity-40 group-hover:opacity-80 transition-opacity">
-                            <span className="text-[12px] font-black uppercase tracking-[0.3em]" style={{ color: t(theme, 'text-primary') }}>
+                            <span className="text-[12px] font-semibold uppercase tracking-[0.3em]" style={{ color: t(theme, 'text-primary') }}>
                                 Custom
                             </span>
                             <div style={{ color: t(theme, 'accent') }}>

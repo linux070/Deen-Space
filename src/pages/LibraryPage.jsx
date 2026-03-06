@@ -25,11 +25,12 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const navigate = useNavigate()
 
     // View state
-    const [viewMode, setViewMode] = useState(
-        initialSection
-            ? (['situational', 'emotions', 'general', 'rabbana', 'salawat'].includes(initialSection) ? (['situational', 'emotions', 'general'].includes(initialSection) ? 'sublist' : 'dualist') : 'swipe')
-            : 'landing'
-    )
+    const [viewMode, setViewMode] = useState(() => {
+        if (!initialSection) return 'landing'
+        if (initialSection === 'custom-prayers') return 'custom'
+        if (['situational', 'emotions', 'general', 'rabbana', 'salawat'].includes(initialSection)) return 'dualist'
+        return 'swipe'
+    })
     const [activeSection, setActiveSection] = useState(initialSection)
     const [activeSubSection, setActiveSubSection] = useState(null)
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -96,11 +97,14 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             result = result.filter(d => d.category === activeSubSection)
         } else if (activeSection) {
             if (['situational', 'emotions', 'general'].includes(activeSection)) {
-                let subIds = []
-                if (activeSection === 'situational') subIds = ['travel', 'illness', 'istikhara']
-                else if (activeSection === 'emotions') subIds = ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust']
-                else if (activeSection === 'general') subIds = ['prophetic', 'waking', 'sleeping', 'eating', 'toilet', 'home', 'dressing']
-                result = result.filter(d => subIds.includes(d.category))
+                if (activeSection === 'emotions') {
+                    result = result.filter(d => d.category === 'emotions')
+                } else {
+                    let subIds = []
+                    if (activeSection === 'situational') subIds = ['travel', 'illness', 'istikhara']
+                    else if (activeSection === 'general') subIds = ['prophetic', 'waking', 'sleeping', 'eating', 'toilet', 'home', 'dressing']
+                    result = result.filter(d => subIds.includes(d.category))
+                }
             } else {
                 result = result.filter(d => d.category === activeSection)
             }
@@ -108,9 +112,10 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (search.trim()) {
             const q = search.toLowerCase()
             result = result.filter(d =>
-                (d.translation && d.translation.toLowerCase().includes(q)) ||
+                (d.translation && d.translation.en && d.translation.en.toLowerCase().includes(q)) ||
                 (d.transliteration && d.transliteration.toLowerCase().includes(q)) ||
-                (d.arabic && d.arabic.includes(search))
+                (d.arabic && d.arabic.includes(search)) ||
+                (d.category && d.category.toLowerCase().includes(q))
             )
         }
         return result
@@ -120,9 +125,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const swipeDuas = useMemo(() => {
         if (!activeSection) return listDuas
         if (['situational', 'emotions', 'general'].includes(activeSection)) {
+            if (activeSection === 'emotions') {
+                return duas.filter(d => d.category === 'emotions')
+            }
             let subIds = []
             if (activeSection === 'situational') subIds = ['travel', 'illness', 'istikhara']
-            else if (activeSection === 'emotions') subIds = ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust']
             else if (activeSection === 'general') subIds = ['prophetic', 'waking', 'sleeping', 'eating', 'toilet', 'home', 'dressing']
 
             return duas
@@ -196,14 +203,18 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (viewMode === 'landing') return 'Library'
 
         if (viewMode === 'swipe') {
-            if (activeSection === 'rabbana') return `Robbana ${selectedIndex + 1} / ${swipeDuas.length}`
-            if (activeSection === 'salawat') return `Salawat ${selectedIndex + 1} / ${swipeDuas.length}`
+            const currentDua = swipeDuas[selectedIndex]
+            if (activeSection === 'rabbana') return `Robbana ${selectedIndex + 1}`
+            if (activeSection === 'salawat') return `Salawat ${selectedIndex + 1}`
+            if (currentDua) {
+                return getDuaLabel(currentDua)
+            }
         }
 
         const coreCollections = {
-            general: 'General Duas',
+            general: 'General',
             emotions: 'Emotions',
-            situational: 'Situational Duas',
+            situational: 'Situational',
             rabbana: '40 Robbana',
             salawat: 'Salawat',
             ramadan: 'Ramadan Special'
@@ -241,6 +252,13 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         }
         if (cat === 'rabbana') return 'Quranic Rabbana'
         if (cat === 'salawat') return 'Prophetic Salawat'
+        if (cat === 'illness') return 'Dua for Sickness'
+        if (cat === 'travel') return 'Dua for Travel'
+        if (cat === 'istikhara') return 'Dua for Istikhara'
+        if (cat === 'emotions') {
+            const emotionTag = dua.tags?.find(t => ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust'].includes(t))
+            return emotionTag ? `For ${toTitleCase(emotionTag)}` : 'For the Heart'
+        }
 
         return toTitleCase(cat)
     }
@@ -253,50 +271,26 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             subtitle = toTitleCase(activeSubSection)
         } else if (activeSection === 'rabbana') {
             subtitle = 'Prophetic Prayers'
+        } else if (activeSection === 'emotions') {
+            subtitle = 'Spiritual States'
+        } else if (activeSection === 'situational') {
+            subtitle = 'Life Events'
         }
 
         return (
-            <div className="sticky top-0 z-20 pb-6" style={{ background: t(theme, 'surface-0') }}>
+            <div className={`sticky top-0 z-20 ${viewMode === 'landing' ? 'pb-12' : 'pb-6'}`} style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
-                    title={(viewMode === 'dualist' || viewMode === 'sublist') && !['rabbana', 'salawat'].includes(activeSection) ? '' : title}
+                    title={(viewMode === 'dualist' || viewMode === 'sublist') && !['rabbana', 'salawat', 'general', 'emotions', 'situational'].includes(activeSection) ? '' : title}
                     subtitle={(viewMode === 'dualist' || viewMode === 'sublist' || viewMode === 'swipe') ? null : subtitle}
                     onBack={goBack}
-                    padding={(viewMode === 'dualist' || viewMode === 'sublist') ? "px-6 pt-8 pb-1" : "px-6 pt-12 pb-8"}
-                    titleSize={['rabbana', 'salawat'].includes(activeSection) ? "text-xl" : "text-3xl"}
-                    titleWeight={['rabbana', 'salawat'].includes(activeSection) ? 300 : (viewMode === 'dualist' ? 200 : 400)}
+                    padding={viewMode === 'landing' ? "px-6 pt-8 pb-0" : (viewMode === 'dualist' || viewMode === 'sublist') ? "px-6 pt-8 pb-1" : "px-6 pt-10 pb-6"}
+                    titleSize={['rabbana', 'salawat', 'general', 'emotions', 'situational'].includes(activeSection) ? "text-xl" : "text-3xl"}
+                    titleWeight={['rabbana', 'salawat', 'general', 'emotions', 'situational'].includes(activeSection) ? 300 : (viewMode === 'dualist' ? 300 : 400)}
                     sticky={false}
                     titleSerif={false}
                     subtitleCase="title"
                 />
 
-                {(viewMode === 'landing' || (viewMode === 'dualist' && !activeSection)) && (
-                    <div className="px-6 mt-10 relative animate-fade-in transition-all">
-                        <section className="relative group">
-                            <div
-                                className="absolute inset-0 rounded-2xl opacity-0 group-focus-within:opacity-100 transition-all duration-500 pointer-events-none"
-                                style={{ boxShadow: `0 0 0 2px ${t(theme, 'accent')}20` }}
-                            />
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
-                                <IconSearch size={18} className="opacity-50 group-focus-within:opacity-100 transition-opacity" style={{ color: t(theme, 'accent') }} />
-                            </div>
-                            <input
-                                type="search"
-                                value={search}
-                                onChange={(e) => {
-                                    setSearch(e.target.value)
-                                    if (e.target.value && viewMode === 'landing') setViewMode('dualist')
-                                }}
-                                placeholder="Search translations or Arabic..."
-                                className="w-full py-4 pl-12 pr-6 rounded-2xl text-[14px] font-medium outline-none transition-all border shadow-sm"
-                                style={{
-                                    background: t(theme, 'surface-1'),
-                                    color: t(theme, 'text-primary'),
-                                    borderColor: t(theme, 'border'),
-                                }}
-                            />
-                        </section>
-                    </div>
-                )}
             </div>
         )
     }
@@ -308,7 +302,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         return (
             <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
-                <main className="px-6 flex flex-col gap-4 mt-6 animate-fade-in">
+                <main className="px-6 flex flex-col gap-2 mt-8 animate-fade-in">
                     {SECTIONS.map((s, idx) => {
                         const Icon = s.icon
                         return (
@@ -316,26 +310,26 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 key={s.id}
                                 onClick={() => {
                                     setActiveSection(s.id)
-                                    if (['situational', 'emotions', 'general'].includes(s.id)) {
-                                        setViewMode('sublist')
+                                    if (s.id === 'custom-prayers') {
+                                        setViewMode('custom')
                                     } else {
                                         setViewMode('dualist')
                                     }
                                 }}
-                                className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg"
+                                className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                                 style={{
                                     background: t(theme, 'surface-1'),
                                     border: `1px solid ${t(theme, 'border')}`,
-                                    boxShadow: isDark ? 'none' : '0 4px 15px rgba(0,0,0,0.02)'
+                                    boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)'
                                 }}
                             >
-                                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl font-black text-sm relative overflow-hidden"
+                                <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-bold text-xs relative overflow-hidden"
                                     style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
-                                    <div className="absolute inset-0 opacity-5" style={{ background: t(theme, 'text-primary') }} />
+                                    <div className="absolute inset-0 opacity-[0.08]" style={{ background: t(theme, 'text-primary') }} />
                                     {idx + 1}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="text-[15px] font-semibold truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                                    <h4 className="text-[14px] font-semibold truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
                                         {s.title}
                                     </h4>
                                     <p className="text-[11px] font-medium opacity-50 tracking-tight" style={{ color: t(theme, 'text-muted') }}>
@@ -383,7 +377,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     <div className="absolute inset-0 opacity-5" style={{ background: t(theme, 'text-primary') }} />
                                     {idx + 1}
                                 </div>
-                                <h4 className="flex-1 font-semibold text-[15px] tracking-tight" style={{ color: t(theme, 'text-primary') }}>{sub.title}</h4>
+                                <h4 className="flex-1 font-medium text-[15px] tracking-tight" style={{ color: t(theme, 'text-primary') }}>{sub.title}</h4>
                             </button>
                         )
                     })}
@@ -397,9 +391,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         return (
             <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
-                <main className="px-6 flex flex-col gap-1 mt-1 animate-fade-in">
+                <main className="px-6 flex flex-col gap-1.5 mt-2 animate-fade-in">
                     {listDuas.length === 0 ? (
-                        <div className="text-center py-20 opacity-30">No duas found</div>
+                        <div className="text-center py-20 opacity-30 text-[11px] font-black uppercase tracking-widest">No duas found</div>
                     ) : (
                         listDuas.map((dua, i) => {
                             // Helper to make title more "Institutional"
@@ -407,42 +401,41 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 if (d.category === 'illness') return 'Dua for Sickness'
                                 if (d.category === 'travel') return 'Dua for Travel'
                                 if (d.category === 'istikhara') return 'Dua for Istikhara'
-                                if (d.category === 'emotions') return `For ${activeSubSection?.charAt(0).toUpperCase()}${activeSubSection?.slice(1)}`
+                                if (activeSection === 'emotions') {
+                                    const emotionTag = d.tags?.find(t => ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust'].includes(t))
+                                    return emotionTag ? `For ${toTitleCase(emotionTag)}` : 'For the Heart'
+                                }
                                 if (d.category === 'rabbana') return `Robbana ${i + 1}`
                                 if (d.category === 'salawat') return `Salawat ${i + 1}`
                                 if (['morning', 'evening', 'after-salah'].includes(d.category)) return `${toTitleCase(d.category)} ${i + 1}`
-                                return d.transliteration || 'Supplication'
+                                return toTitleCase(d.category) || toTitleCase(d.reference) || 'Supplication'
                             }
 
                             return (
                                 <button
                                     key={dua.id}
                                     onClick={() => {
-                                        // Find global index in swipeDuas for full scrolling
                                         const globalIndex = swipeDuas.findIndex(sd => sd.id === dua.id)
                                         setSelectedIndex(globalIndex !== -1 ? globalIndex : i)
                                         skippingFirstScroll.current = true
                                         setViewMode('swipe')
                                     }}
-                                    className="group flex gap-4 items-center p-3.5 rounded-2xl text-left transition-all active:scale-[0.98] hover:shadow-lg"
+                                    className="group flex gap-3.5 items-center p-3 rounded-2xl text-left transition-all active:scale-[0.98] hover:shadow-lg"
                                     style={{
                                         background: t(theme, 'surface-1'),
                                         border: `1px solid ${t(theme, 'border')}`,
                                         boxShadow: theme === 'dark' ? 'none' : '0 2px 8px rgba(0,0,0,0.01)'
                                     }}
                                 >
-                                    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl font-black text-sm relative overflow-hidden"
+                                    <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-black text-xs relative overflow-hidden"
                                         style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
-                                        <div className="absolute inset-0 opacity-5" style={{ background: t(theme, 'text-primary') }} />
+                                        <div className="absolute inset-0 opacity-10" style={{ background: t(theme, 'text-primary') }} />
                                         {i + 1}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-[15px] font-semibold text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
-                                            {activeSection === 'rabbana' ? `Robbana ${i + 1}` :
-                                                activeSection === 'salawat' ? `Salawat ${i + 1}` :
-                                                    (toTitleCase(dua.reference) || 'Supplication')}
+                                        <h4 className="text-[14px] font-semibold text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                                            {getTitle(dua)}
                                         </h4>
-                                        {/* Main text removed as requested, keeping it clean and institutional */}
                                     </div>
                                 </button>
                             )
@@ -467,10 +460,10 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                         paddingBottom: '1.5rem'
                     }}
                 >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                         <button
                             onClick={goBack}
-                            className="w-10 h-10 flex items-center justify-center rounded-2xl transition-all active:scale-90"
+                            className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90"
                             style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
                         >
                             <IconChevronLeft size={22} />

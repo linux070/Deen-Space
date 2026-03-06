@@ -67,6 +67,13 @@ export default function DuaPage() {
             icon: IconMosque,
             action: () => navigate('/library/ramadan')
         },
+        {
+            id: 'personal',
+            title: 'Personal Prayers',
+            subtitle: 'Private Collection',
+            icon: IconGrid,
+            action: () => navigate('/library/custom-prayers')
+        },
     ]
 
     return (

@@ -131,7 +131,7 @@ export default function FavoritesPage({ duas, asma }) {
                         {favDuas.length > 0 && (
                             <section>
                                 <h2
-                                    className="text-sm font-semibold uppercase tracking-wider mb-3 mt-2"
+                                    className="text-sm font-medium uppercase tracking-wider mb-3 mt-2"
                                     style={{ color: t(theme, 'text-muted') }}
                                 >
                                     Duas & Salawat ({favDuas.length})
