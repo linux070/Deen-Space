@@ -188,7 +188,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     title={title}
                     subtitle={subtitle}
                     onBack={goBack}
-                    padding="px-6 pt-10 pb-6"
+                    padding="px-6 pt-16 pb-10"
                     sticky={false}
                     titleSerif={false}
                     titleWeight={400}

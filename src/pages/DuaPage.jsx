@@ -77,7 +77,7 @@ export default function DuaPage() {
                 showBack={false}
                 titleSerif={false}
                 titleWeight={400}
-                padding="px-6 pt-10 pb-10"
+                padding="px-6 pt-16 pb-12"
                 subtitleCase="title"
             />
 
@@ -96,6 +96,7 @@ export default function DuaPage() {
                     ))}
                 </div>
             </section>
+
         </div>
     )
 }

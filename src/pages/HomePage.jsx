@@ -243,10 +243,10 @@ export default function HomePage({ duas = [], asma = [] }) {
 
     /* ────────────── Home View ────────────── */
     return (
-        <div className="pb-32 pt-8 px-6 flex flex-col gap-10 max-w-xl md:max-w-6xl mx-auto">
+        <div className="pb-32 pt-16 px-6 flex flex-col gap-10 max-w-xl md:max-w-6xl mx-auto">
 
             {/* ── Greeting ── */}
-            <header className="animate-fade-in flex flex-col gap-1 px-1">
+            <header className="animate-fade-in flex flex-col gap-2 px-1 mb-6">
                 <h1
                     style={{
                         color: t(theme, 'text-primary'),
@@ -392,6 +392,7 @@ export default function HomePage({ duas = [], asma = [] }) {
                     </div>
                 </div>
             </section>
+
         </div>
     )
 }

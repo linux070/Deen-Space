@@ -2,6 +2,7 @@ import { useSettings } from '../context/SettingsContext'
 import { IconSun, IconMoon, IconMinus, IconPlus } from '../components/Icons'
 import { t } from '../utils/theme'
 import PageHeader from '../components/PageHeader'
+import BuiltByBadge from '../components/BuiltByBadge'
 
 function Toggle({ checked, onChange, theme }) {
     const isDark = theme === 'dark'
@@ -100,7 +101,7 @@ export default function SettingsPage() {
                 showBack={false}
                 titleSerif={false}
                 titleWeight={400}
-                padding="px-6 pt-10 pb-10"
+                padding="px-6 pt-16 pb-12"
                 subtitleCase="title"
             />
 
@@ -313,13 +314,17 @@ export default function SettingsPage() {
                 </section>
 
                 {/* ── Footer ── */}
-                <div className="px-6 py-8 text-center animate-fade-in" style={{ animationDelay: '300ms' }}>
+                <div className="px-6 pt-8 pb-12 flex flex-col items-center gap-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
                     <p
                         className="text-[11px] font-black uppercase tracking-[0.2em] opacity-35"
                         style={{ color: t(theme, 'text-muted') }}
                     >
                         AVAILABLE OFFLINE
                     </p>
+
+                    <div className="mt-2">
+                        <BuiltByBadge theme={theme} />
+                    </div>
                 </div>
             </main>
         </div>

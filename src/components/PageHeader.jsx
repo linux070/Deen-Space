@@ -9,7 +9,7 @@ export default function PageHeader({
     onBack,
     showBack = true,
     sticky = true,
-    padding = "px-6 pt-12 pb-6",
+    padding = "px-6 pt-16 pb-8",
     subtitleCase = "uppercase",
     titleWeight,
     titleSerif = false
