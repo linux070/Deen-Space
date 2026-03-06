@@ -30,6 +30,7 @@ export default function PageHeader({
             className={`${padding} ${sticky ? 'sticky top-0 z-30' : ''}`}
             style={{
                 background: t(theme, 'surface-0'),
+                paddingTop: `calc(env(safe-area-inset-top, 0px) + ${padding.includes('pt-16') ? '1.5rem' : '1rem'})`,
             }}
         >
             <div className="flex items-start gap-5 animate-slide-down">

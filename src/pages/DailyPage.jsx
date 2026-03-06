@@ -18,8 +18,8 @@ export default function DailyPage({ duas }) {
     const navigate = useNavigate()
     const { category } = useParams()
 
-    // View state: 'landing' (grid) -> 'dualist' (numbered list) -> 'swipe' (detail)
-    const [viewMode, setViewMode] = useState(category ? 'dualist' : 'landing')
+    // View state: 'landing' (grid) -> 'swipe' (detail)
+    const [viewMode, setViewMode] = useState(category ? 'swipe' : 'landing')
     const [activeCategory, setActiveCategory] = useState(category)
     const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -29,14 +29,23 @@ export default function DailyPage({ duas }) {
     useEffect(() => {
         if (category) {
             setActiveCategory(category)
-            setViewMode('dualist')
+            setViewMode('swipe')
         }
     }, [category])
 
-    const filtered = useMemo(() => {
+    // List of duas for the current active category (for the vertical list)
+    const listDuas = useMemo(() => {
         if (!activeCategory) return []
         return duas.filter(d => d.category === activeCategory)
     }, [duas, activeCategory])
+
+    // Sequence of all daily duas (Morning -> Evening -> After Salah) for the swiper
+    const swipeDuas = useMemo(() => {
+        const order = ['morning', 'evening', 'after-salah']
+        return duas
+            .filter(d => order.includes(d.category))
+            .sort((a, b) => order.indexOf(a.category) - order.indexOf(b.category))
+    }, [duas])
 
     const activeCatData = useMemo(
         () => CATEGORIES.find(c => c.key === activeCategory),
@@ -56,12 +65,8 @@ export default function DailyPage({ duas }) {
             return
         }
         if (viewMode === 'dualist') {
-            if (category) {
-                navigate('/dua')
-            } else {
-                setViewMode('landing')
-                setActiveCategory(null)
-            }
+            setViewMode('landing')
+            setActiveCategory(null)
             return
         }
         if (viewMode === 'landing') {
@@ -72,9 +77,9 @@ export default function DailyPage({ duas }) {
 
     // HEADER — matching LibraryPage's header pattern
     const Header = () => {
-        const title = viewMode === 'landing'
-            ? 'Daily Adhkar'
-            : activeCatData?.label || 'Adhkar'
+        const title = viewMode === 'swipe'
+            ? 'Daily Adhkar' // Stable header in swipe mode
+            : (viewMode === 'landing' ? 'Daily Adhkar' : activeCatData?.label || 'Adhkar')
 
         const subtitle = 'Collections of Supplication'
 
@@ -94,12 +99,11 @@ export default function DailyPage({ duas }) {
         )
     }
 
-
     // ─── LANDING: List of categories ───
     if (viewMode === 'landing') {
         const isDark = theme === 'dark'
         return (
-            <div className="pb-32 min-h-screen">
+            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 <Header />
                 <main className="px-6 flex flex-col gap-3 mt-4 animate-fade-in">
                     {CATEGORIES.map((cat, idx) => (
@@ -107,7 +111,11 @@ export default function DailyPage({ duas }) {
                             key={cat.key}
                             onClick={() => {
                                 setActiveCategory(cat.key)
-                                setViewMode('dualist')
+                                // Find global index in swipeDuas for full scrolling
+                                const firstDuaInCat = duas.find(d => d.category === cat.key)
+                                const globalIndex = swipeDuas.findIndex(sd => sd.id === firstDuaInCat?.id)
+                                setSelectedIndex(globalIndex !== -1 ? globalIndex : 0)
+                                setViewMode('swipe')
                             }}
                             className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                             style={{
@@ -164,17 +172,18 @@ export default function DailyPage({ duas }) {
     // ─── DUALIST: Vertical Numbered List (matching LibraryPage dualist) ───
     if (viewMode === 'dualist') {
         return (
-            <div className="pb-32 min-h-screen">
+            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 <Header />
                 <main className="px-6 flex flex-col gap-4 mt-4 animate-fade-in">
-                    {filtered.length === 0 ? (
+                    {listDuas.length === 0 ? (
                         <div className="text-center py-20 opacity-30">No duas found</div>
                     ) : (
-                        filtered.map((dua, i) => (
+                        listDuas.map((dua, i) => (
                             <button
                                 key={dua.id}
                                 onClick={() => {
-                                    setSelectedIndex(i)
+                                    const globalIndex = swipeDuas.findIndex(sd => sd.id === dua.id)
+                                    setSelectedIndex(globalIndex !== -1 ? globalIndex : i)
                                     setViewMode('swipe')
                                 }}
                                 className="group flex gap-5 items-center p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg"
@@ -200,42 +209,39 @@ export default function DailyPage({ duas }) {
         )
     }
 
-
     // ─── SWIPE: Full screen gallery (matching LibraryPage swipe) ───
     if (viewMode === 'swipe') {
         return (
             <div className="fixed inset-0 z-[100] flex flex-col animate-modal-slide-up" style={{ background: t(theme, 'surface-0') }}>
-                {/* Header Sub-Nav - Polished to match Library/Praise */}
-                <div className="flex items-center justify-between py-6 px-6" style={{ background: t(theme, 'surface-0') }}>
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => setViewMode('dualist')}
-                            className="w-10 h-10 flex items-center justify-center rounded-2xl transition-all active:scale-90"
-                            style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
-                        >
-                            <IconChevronLeft size={22} />
-                        </button>
-                        <span className="text-[15px] font-normal tracking-tight" style={{ color: t(theme, 'text-primary') }}>{activeCatData?.label} {selectedIndex + 1} / {filtered.length}</span>
-                    </div>
-                </div>
+                <Header />
 
                 {/* Swiper Content */}
                 <div
-                    ref={scrollRef}
+                    ref={(el) => {
+                        scrollRef.current = el;
+                        if (el && viewMode === 'swipe' && el.scrollLeft === 0 && selectedIndex > 0) {
+                            el.scrollLeft = selectedIndex * el.offsetWidth;
+                        }
+                    }}
                     onScroll={handleSwipeScroll}
                     className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
                 >
-                    {filtered.map((dua, i) => (
-                        <div key={dua.id} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto">
-                            <div className="mb-6 flex justify-between items-center">
-                                <span className="text-[10px] font-black uppercase tracking-widest opacity-30">{activeCatData?.label || 'Daily'} Adhkar</span>
-                                <span className="text-[10px] font-black px-2 py-1 rounded bg-accent-soft text-accent">
-                                    {i + 1} / {filtered.length}
-                                </span>
-                            </div>
-                            <DuaCard dua={dua} type="dua" isCountingMode={false} hideAudio={true} hideCounter={true} />
+                    {swipeDuas.map((dua, i) => (
+                        <div key={dua.id} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto h-full">
+                            <DuaCard
+                                dua={dua}
+                                label={toTitleCase(dua.category) + ' Adhkar'}
+                                type="dua"
+                                isCountingMode={false}
+                                hideAudio={true}
+                                hideCounter={false}
+                            />
                         </div>
                     ))}
+                </div>
+
+                <div className="pb-8 pt-4 text-center opacity-30 text-[10px] font-black tracking-widest uppercase">
+                    Swipe left or right
                 </div>
             </div>
         )

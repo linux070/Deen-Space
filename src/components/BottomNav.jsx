@@ -37,14 +37,18 @@ export default function BottomNav() {
                             key={to}
                             to={to}
                             end={to === '/'}
-                            className="flex flex-col items-center gap-1.5 py-2 px-3 rounded-2xl"
+                            className="flex flex-col items-center gap-1.5 py-2 px-4 rounded-2xl transition-all duration-200 active:scale-95"
                             style={{
-                                color: isActive ? t(theme, 'accent') : t(theme, 'text-secondary'),
-                                background: isActive ? t(theme, 'accent-soft') : 'transparent'
+                                color: isActive ? t(theme, 'accent') : t(theme, 'text-muted'),
+                                background: isActive
+                                    ? (theme === 'light' ? 'rgba(138, 109, 27, 0.12)' : t(theme, 'accent-soft'))
+                                    : 'transparent',
                             }}
                         >
-                            <Icon size={24} />
-                            <span className="text-[11px] font-bold tracking-tight leading-none">{label}</span>
+                            <Icon size={24} className="transition-all duration-200" style={{ opacity: isActive ? 1 : 0.5 }} />
+                            <span className={`text-[11px] tracking-tight leading-none transition-all duration-200 ${isActive ? 'font-black opacity-100' : 'font-medium opacity-50'}`}>
+                                {label}
+                            </span>
                         </NavLink>
                     )
                 })}

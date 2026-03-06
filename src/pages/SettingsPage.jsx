@@ -94,7 +94,7 @@ export default function SettingsPage() {
     const isDark = theme === 'dark'
 
     return (
-        <div className="pb-32 max-w-xl md:max-w-6xl mx-auto min-h-screen">
+        <div className="pb-32 max-w-xl md:max-w-6xl mx-auto min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
             <PageHeader
                 title="Settings"
                 subtitle="Personalize Your Spiritual Experience"

@@ -71,7 +71,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
     if (viewMode === 'list') {
         const isDark = theme === 'dark'
         return (
-            <div className="pb-32 min-h-screen animate-fade-in">
+            <div className="pb-32 min-h-screen animate-fade-in" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {/* INLINE HEADER to prevent focus loss on re-render */}
                 <div className="sticky top-0 z-20 pb-6" style={{ background: t(theme, 'surface-0') }}>
                     <PageHeader
@@ -164,7 +164,14 @@ export default function PraisePage({ duas, asma, embedded = false }) {
         return (
             <div className="fixed inset-0 z-[100] flex flex-col animate-modal-slide-up" style={{ background: t(theme, 'surface-0') }}>
                 {/* Header Sub-Nav */}
-                <div className="flex items-center justify-between py-6 px-6" style={{ background: t(theme, 'surface-0') }}>
+                <div
+                    className="flex items-center justify-between px-6"
+                    style={{
+                        background: t(theme, 'surface-0'),
+                        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
+                        paddingBottom: '1.5rem'
+                    }}
+                >
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setViewMode('list')}

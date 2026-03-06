@@ -59,53 +59,53 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
                 </div>
             )}
 
-            {/* Arabic text */}
-            <div
-                className={`px-6 pb-6 text-right leading-[var(--arabic-line-height)] scroll-auto ${label ? 'pt-4' : 'pt-8'}`}
-                style={{
-                    fontFamily: 'var(--script-font)',
-                    fontSize: 'var(--arabic-size)',
-                    color: t(theme, 'text-primary'),
-                    direction: 'rtl',
-                }}
-            >
-                {dua.arabic_text}
-            </div>
+            <div className={`px-6 pt-8 pb-6 flex-1 overflow-y-auto no-scrollbar flex flex-col`}>
+                {/* Arabic text */}
+                <div
+                    className={`text-right leading-[var(--arabic-line-height)] mb-8`}
+                    style={{
+                        fontFamily: 'var(--script-font)',
+                        fontSize: 'var(--arabic-size)',
+                        color: t(theme, 'text-primary'),
+                        direction: 'rtl',
+                    }}
+                >
+                    {dua.arabic_text}
+                </div>
 
-            {/* Separator */}
-            <div
-                className="mx-6 h-px"
-                style={{ background: t(theme, 'surface-3') }}
-            />
+                {/* Separator */}
+                <div
+                    className="h-px w-full mb-8 opacity-50 flex-shrink-0"
+                    style={{ background: t(theme, 'border') }}
+                />
 
-            <div className={`px-6 pt-4 pb-6 flex-1 overflow-y-auto no-scrollbar ${isCountingMode ? 'max-h-[30vh]' : ''}`}>
-                {/* Transliteration */}
-                {showTransliteration && dua.transliteration && (
-                    <p
-                        className="text-sm italic leading-relaxed mb-3 text-capitalize"
-                        style={{
-                            color: t(theme, 'text-secondary'),
-                            fontFamily: 'var(--font-serif-body)',
-                            opacity: 0.85
-                        }}
-                    >
-                        {dua.transliteration}
-                    </p>
-                )}
+                <div className={`flex-1 ${isCountingMode ? 'max-h-[30vh]' : ''}`}>
+                    {/* Transliteration */}
+                    {showTransliteration && dua.transliteration && (
+                        <p
+                            className="text-[15px] italic leading-relaxed mb-6 text-capitalize"
+                            style={{
+                                color: t(theme, 'text-secondary'),
+                                fontFamily: 'var(--font-serif-body)',
+                            }}
+                        >
+                            {dua.transliteration}
+                        </p>
+                    )}
 
-                {/* Translation */}
-                {showTranslation && translation && (
-                    <p
-                        className="text-sm italic leading-relaxed text-capitalize"
-                        style={{
-                            color: t(theme, 'text-secondary'),
-                            fontFamily: 'var(--font-serif-body)',
-                            opacity: 0.85
-                        }}
-                    >
-                        {translation}
-                    </p>
-                )}
+                    {/* Translation */}
+                    {showTranslation && translation && (
+                        <p
+                            className="text-[15px] italic leading-relaxed text-capitalize"
+                            style={{
+                                color: t(theme, 'text-secondary'),
+                                fontFamily: 'var(--font-serif-body)',
+                            }}
+                        >
+                            {translation}
+                        </p>
+                    )}
+                </div>
             </div>
 
             {/* Counting Area (if repeat > 1) */}

@@ -25,7 +25,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const navigate = useNavigate()
 
     // View state
-    const [viewMode, setViewMode] = useState(initialSection ? 'dualist' : 'landing')
+    const [viewMode, setViewMode] = useState(
+        initialSection
+            ? (['situational', 'emotions', 'general'].includes(initialSection) ? 'sublist' : 'swipe')
+            : 'landing'
+    )
     const [activeSection, setActiveSection] = useState(initialSection)
     const [activeSubSection, setActiveSubSection] = useState(null)
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -79,7 +83,8 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     }, [activeSection])
 
     // Filtered duas based on active section/subsection and search
-    const filteredDuas = useMemo(() => {
+    // We now have two versions: one for the list, one for the swiper
+    const listDuas = useMemo(() => {
         let result = duas
         if (activeSubSection) {
             result = result.filter(d => d.category === activeSubSection)
@@ -105,6 +110,22 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         return result
     }, [duas, activeSection, activeSubSection, search])
 
+    // For the swiper, we want all siblings even if we entered from a sub-section
+    const swipeDuas = useMemo(() => {
+        if (!activeSection) return listDuas
+        if (['situational', 'emotions', 'general'].includes(activeSection)) {
+            let subIds = []
+            if (activeSection === 'situational') subIds = ['travel', 'illness', 'istikhara']
+            else if (activeSection === 'emotions') subIds = ['anxiety', 'sadness', 'fear', 'anger', 'gratitude', 'loneliness', 'worry', 'trust']
+            else if (activeSection === 'general') subIds = ['prophetic', 'waking', 'sleeping', 'eating', 'toilet', 'home', 'dressing']
+
+            return duas
+                .filter(d => subIds.includes(d.category))
+                .sort((a, b) => subIds.indexOf(a.category) - subIds.indexOf(b.category))
+        }
+        return listDuas
+    }, [duas, activeSection, listDuas])
+
     // Scroll handling for swipe view
     const handleSwipeScroll = (e) => {
         // Prevent reset to 0 during initial mount-scroll
@@ -120,7 +141,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         setMiniTasbihCount(0)
     }, [selectedIndex])
 
-    // BACK NAVIGATION
+    // BACK NAVIGATION - Skip sublist if coming from vertical list
     const goBack = () => {
         if (search) {
             setSearch('')
@@ -131,26 +152,22 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             return
         }
 
-        // If we entered deep (initialSection provided) and are at the root of that deep section,
-        // navigate back to the Main Dua Application Page
         if (initialSection && activeSection === initialSection) {
-            const isAtDeepRoot =
-                (viewMode === 'sublist') ||
-                (viewMode === 'dualist' && !['situational', 'emotions', 'general'].includes(activeSection))
-
-            if (isAtDeepRoot) {
-                navigate('/dua')
+            if (activeSubSection) {
+                setActiveSubSection(null)
                 return
             }
+            navigate('/dua')
+            return
         }
 
         if (viewMode === 'dualist') {
-            if (['situational', 'emotions', 'general'].includes(activeSection)) {
-                setViewMode('sublist')
-            } else {
-                setViewMode('landing')
-                setActiveSection(null)
+            if (activeSubSection) {
+                setActiveSubSection(null)
+                return
             }
+            setViewMode('landing')
+            setActiveSection(null)
             return
         }
         if (viewMode === 'sublist') {
@@ -168,14 +185,44 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const getPageTitle = () => {
         if (viewMode === 'landing') return 'Library'
         if (viewMode === 'swipe') {
-            if (activeSection === 'rabbana') return `Robbana Dua ${selectedIndex + 1} / ${filteredDuas.length}`
-            if (activeSection === 'salawat') return `Prophetic Salawat ${selectedIndex + 1} / ${filteredDuas.length}`
+            if (activeSection === 'rabbana') return `Robbana Dua ${selectedIndex + 1} / ${swipeDuas.length}`
+            if (activeSection === 'salawat') return `Prophetic Salawat ${selectedIndex + 1} / ${swipeDuas.length}`
+            return toTitleCase(activeSection) + ' Duas'
         }
         if (activeSection === 'rabbana') return '40 Robbana'
+        if (activeSection === 'salawat') return 'Prophetic Salawat'
         if (activeSection === 'ramadan') return 'Ramadan Special'
-        if (viewMode === 'sublist') return activeSection.charAt(0).toUpperCase() + activeSection.slice(1)
-        if (activeSubSection) return activeSubSection.charAt(0).toUpperCase() + activeSubSection.slice(1)
-        return activeSection?.charAt(0).toUpperCase() + activeSection?.slice(1) || 'Duas'
+
+        if (activeSubSection) return toTitleCase(activeSubSection)
+        return activeSection ? toTitleCase(activeSection) : 'Library'
+    }
+
+    // Map specific categories to institutional labels
+    const getDuaLabel = (dua) => {
+        const cat = dua.category
+        if (cat === 'prophetic') return 'Prophetic Dua'
+        if (cat === 'waking') return 'Waking Up'
+        if (cat === 'sleeping') return 'Before Sleeping'
+        if (cat === 'eating') {
+            if (dua.arabic_text.includes('الْحَمْدُ لِلَّهِ')) return 'After Eating'
+            return 'Before Eating'
+        }
+        if (cat === 'toilet') {
+            if (dua.arabic_text.includes('غُفْرَانَكَ')) return 'Leaving Restroom'
+            return 'Entering Restroom'
+        }
+        if (cat === 'home') {
+            if (dua.arabic_text.includes('بِسْمِ اللَّهِ تَوَكَّلْتُ')) return 'Leaving Home'
+            return 'Entering Home'
+        }
+        if (cat === 'dressing') {
+            if (dua.arabic_text.includes('الْحَمْدُ لِلَّهِ')) return 'Dressing'
+            return 'Undressing'
+        }
+        if (cat === 'rabbana') return 'Quranic Robbana'
+        if (cat === 'salawat') return 'Prophetic Salawat'
+
+        return toTitleCase(cat)
     }
 
     const Header = () => {
@@ -232,7 +279,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     if (viewMode === 'landing') {
         const isDark = theme === 'dark'
         return (
-            <div className="pb-32 min-h-screen">
+            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
                 <main className="px-6 flex flex-col gap-4 mt-6 animate-fade-in">
                     {SECTIONS.map((s, idx) => {
@@ -242,7 +289,14 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 key={s.id}
                                 onClick={() => {
                                     setActiveSection(s.id)
-                                    setViewMode(['situational', 'emotions', 'general'].includes(s.id) ? 'sublist' : 'dualist')
+                                    if (['situational', 'emotions', 'general'].includes(s.id)) {
+                                        setViewMode('sublist')
+                                    } else {
+                                        // Simple sections (like Salawat) land on swipe directly
+                                        setSelectedIndex(0)
+                                        skippingFirstScroll.current = true
+                                        setViewMode('swipe')
+                                    }
                                 }}
                                 className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg"
                                 style={{
@@ -276,7 +330,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     if (viewMode === 'sublist') {
         const isDark = theme === 'dark'
         return (
-            <div className="pb-32 min-h-screen">
+            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
                 <main className="px-6 flex flex-col gap-3 mt-4 animate-fade-in">
                     {SUB_SECTIONS.map((sub, idx) => {
@@ -286,7 +340,12 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 key={sub.id}
                                 onClick={() => {
                                     setActiveSubSection(sub.id)
-                                    setViewMode('dualist')
+                                    // Bypassing dualist: find the first dua of this sub-section and jump straight to swipe
+                                    const firstDuaOfSub = duas.find(d => d.category === sub.id)
+                                    const globalIndex = swipeDuas.findIndex(sd => sd.id === (firstDuaOfSub?.id))
+                                    setSelectedIndex(globalIndex !== -1 ? globalIndex : 0)
+                                    skippingFirstScroll.current = true
+                                    setViewMode('swipe')
                                 }}
                                 className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                                 style={{
@@ -312,7 +371,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     // DUALIST: Vertical Numbered List
     if (viewMode === 'dualist') {
         return (
-            <div className="pb-32 min-h-screen">
+            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
                 <main className="px-6 flex flex-col gap-4 mt-4 animate-fade-in">
                     {activeSection === 'rabbana' && (
@@ -328,10 +387,10 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             </p>
                         </div>
                     )}
-                    {filteredDuas.length === 0 ? (
+                    {listDuas.length === 0 ? (
                         <div className="text-center py-20 opacity-30">No duas found</div>
                     ) : (
-                        filteredDuas.map((dua, i) => {
+                        listDuas.map((dua, i) => {
                             // Helper to make title more "Institutional"
                             const getTitle = (d) => {
                                 if (d.category === 'illness') return 'Dua for Sickness'
@@ -347,7 +406,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 <button
                                     key={dua.id}
                                     onClick={() => {
-                                        setSelectedIndex(i)
+                                        // Find global index in swipeDuas for full scrolling
+                                        const globalIndex = swipeDuas.findIndex(sd => sd.id === dua.id)
+                                        setSelectedIndex(globalIndex !== -1 ? globalIndex : i)
                                         skippingFirstScroll.current = true
                                         setViewMode('swipe')
                                     }}
@@ -381,9 +442,17 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // SWIPE: Full screen gallery
     if (viewMode === 'swipe') {
+        const currentDua = swipeDuas[selectedIndex]
         return (
             <div className="fixed inset-0 z-[100] flex flex-col animate-modal-slide-up" style={{ background: t(theme, 'surface-0') }}>
-                <div className="flex items-center justify-between py-6 px-6" style={{ background: t(theme, 'surface-0') }}>
+                <div
+                    className="flex items-center justify-between px-6"
+                    style={{
+                        background: t(theme, 'surface-0'),
+                        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
+                        paddingBottom: '1.5rem'
+                    }}
+                >
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setViewMode('dualist')}
@@ -407,13 +476,14 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     onScroll={handleSwipeScroll}
                     className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
                 >
-                    {filteredDuas.map((dua, i) => (
-                        <div key={dua.id} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto">
+                    {swipeDuas.map((dua, i) => (
+                        <div key={dua.id} className="w-full h-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto">
                             <DuaCard
                                 dua={{
                                     ...dua,
                                     reference: toTitleCase(dua.reference) || 'Supplication'
                                 }}
+                                label={getDuaLabel(dua)}
                                 type="dua"
                                 hideAudio={false}
                                 hideCounter={['rabbana', 'salawat'].includes(activeSection)}
@@ -423,9 +493,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 </div>
 
                 {/* Mounted mini tasbeeh whenever a Dua is to be read a certain amount of times */}
-                {filteredDuas[selectedIndex]?.repeat > 1 && (
+                {swipeDuas[selectedIndex]?.repeat > 1 && (
                     <MiniTasbih
-                        target={filteredDuas[selectedIndex].repeat}
+                        target={swipeDuas[selectedIndex].repeat}
                         count={miniTasbihCount}
                         onCountChange={setMiniTasbihCount}
                     />
@@ -433,6 +503,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             </div>
         )
     }
+
 
     return null
 }

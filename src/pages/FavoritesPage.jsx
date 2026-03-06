@@ -32,7 +32,7 @@ export default function FavoritesPage({ duas, asma }) {
     const isEmpty = favDuas.length === 0 && favAsma.length === 0
 
     return (
-        <div className="pb-32 max-w-xl md:max-w-6xl mx-auto min-h-screen">
+        <div className="pb-32 max-w-xl md:max-w-6xl mx-auto min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
             <PageHeader
                 title="Favourites"
                 subtitle="Your pinned Duas, Names & Salawat"

@@ -70,7 +70,7 @@ export default function DuaPage() {
     ]
 
     return (
-        <div className="pb-32 flex flex-col gap-6 max-w-xl md:max-w-6xl mx-auto">
+        <div className="pb-32 flex flex-col gap-6 max-w-xl md:max-w-6xl mx-auto" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
             <PageHeader
                 title="Dhikr & Dua"
                 subtitle="Collections of Supplication"
