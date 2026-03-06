@@ -1,6 +1,6 @@
 # Deen Space
 
-> A beautifully crafted, modern web application for digital Tasbih, Awrad, and Islamic resources.
+> a beautifully crafted, modern web application for your Daily Dua, Awrad, and Islamic resources.
 
 ## Features
 
