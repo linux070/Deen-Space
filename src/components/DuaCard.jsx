@@ -79,11 +79,11 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
                     style={{ background: t(theme, 'border') }}
                 />
 
-                <div className={`flex-1 ${isCountingMode ? 'max-h-[30vh]' : ''}`}>
+                <div className={`flex-1`}>
                     {/* Transliteration */}
                     {showTransliteration && dua.transliteration && (
                         <p
-                            className="text-[15px] italic leading-relaxed mb-6 text-capitalize"
+                            className="text-[17px] italic leading-relaxed mb-6 text-capitalize"
                             style={{
                                 color: t(theme, 'text-secondary'),
                                 fontFamily: 'var(--font-serif-body)',
@@ -96,7 +96,7 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
                     {/* Translation */}
                     {showTranslation && translation && (
                         <p
-                            className="text-[15px] italic leading-relaxed text-capitalize"
+                            className="text-[17px] italic leading-relaxed text-capitalize"
                             style={{
                                 color: t(theme, 'text-secondary'),
                                 fontFamily: 'var(--font-serif-body)',
@@ -108,58 +108,17 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
                 </div>
             </div>
 
-            {/* Counting Area (if repeat > 1) */}
-            {dua.repeat && dua.repeat > 1 && !hideCounter && (
-                <div
-                    className={`mt-auto px-6 py-6 border-t flex flex-col items-center gap-3`}
-                    style={{
-                        borderColor: t(theme, 'surface-3'),
-                        background: isCountingMode ? t(theme, 'surface-2') : 'transparent'
-                    }}
-                >
-                    <div className="flex items-center justify-between w-full">
-                        <div className="flex flex-col">
-                            <span className="text-[10px] uppercase tracking-wider font-bold mb-0.5" style={{ color: t(theme, 'text-muted') }}>Progress</span>
-                            <span className="text-xl font-bold tabular-nums" style={{ color: t(theme, 'accent') }}>
-                                {count} <span className="text-sm" style={{ color: t(theme, 'text-muted') }}>/ {dua.repeat}</span>
-                            </span>
-                        </div>
-                        <button
-                            onClick={resetCount}
-                            className="p-2 rounded-xl transition-all duration-200 active:rotate-180"
-                            style={{ background: t(theme, 'surface-3'), color: t(theme, 'text-secondary') }}
-                        >
-                            <IconRefresh size={18} />
-                        </button>
-                    </div>
-                    {/* Progress Bar */}
-                    <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: t(theme, 'surface-3') }}>
-                        <div
-                            className="h-full transition-all duration-300 rounded-full"
-                            style={{
-                                width: `${(count / dua.repeat) * 100}%`,
-                                background: t(theme, 'accent'),
-                                boxShadow: `0 0 10px ${t(theme, 'accent')}44`
-                            }}
-                        />
-                    </div>
-                    {isCountingMode && (
-                        <p className="text-[10px] text-center mt-1 font-medium animate-pulse" style={{ color: t(theme, 'text-muted') }}>
-                            Tap anywhere on the card to count
-                        </p>
-                    )}
-                </div>
-            )}
+
 
             {/* Footer: Reference + Actions */}
             <div className="flex items-center justify-between px-6 py-4" style={{ background: t(theme, 'surface-1') }}>
                 <div className="flex items-center gap-2">
                     {dua.reference && (
                         <span
-                            className="text-[10px] px-2.5 py-1 rounded-lg font-bold tracking-[0.1em]"
+                            className="text-[13px] px-3 py-1.5 rounded-xl font-bold tracking-tight"
                             style={{
                                 background: t(theme, 'surface-2'),
-                                color: t(theme, 'text-secondary'),
+                                color: t(theme, 'text-primary'),
                                 border: `1px solid ${t(theme, 'border')}`
                             }}
                         >
@@ -168,7 +127,16 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
                     )}
                 </div>
 
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-3">
+                    {dua.repeat && dua.repeat > 1 && (
+                        <span className="text-[14px] font-bold px-3 py-1.5 rounded-xl" style={{
+                            color: t(theme, 'text-primary'),
+                            background: t(theme, 'surface-2'),
+                            border: `1px solid ${t(theme, 'border')}`
+                        }}>
+                            x{dua.repeat}
+                        </span>
+                    )}
                     <button
                         onClick={(e) => { e.stopPropagation(); toggle({ id: dua.id, type }) }}
                         className="p-2.5 rounded-full transition-all duration-200 active:scale-90"
@@ -181,26 +149,6 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
                     >
                         {fav ? <IconHeartFill size={20} /> : <IconHeart size={20} />}
                     </button>
-                    {!hideAudio && (
-                        <button
-                            onClick={(e) => { e.stopPropagation(); speak(dua.arabic_text, dua.id) }}
-                            className="p-2.5 rounded-full transition-all duration-200 active:scale-90 relative"
-                            style={{
-                                color: isPlaying
-                                    ? t(theme, 'accent')
-                                    : t(theme, 'text-muted'),
-                            }}
-                            aria-label={isPlaying ? 'Stop audio' : 'Play audio'}
-                        >
-                            <IconVolume size={20} />
-                            {isPlaying && (
-                                <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: t(theme, 'accent') }}></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: t(theme, 'accent') }}></span>
-                                </span>
-                            )}
-                        </button>
-                    )}
                 </div>
             </div>
         </article>

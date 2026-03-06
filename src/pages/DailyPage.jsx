@@ -19,7 +19,7 @@ export default function DailyPage({ duas }) {
     const { category } = useParams()
 
     // View state: 'landing' (grid) -> 'swipe' (detail)
-    const [viewMode, setViewMode] = useState(category ? 'swipe' : 'landing')
+    const [viewMode, setViewMode] = useState(category ? 'dualist' : 'landing')
     const [activeCategory, setActiveCategory] = useState(category)
     const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -29,7 +29,7 @@ export default function DailyPage({ duas }) {
     useEffect(() => {
         if (category) {
             setActiveCategory(category)
-            setViewMode('swipe')
+            setViewMode('dualist')
         }
     }, [category])
 
@@ -65,6 +65,10 @@ export default function DailyPage({ duas }) {
             return
         }
         if (viewMode === 'dualist') {
+            if (category) {
+                navigate('/dua')
+                return
+            }
             setViewMode('landing')
             setActiveCategory(null)
             return
@@ -78,21 +82,21 @@ export default function DailyPage({ duas }) {
     // HEADER — matching LibraryPage's header pattern
     const Header = () => {
         const title = viewMode === 'swipe'
-            ? 'Daily Adhkar' // Stable header in swipe mode
-            : (viewMode === 'landing' ? 'Daily Adhkar' : activeCatData?.label || 'Adhkar')
+            ? `${toTitleCase(activeCategory)} ${selectedIndex + 1} / ${swipeDuas.length}`
+            : (viewMode === 'landing' ? 'Daily Adhkar' : toTitleCase(activeCategory))
 
-        const subtitle = 'Collections of Supplication'
+        const subtitle = (viewMode === 'landing') ? 'Collections of Supplication' : null
 
         return (
             <div className="sticky top-0 z-20 pb-6" style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
-                    title={title}
+                    title={viewMode === 'dualist' ? '' : title}
                     subtitle={subtitle}
                     onBack={goBack}
-                    padding="px-6 pt-16 pb-10"
+                    padding={(viewMode === 'dualist') ? "px-6 pt-12 pb-4" : "px-6 pt-16 pb-10"}
+                    titleWeight={viewMode === 'dualist' ? 200 : 400}
                     sticky={false}
                     titleSerif={false}
-                    titleWeight={400}
                     subtitleCase="title"
                 />
             </div>
@@ -111,11 +115,7 @@ export default function DailyPage({ duas }) {
                             key={cat.key}
                             onClick={() => {
                                 setActiveCategory(cat.key)
-                                // Find global index in swipeDuas for full scrolling
-                                const firstDuaInCat = duas.find(d => d.category === cat.key)
-                                const globalIndex = swipeDuas.findIndex(sd => sd.id === firstDuaInCat?.id)
-                                setSelectedIndex(globalIndex !== -1 ? globalIndex : 0)
-                                setViewMode('swipe')
+                                setViewMode('dualist')
                             }}
                             className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                             style={{
@@ -198,7 +198,7 @@ export default function DailyPage({ duas }) {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <h4 className="text-[15px] font-semibold text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
-                                        {toTitleCase(dua.reference) || 'Supplication'}
+                                        {activeCategory ? `${toTitleCase(activeCategory)} ${i + 1}` : (toTitleCase(dua.reference) || 'Supplication')}
                                     </h4>
                                 </div>
                             </button>

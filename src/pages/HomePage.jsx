@@ -244,7 +244,7 @@ export default function HomePage({ duas = [], asma = [] }) {
     /* ────────────── Home View ────────────── */
     return (
         <div
-            className="pb-32 px-6 flex flex-col gap-6 max-w-xl md:max-w-6xl mx-auto"
+            className="pb-32 px-6 flex flex-col gap-4 max-w-xl md:max-w-6xl mx-auto"
             style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 2.5rem)' }}
         >
 
@@ -263,7 +263,7 @@ export default function HomePage({ duas = [], asma = [] }) {
                     Assalamu Alaikum
                 </h1>
                 <p
-                    className="text-[16px] opacity-60 mt-1 tracking-tight leading-relaxed"
+                    className="text-[16px] opacity-60 tracking-tight leading-relaxed"
                     style={{ color: t(theme, 'text-muted') }}
                 >
                     {greeting}, welcome back to your space.

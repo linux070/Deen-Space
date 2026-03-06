@@ -27,7 +27,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     // View state
     const [viewMode, setViewMode] = useState(
         initialSection
-            ? (['situational', 'emotions', 'general'].includes(initialSection) ? 'sublist' : 'swipe')
+            ? (['situational', 'emotions', 'general', 'rabbana', 'salawat'].includes(initialSection) ? (['situational', 'emotions', 'general'].includes(initialSection) ? 'sublist' : 'dualist') : 'swipe')
             : 'landing'
     )
     const [activeSection, setActiveSection] = useState(initialSection)
@@ -35,6 +35,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [search, setSearch] = useState('')
     const [miniTasbihCount, setMiniTasbihCount] = useState(0)
+    const [customPrayers, setCustomPrayers] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('user-custom-prayers') || '[]') } catch { return [] }
+    })
+    const [showAddModal, setShowAddModal] = useState(false)
+    const [newPrayer, setNewPrayer] = useState({ arabic: '', transliteration: '', translation: '', reference: '' })
 
     const scrollRef = useRef(null)
     const skippingFirstScroll = useRef(false)
@@ -77,6 +82,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 { id: 'toilet', title: 'Restroom', icon: IconInfo },
                 { id: 'home', title: 'Leaving / Entering Home', icon: IconCompass },
                 { id: 'dressing', title: 'Dressing', icon: IconHeart },
+                { id: 'custom-prayers', title: 'Custom Prayers', icon: IconGrid },
             ]
         }
         return []
@@ -141,29 +147,25 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         setMiniTasbihCount(0)
     }, [selectedIndex])
 
-    // BACK NAVIGATION - Skip sublist if coming from vertical list
     const goBack = () => {
         if (search) {
             setSearch('')
             return
         }
+
         if (viewMode === 'swipe') {
             setViewMode('dualist')
             return
         }
 
-        if (initialSection && activeSection === initialSection) {
+        if (viewMode === 'dualist') {
             if (activeSubSection) {
+                setViewMode('sublist')
                 setActiveSubSection(null)
                 return
             }
-            navigate('/dua')
-            return
-        }
-
-        if (viewMode === 'dualist') {
-            if (activeSubSection) {
-                setActiveSubSection(null)
+            if (activeSection === 'salawat' || activeSection === 'rabbana' || (initialSection && activeSection === initialSection)) {
+                navigate('/dua')
                 return
             }
             setViewMode('landing')
@@ -171,8 +173,16 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             return
         }
         if (viewMode === 'sublist') {
+            if (initialSection && activeSection === initialSection) {
+                navigate('/dua')
+                return
+            }
             setViewMode('landing')
             setActiveSection(null)
+            return
+        }
+        if (viewMode === 'custom') {
+            setViewMode('sublist')
             return
         }
         if (viewMode === 'landing') {
@@ -184,14 +194,24 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     const getPageTitle = () => {
         if (viewMode === 'landing') return 'Library'
+
         if (viewMode === 'swipe') {
-            if (activeSection === 'rabbana') return `Robbana Dua ${selectedIndex + 1} / ${swipeDuas.length}`
-            if (activeSection === 'salawat') return `Prophetic Salawat ${selectedIndex + 1} / ${swipeDuas.length}`
-            return toTitleCase(activeSection) + ' Duas'
+            if (activeSection === 'rabbana') return `Robbana ${selectedIndex + 1} / ${swipeDuas.length}`
+            if (activeSection === 'salawat') return `Salawat ${selectedIndex + 1} / ${swipeDuas.length}`
         }
-        if (activeSection === 'rabbana') return '40 Robbana'
-        if (activeSection === 'salawat') return 'Prophetic Salawat'
-        if (activeSection === 'ramadan') return 'Ramadan Special'
+
+        const coreCollections = {
+            general: 'General Duas',
+            emotions: 'Emotions',
+            situational: 'Situational Duas',
+            rabbana: '40 Robbana',
+            salawat: 'Salawat',
+            ramadan: 'Ramadan Special'
+        }
+
+        if (activeSection && coreCollections[activeSection]) {
+            return coreCollections[activeSection]
+        }
 
         if (activeSubSection) return toTitleCase(activeSubSection)
         return activeSection ? toTitleCase(activeSection) : 'Library'
@@ -219,7 +239,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             if (dua.arabic_text.includes('الْحَمْدُ لِلَّهِ')) return 'Dressing'
             return 'Undressing'
         }
-        if (cat === 'rabbana') return 'Quranic Robbana'
+        if (cat === 'rabbana') return 'Quranic Rabbana'
         if (cat === 'salawat') return 'Prophetic Salawat'
 
         return toTitleCase(cat)
@@ -227,18 +247,25 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     const Header = () => {
         const title = getPageTitle()
-        const subtitle = 'Collections of Supplication'
+        let subtitle = 'Collections of Supplication'
+
+        if (activeSubSection) {
+            subtitle = toTitleCase(activeSubSection)
+        } else if (activeSection === 'rabbana') {
+            subtitle = 'Prophetic Prayers'
+        }
 
         return (
             <div className="sticky top-0 z-20 pb-6" style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
-                    title={title}
-                    subtitle={subtitle}
+                    title={(viewMode === 'dualist' || viewMode === 'sublist') && !['rabbana', 'salawat'].includes(activeSection) ? '' : title}
+                    subtitle={(viewMode === 'dualist' || viewMode === 'sublist' || viewMode === 'swipe') ? null : subtitle}
                     onBack={goBack}
-                    padding="px-6 pt-16 pb-10"
+                    padding={(viewMode === 'dualist' || viewMode === 'sublist') ? "px-6 pt-8 pb-1" : "px-6 pt-12 pb-8"}
+                    titleSize={['rabbana', 'salawat'].includes(activeSection) ? "text-xl" : "text-3xl"}
+                    titleWeight={['rabbana', 'salawat'].includes(activeSection) ? 300 : (viewMode === 'dualist' ? 200 : 400)}
                     sticky={false}
                     titleSerif={false}
-                    titleWeight={400}
                     subtitleCase="title"
                 />
 
@@ -292,10 +319,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     if (['situational', 'emotions', 'general'].includes(s.id)) {
                                         setViewMode('sublist')
                                     } else {
-                                        // Simple sections (like Salawat) land on swipe directly
-                                        setSelectedIndex(0)
-                                        skippingFirstScroll.current = true
-                                        setViewMode('swipe')
+                                        setViewMode('dualist')
                                     }
                                 }}
                                 className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg"
@@ -340,12 +364,12 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 key={sub.id}
                                 onClick={() => {
                                     setActiveSubSection(sub.id)
-                                    // Bypassing dualist: find the first dua of this sub-section and jump straight to swipe
-                                    const firstDuaOfSub = duas.find(d => d.category === sub.id)
-                                    const globalIndex = swipeDuas.findIndex(sd => sd.id === (firstDuaOfSub?.id))
-                                    setSelectedIndex(globalIndex !== -1 ? globalIndex : 0)
-                                    skippingFirstScroll.current = true
-                                    setViewMode('swipe')
+                                    if (sub.id === 'custom-prayers') {
+                                        setViewMode('custom')
+                                        return
+                                    }
+                                    // Enter list mode for the selected sub-category
+                                    setViewMode('dualist')
                                 }}
                                 className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                                 style={{
@@ -373,20 +397,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         return (
             <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
-                <main className="px-6 flex flex-col gap-4 mt-4 animate-fade-in">
-                    {activeSection === 'rabbana' && (
-                        <div className="flex flex-col items-center py-12 opacity-80 animate-fade-in">
-                            <p
-                                className="text-[1.75rem] md:text-4xl text-center mb-4 whitespace-nowrap overflow-hidden text-ellipsis"
-                                style={{ fontFamily: 'var(--script-font)', color: t(theme, 'text-primary'), direction: 'rtl' }}
-                            >
-                                بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ
-                            </p>
-                            <p className="text-[11px] font-medium tracking-wide opacity-40 mt-1 text-center leading-relaxed">
-                                In The Name Of Allah, The Most Beneficent, The Most Merciful.
-                            </p>
-                        </div>
-                    )}
+                <main className="px-6 flex flex-col gap-1 mt-1 animate-fade-in">
                     {listDuas.length === 0 ? (
                         <div className="text-center py-20 opacity-30">No duas found</div>
                     ) : (
@@ -397,8 +408,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 if (d.category === 'travel') return 'Dua for Travel'
                                 if (d.category === 'istikhara') return 'Dua for Istikhara'
                                 if (d.category === 'emotions') return `For ${activeSubSection?.charAt(0).toUpperCase()}${activeSubSection?.slice(1)}`
-                                if (d.category === 'rabbana') return d.transliteration || 'Supplication'
-                                if (d.category === 'salawat') return d.transliteration || 'Supplication'
+                                if (d.category === 'rabbana') return `Robbana ${i + 1}`
+                                if (d.category === 'salawat') return `Salawat ${i + 1}`
+                                if (['morning', 'evening', 'after-salah'].includes(d.category)) return `${toTitleCase(d.category)} ${i + 1}`
                                 return d.transliteration || 'Supplication'
                             }
 
@@ -412,11 +424,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         skippingFirstScroll.current = true
                                         setViewMode('swipe')
                                     }}
-                                    className="group flex gap-5 items-center p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg"
+                                    className="group flex gap-4 items-center p-3.5 rounded-2xl text-left transition-all active:scale-[0.98] hover:shadow-lg"
                                     style={{
                                         background: t(theme, 'surface-1'),
                                         border: `1px solid ${t(theme, 'border')}`,
-                                        boxShadow: theme === 'dark' ? 'none' : '0 4px 15px rgba(0,0,0,0.02)'
+                                        boxShadow: theme === 'dark' ? 'none' : '0 2px 8px rgba(0,0,0,0.01)'
                                     }}
                                 >
                                     <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl font-black text-sm relative overflow-hidden"
@@ -426,7 +438,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <h4 className="text-[15px] font-semibold text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
-                                            {activeSection === 'rabbana' ? `Robbana Dua ${i + 1}` : (toTitleCase(dua.reference) || 'Supplication')}
+                                            {activeSection === 'rabbana' ? `Robbana ${i + 1}` :
+                                                activeSection === 'salawat' ? `Salawat ${i + 1}` :
+                                                    (toTitleCase(dua.reference) || 'Supplication')}
                                         </h4>
                                         {/* Main text removed as requested, keeping it clean and institutional */}
                                     </div>
@@ -455,7 +469,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 >
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={() => setViewMode('dualist')}
+                            onClick={goBack}
                             className="w-10 h-10 flex items-center justify-center rounded-2xl transition-all active:scale-90"
                             style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
                         >
@@ -477,13 +491,13 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
                 >
                     {swipeDuas.map((dua, i) => (
-                        <div key={dua.id} className="w-full h-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto">
+                        <div key={dua?.id || i} className="w-full h-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto">
                             <DuaCard
                                 dua={{
                                     ...dua,
                                     reference: toTitleCase(dua.reference) || 'Supplication'
                                 }}
-                                label={getDuaLabel(dua)}
+                                label={null}
                                 type="dua"
                                 hideAudio={false}
                                 hideCounter={['rabbana', 'salawat'].includes(activeSection)}
@@ -504,6 +518,148 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         )
     }
 
+
+    // CUSTOM PRAYERS VIEW
+    if (viewMode === 'custom') {
+        const isDark = theme === 'dark'
+        const savePrayer = () => {
+            if (!newPrayer.arabic.trim()) return
+            const updated = [...customPrayers, { ...newPrayer, id: Date.now() }]
+            setCustomPrayers(updated)
+            localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
+            setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
+            setShowAddModal(false)
+        }
+        const removePrayer = (id) => {
+            const updated = customPrayers.filter(p => p.id !== id)
+            setCustomPrayers(updated)
+            localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
+        }
+
+        return (
+            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+                {/* Header removed as per user request for Custom Dua section */}
+                <div className="px-6 pt-8 pb-6 container mx-auto flex items-center justify-between">
+                    <button onClick={goBack} className="p-3 rounded-2xl transition-all active:scale-95" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}>
+                        <IconChevronLeft size={20} />
+                    </button>
+                    <button
+                        onClick={() => setShowAddModal(true)}
+                        className="px-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-[0.98]"
+                        style={{ background: t(theme, 'accent'), color: theme === 'dark' ? '#000' : '#fff' }}
+                    >
+                        + New prayer
+                    </button>
+                </div>
+
+                <main className="px-6 animate-fade-in mt-2 container mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {customPrayers.length === 0 ? (
+                            <div className="col-span-full text-center py-24 opacity-30 text-[11px] font-black uppercase tracking-[0.3em]">No personal prayers yet</div>
+                        ) : (
+                            customPrayers.map((p) => (
+                                <div
+                                    key={p.id}
+                                    className="group relative flex items-center gap-5 px-6 py-5 rounded-[1.5rem] transition-all duration-500 border hover:shadow-xl hover:-translate-y-1"
+                                    style={{
+                                        background: t(theme, 'surface-1'),
+                                        borderColor: t(theme, 'border'),
+                                        boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.2)' : '0 8px 25px rgba(0,0,0,0.03)'
+                                    }}
+                                >
+                                    <div className="flex-1 flex flex-col items-start leading-tight min-w-0">
+                                        <span className="text-[16px] font-bold tracking-tight truncate w-full" style={{ color: t(theme, 'text-primary') }}>{p.transliteration || 'Personal Dua'}</span>
+                                        <span className="text-[11px] opacity-50 font-medium line-clamp-1 mt-1.5" style={{ color: t(theme, 'text-muted') }}>{p.translation || 'Private Supplication'}</span>
+                                    </div>
+                                    <button
+                                        onClick={() => removePrayer(p.id)}
+                                        className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500/10 hover:text-red-500"
+                                        style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-muted') }}
+                                    >
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M18 6L6 18M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </main>
+
+                {showAddModal && (
+                    <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-fade-in">
+                        <div className="w-full max-w-lg p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up" style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
+                            <div className="flex items-center justify-between mb-8">
+                                <h3 className="text-2xl font-medium" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>New Personal Prayer</h3>
+                                <button onClick={() => setShowAddModal(false)} className="opacity-40 hover:opacity-100 transition-opacity">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M18 6L6 18M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div className="flex flex-col gap-8">
+                                <div className="space-y-6">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Arabic Text (Optional)</label>
+                                        <textarea
+                                            placeholder="بِسْمِ اللَّهِ..."
+                                            value={newPrayer.arabic}
+                                            onChange={e => setNewPrayer({ ...newPrayer, arabic: e.target.value })}
+                                            className="w-full p-5 rounded-[1.5rem] text-right min-h-[120px] outline-none transition-all focus:ring-2 focus:ring-accent/20 resize-none text-xl"
+                                            style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary'), direction: 'rtl', fontFamily: 'var(--font-serif-arabic)' }}
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Transliteration</label>
+                                            <input
+                                                placeholder="Bismillah..."
+                                                value={newPrayer.transliteration}
+                                                onChange={e => setNewPrayer({ ...newPrayer, transliteration: e.target.value })}
+                                                className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
+                                                style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Reference</label>
+                                            <input
+                                                placeholder="e.g. Personal"
+                                                value={newPrayer.reference}
+                                                onChange={e => setNewPrayer({ ...newPrayer, reference: e.target.value })}
+                                                className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
+                                                style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Translation</label>
+                                        <input
+                                            placeholder="In the name of Allah..."
+                                            value={newPrayer.translation}
+                                            onChange={e => setNewPrayer({ ...newPrayer, translation: e.target.value })}
+                                            className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
+                                            style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={savePrayer}
+                                    className="w-full py-5 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[0.2em] transition-all active:scale-[0.98] shadow-xl"
+                                    style={{ background: t(theme, 'accent'), color: theme === 'dark' ? '#000' : '#fff' }}
+                                >
+                                    Save Prayer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        )
+    }
 
     return null
 }

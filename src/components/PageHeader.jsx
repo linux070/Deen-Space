@@ -11,6 +11,7 @@ export default function PageHeader({
     sticky = true,
     padding = "px-6 pt-16 pb-8",
     subtitleCase = "uppercase",
+    titleSize = "text-3xl",
     titleWeight,
     titleSerif = false
 }) {
@@ -33,11 +34,11 @@ export default function PageHeader({
                 paddingTop: `calc(env(safe-area-inset-top, 0px) + ${padding.includes('pt-16') ? '1.5rem' : '1rem'})`,
             }}
         >
-            <div className="flex items-start gap-5 animate-slide-down">
+            <div className={`flex ${subtitle ? 'items-start' : 'items-center'} gap-5 animate-slide-down`}>
                 {showBack && (
                     <button
                         onClick={handleBack}
-                        className="mt-1 p-2.5 -ml-2 rounded-2xl transition-all duration-300 active:scale-90 flex-shrink-0 group relative"
+                        className="p-2.5 -ml-2 rounded-2xl transition-all duration-300 active:scale-90 flex-shrink-0 group relative"
                         style={{
                             background: t(theme, 'surface-1'),
                             color: t(theme, 'accent'),
@@ -54,7 +55,7 @@ export default function PageHeader({
                 )}
                 <div className="flex-1 min-w-0">
                     <h1
-                        className={`text-3xl tracking-tight leading-tight ${titleSerif ? 'italic' : ''}`}
+                        className={`${titleSize} tracking-tight leading-tight ${titleSerif ? 'italic' : ''}`}
                         style={{
                             color: t(theme, 'text-primary'),
                             fontFamily: titleSerif ? 'var(--font-serif-heading)' : 'inherit',

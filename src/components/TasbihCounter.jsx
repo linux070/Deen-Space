@@ -18,14 +18,22 @@ export default function TasbihCounter() {
     const isLight = theme === 'light'
 
     const [selected, setSelected] = useState(() => {
-        try { return parseInt(localStorage.getItem('dhikr-selected') || '0') } catch { return 0 }
+        try {
+            const saved = localStorage.getItem('dhikr-selected')
+            // Special case: we want it to default to "Select Dhikr" (null) on fresh load/refresh
+            // unless the user has explicitly interacted with it in this session.
+            // But to follow the "go back to select dhikr on refresh" instruction:
+            return null
+        } catch { return null }
     })
 
     const [customLabel, setCustomLabel] = useState(() => localStorage.getItem('dhikr-custom-label') || '')
     const [customTarget, setCustomTarget] = useState(() => {
         try {
             const saved = localStorage.getItem('dhikr-custom-target')
-            return saved ? parseInt(saved) : 0
+            const parsed = saved ? parseInt(saved) : 0
+            // Reset to 0 if it was the old default of 100
+            return (parsed === 100) ? 0 : parsed
         } catch { return 0 }
     })
 
@@ -37,7 +45,8 @@ export default function TasbihCounter() {
         } catch { return [] }
     })
 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+    const [isCustomModalOpen, setIsCustomModalOpen] = useState(false)
 
     // Combined options
     const allOptions = [
@@ -62,11 +71,11 @@ export default function TasbihCounter() {
     })
 
     const btnRef = useRef(null)
-    const activeOpt = allOptions[selected] || allOptions[0]
-    const isCustom = activeOpt.isCustom
-    const currentCount = counts[selected] || 0
-    const target = isCustom ? customTarget : activeOpt.target
-    const displayText = isCustom ? (customLabel || 'Custom Counter') : activeOpt.text
+    const activeOpt = selected !== null ? allOptions[selected] : null
+    const isCustom = activeOpt?.isCustom
+    const currentCount = selected !== null ? (counts[selected] || 0) : 0
+    const target = isCustom ? customTarget : (activeOpt?.target || 0)
+    const displayText = isCustom ? (customLabel || 'Custom Counter') : (activeOpt?.text || 'Select Dhikr')
 
     const haptic = useCallback(() => {
         if (navigator.vibrate) navigator.vibrate(15)
@@ -96,7 +105,6 @@ export default function TasbihCounter() {
     const handleSelectDhikr = (index) => {
         setSelected(index)
         localStorage.setItem('dhikr-selected', String(index))
-        setIsDropdownOpen(false)
         haptic()
     }
 
@@ -135,181 +143,205 @@ export default function TasbihCounter() {
     const trackColor = isLight ? '#D4CCA4' : t(theme, 'surface-2')
 
     return (
-        <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center gap-12 lg:gap-20 py-8 w-full max-w-6xl mx-auto px-6">
+        <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center gap-8 lg:gap-16 py-4 w-full max-w-6xl mx-auto px-6">
 
             {/* Selection Area */}
-            <div className="w-full lg:w-[440px] flex flex-col gap-8 animate-fade-in text-left">
-                {/* Dhikr selection system - DROPDOWN */}
-                <div className="flex flex-col gap-6 relative">
-                    <p className="text-[12px] font-bold tracking-tight opacity-50 ml-1" style={{ color: t(theme, 'text-muted') }}>
-                        Select Dhikr
-                    </p>
+            <div className="w-full lg:w-[440px] flex flex-col gap-4 animate-fade-in text-left relative">
 
-                    <div className="relative">
-                        <button
-                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className="w-full flex items-center justify-between px-6 py-5 rounded-[2.5rem] text-left transition-all duration-300 border shadow-md relative group"
-                            style={{
-                                background: t(theme, 'surface-1'),
-                                color: t(theme, 'text-primary'),
-                                borderColor: t(theme, 'border')
-                            }}
-                        >
-                            <span className="text-[15px] font-bold flex items-center gap-4">
-                                <span className={`w-2 h-2 rounded-full transition-shadow duration-300 ${isDropdownOpen ? 'shadow-[0_0_10px_var(--color-accent)]' : ''}`} style={{ background: t(theme, 'accent') }} />
-                                {activeOpt.label}
-                            </span>
-                            <div className={`p-1 rounded-full transition-all duration-300 ${isDropdownOpen ? 'bg-[rgba(0,0,0,0.05)]' : ''}`}>
-                                <svg className={`transition-transform duration-500 ${isDropdownOpen ? 'rotate-180' : ''}`} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </button>
+                <div className="grid grid-cols-2 gap-3">
+                    {/* Standard Options */}
+                    {DHIKR_OPTIONS.slice(0, -1).map((opt, i) => {
+                        const isActive = selected === i
+                        return (
+                            <button
+                                key={i}
+                                onClick={() => handleSelectDhikr(i)}
+                                className="group relative flex items-center justify-center py-6 px-4 transition-all duration-300 active:scale-95"
+                            >
+                                <div
+                                    className={`absolute inset-0 rounded-[1.25rem] transition-all duration-500 ${isActive ? 'opacity-100 shadow-xl scale-100' : 'opacity-0 scale-95'}`}
+                                    style={{
+                                        background: isActive ? (isLight ? '#334155' : '#4b5563') : t(theme, 'text-primary'),
+                                        boxShadow: isActive ? '0 12px 30px rgba(0,0,0,0.2)' : 'none'
+                                    }}
+                                />
+                                <div className="flex flex-col items-center gap-1.5 relative">
+                                    <span
+                                        className="text-[22px] transition-all duration-300 leading-tight pt-0.5"
+                                        style={{
+                                            color: isActive ? '#ffffff' : t(theme, 'text-primary'),
+                                            fontFamily: 'var(--font-serif-arabic)',
+                                            fontWeight: isActive ? 600 : 500
+                                        }}
+                                    >
+                                        {opt.label}
+                                    </span>
+                                    <span
+                                        className="text-[9px] font-black uppercase tracking-[0.15em] opacity-60 transition-colors"
+                                        style={{ color: isActive ? '#ffffff' : t(theme, 'text-muted') }}
+                                    >
+                                        {opt.text}
+                                    </span>
+                                </div>
+                            </button>
+                        )
+                    })}
 
-                        {isDropdownOpen && (
-                            <div
-                                className="absolute top-[calc(100%+12px)] left-0 right-0 z-[100] rounded-[2.5rem] overflow-hidden shadow-2xl border animate-modal-slide-up"
+                    {/* Saved Items in same grid */}
+                    {savedCustoms.map((opt, idx) => {
+                        const realIndex = DHIKR_OPTIONS.length - 1 + idx
+                        const isActive = selected === realIndex
+                        return (
+                            <button
+                                key={opt.id}
+                                onClick={() => handleSelectDhikr(realIndex)}
+                                className="group relative flex items-center justify-center py-6 px-4 transition-all duration-300 active:scale-95 border rounded-[1.25rem]"
                                 style={{
-                                    background: t(theme, 'surface-1'),
-                                    borderColor: t(theme, 'border'),
-                                    backdropFilter: 'blur(30px)',
-                                    WebkitBackdropFilter: 'blur(30px)',
+                                    borderColor: isActive ? (isLight ? '#334155' : '#4b5563') : t(theme, 'border')
                                 }}
                             >
-                                <div className="px-6 pt-6 pb-2">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40" style={{ color: t(theme, 'text-primary') }}>
-                                        Select Dhikr
-                                    </p>
-                                </div>
-                                <div className="max-h-[350px] overflow-y-auto no-scrollbar pb-4">
-                                    {allOptions.map((opt, i) => {
-                                        const isActive = selected === i
-                                        return (
-                                            <div
-                                                key={i}
-                                                onClick={() => handleSelectDhikr(i)}
-                                                className="group flex items-center justify-between px-6 py-5 cursor-pointer transition-all duration-300 mx-2 rounded-[1.5rem]"
-                                                style={{
-                                                    color: isActive ? t(theme, 'text-primary') : t(theme, 'text-secondary'),
-                                                    background: isActive
-                                                        ? (theme === 'light' ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.04)')
-                                                        : 'transparent'
-                                                }}
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div
-                                                        className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all duration-300 ${isActive ? 'scale-110 shadow-sm' : 'opacity-40'}`}
-                                                        style={{
-                                                            background: isActive ? t(theme, 'accent') : t(theme, 'surface-2'),
-                                                            color: isActive ? (theme === 'dark' ? '#0c0f14' : '#ffffff') : t(theme, 'text-primary')
-                                                        }}
-                                                    >
-                                                        {i + 1}
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <span className={`text-[17px] tracking-tight transition-all ${isActive ? 'font-black' : 'font-bold'}`}>{opt.label}</span>
-                                                        <span className="text-[11px] font-medium opacity-50 tracking-tight">Goal: {opt.target} {opt.text !== opt.label ? `• ${opt.text}` : ''}</span>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex items-center gap-2">
-                                                    {opt.isSaved && (
-                                                        <button
-                                                            onClick={(e) => removeSaved(e, opt.id)}
-                                                            className="p-3 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-all active:scale-90"
-                                                        >
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                                            </svg>
-                                                        </button>
-                                                    )}
-                                                    {isActive && (
-                                                        <div className="w-2 h-2 rounded-full animate-fade-in" style={{ background: t(theme, 'accent'), boxShadow: `0 0 10px ${t(theme, 'accent')}` }} />
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {isCustom && (
-                        <div className="flex flex-col gap-6 p-8 rounded-[2.5rem] animate-fade-in shadow-xl group" style={{
-                            background: t(theme, 'surface-1'),
-                            border: `1px solid ${t(theme, 'border')}`,
-                            boxShadow: `0 20px 60px rgba(0,0,0,${theme === 'dark' ? '0.4' : '0.04'})`
-                        }}>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-4 rounded-full" style={{ background: t(theme, 'accent') }} />
-                                    <p className="text-[11px] font-black uppercase tracking-widest opacity-60">Custom Counter</p>
-                                </div>
-                                <button
-                                    onClick={saveCustom}
-                                    disabled={!customLabel.trim() || customTarget <= 0}
-                                    className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-20"
+                                <div
+                                    className={`absolute inset-0 rounded-[1.25rem] transition-all duration-500 ${isActive ? 'opacity-100 shadow-xl scale-100' : 'opacity-0 scale-95'}`}
                                     style={{
-                                        background: t(theme, 'accent'),
-                                        color: theme === 'dark' ? '#0c0f14' : '#ffffff',
+                                        background: isActive ? (isLight ? '#334155' : '#4b5563') : 'transparent',
+                                        boxShadow: isActive ? '0 12px 30px rgba(0,0,0,0.2)' : 'none'
                                     }}
-                                >
-                                    Save
-                                </button>
-                            </div>
+                                />
+                                <div className="flex flex-col items-center gap-1.5 relative w-full">
+                                    <span
+                                        className="text-[15px] font-bold tracking-tight transition-all duration-300 text-center"
+                                        style={{ color: isActive ? '#ffffff' : t(theme, 'text-primary') }}
+                                    >
+                                        {opt.label}
+                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        <span
+                                            className="text-[10px] font-bold opacity-60 transition-colors"
+                                            style={{ color: isActive ? '#ffffff' : t(theme, 'text-muted') }}
+                                        >
+                                            Goal: {opt.target}
+                                        </span>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Name</label>
+                                        <div
+                                            onClick={(e) => removeSaved(e, opt.id)}
+                                            className={`p-1.5 rounded-full transition-all duration-300 ${isActive ? 'bg-black/20 hover:bg-black/30 text-white' : 'opacity-40 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 text-muted'}`}
+                                        >
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M18 6L6 18M6 6l12 12"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                        )
+                    })}
+
+                    {/* Custom Counter Trigger */}
+                    <button
+                        onClick={() => {
+                            setCustomLabel('')
+                            setCustomTarget(0)
+                            setIsCustomModalOpen(true)
+                        }}
+                        className="group flex flex-col items-center justify-center py-6 px-4 transition-all duration-300 active:scale-95"
+                    >
+                        <div className="flex flex-col items-center gap-1 opacity-40 group-hover:opacity-80 transition-opacity">
+                            <span className="text-[12px] font-black uppercase tracking-[0.3em]" style={{ color: t(theme, 'text-primary') }}>
+                                Custom
+                            </span>
+                            <div style={{ color: t(theme, 'accent') }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M12 5v14M5 12h14"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                {/* Custom Dhikr Reveal Form (Drops down to bottom) */}
+                {isCustomModalOpen && (
+                    <div className="mt-4 p-8 rounded-[2rem] shadow-xl animate-fade-in-up border group relative overflow-hidden"
+                        style={{
+                            background: t(theme, 'surface-1'),
+                            borderColor: t(theme, 'border'),
+                            boxShadow: isLight ? '0 15px 40px rgba(0,0,0,0.06)' : '0 20px 50px rgba(0,0,0,0.3)'
+                        }}>
+                        {/* Decorative Gradient Background */}
+                        <div className="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none"
+                            style={{ background: `radial-gradient(circle at top right, ${t(theme, 'accent')}, transparent)` }} />
+
+                        <div className="flex items-center justify-between mb-8 relative">
+                            <div className="flex flex-col">
+                                <h3 className="text-xl font-medium" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>Custom Counter</h3>
+                            </div>
+                            <button
+                                onClick={() => setIsCustomModalOpen(false)}
+                                className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-all opacity-40 hover:opacity-100"
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M18 6L6 18M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="flex flex-col gap-6 relative">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="flex flex-col gap-1.5 focus-within:opacity-100 opacity-80 transition-opacity">
+                                    <label className="text-[14px] font-medium opacity-80 mb-1 ml-1" style={{ color: t(theme, 'text-primary') }}>Dua Name</label>
                                     <input
                                         type="text"
+                                        autoFocus
                                         value={customLabel}
-                                        onChange={(e) => {
-                                            const val = e.target.value
-                                            setCustomLabel(val)
-                                            localStorage.setItem('dhikr-custom-label', val)
-                                        }}
-                                        className="bg-transparent border-b-2 py-2 outline-none text-lg font-light italic transition-all focus:border-accent"
+                                        onChange={(e) => setCustomLabel(e.target.value)}
+                                        className="bg-transparent border-b-2 py-3 outline-none text-[17px] font-medium transition-all focus:border-accent w-full"
                                         style={{ borderColor: t(theme, 'border'), color: t(theme, 'text-primary') }}
-                                        placeholder="My Dhikr..."
+                                        placeholder="SubhanAllah"
                                     />
                                 </div>
 
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Goal</label>
+                                <div className="flex flex-col gap-1.5 focus-within:opacity-100 opacity-80 transition-opacity">
+                                    <label className="text-[14px] font-medium opacity-80 mb-1 ml-1" style={{ color: t(theme, 'text-primary') }}>Target</label>
                                     <input
                                         type="number"
                                         value={customTarget === 0 ? '' : customTarget}
-                                        min="1"
-                                        onChange={(e) => {
-                                            const val = parseInt(e.target.value) || 0
-                                            setCustomTarget(val)
-                                            localStorage.setItem('dhikr-custom-target', String(val))
-                                        }}
-                                        className="bg-transparent border-b-2 py-2 outline-none text-lg font-light transition-all focus:border-accent font-mono"
+                                        onChange={(e) => setCustomTarget(parseInt(e.target.value) || 0)}
+                                        className="bg-transparent border-b-2 py-3 outline-none text-[17px] font-medium transition-all focus:border-accent font-mono w-full"
                                         style={{ borderColor: t(theme, 'border'), color: t(theme, 'text-primary') }}
-                                        placeholder="Goal..."
+                                        placeholder="7, 33, 100"
                                     />
                                 </div>
                             </div>
-                        </div>
-                    )}
 
-                    <div className="pt-4 h-24">
-                        <h3
-                            className="text-5xl font-light italic tracking-tight mb-2 leading-tight"
-                            style={{
-                                color: t(theme, 'text-primary'),
-                                fontFamily: 'var(--font-serif-body)'
-                            }}
-                        >
-                            {displayText}
-                        </h3>
+                            <button
+                                onClick={() => {
+                                    saveCustom()
+                                    setIsCustomModalOpen(false)
+                                }}
+                                disabled={!customLabel.trim() || customTarget <= 0}
+                                className="w-full py-4 md:py-5 rounded-[1.25rem] text-[16px] font-bold transition-all active:scale-95 disabled:opacity-20 shadow-xl mt-2"
+                                style={{
+                                    background: t(theme, 'text-primary'),
+                                    color: theme === 'dark' ? '#000000' : '#ffffff'
+                                }}
+                            >
+                                Initialize Counter
+                            </button>
+                        </div>
                     </div>
+                )}
+
+                <div className="pt-2 h-20 mb-2">
+                    <p
+                        className="text-[42px] font-light italic tracking-tight leading-tight opacity-50"
+                        style={{
+                            color: t(theme, 'text-primary'),
+                            fontFamily: 'var(--font-serif-body)'
+                        }}
+                    >
+                        {displayText}
+                    </p>
                 </div>
             </div>
-
             {/* Right Column: Interaction Environment */}
             <div className="flex-1 flex flex-col items-center justify-center gap-8 animate-fade-in" style={{ animationDelay: '100ms' }}>
                 <button

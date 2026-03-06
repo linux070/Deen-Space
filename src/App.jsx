@@ -59,24 +59,8 @@ function AppContent() {
 
 function LoadingScreen() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-            <div className="relative">
-                <div
-                    className="w-16 h-16 rounded-full"
-                    style={{
-                        background: 'var(--color-accent-glow)',
-                        animation: 'pulse 1.5s ease-in-out infinite',
-                    }}
-                />
-                <span className="absolute inset-0 flex items-center justify-center text-3xl">☪</span>
-            </div>
-            <p className="text-[0.625rem] font-bold tracking-widest uppercase opacity-40">Loading…</p>
-            <style>{`
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 0.5; }
-          50% { transform: scale(1.2); opacity: 0.8; }
-        }
-      `}</style>
+        <div className="flex flex-col items-center justify-center min-h-screen" style={{ background: 'var(--color-surface-0)' }}>
+            <div className="w-8 h-8 rounded-full border-2 border-[var(--color-accent)] border-t-transparent animate-spin opacity-20" />
         </div>
     )
 }
