@@ -28,7 +28,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const [viewMode, setViewMode] = useState(() => {
         if (!initialSection) return 'landing'
         if (initialSection === 'custom-prayers') return 'custom'
-        if (['situational', 'emotions', 'general', 'rabbana', 'salawat'].includes(initialSection)) return 'dualist'
+        if (['situational', 'emotions', 'general', 'rabbana', 'salawat', 'ramadan'].includes(initialSection)) return 'dualist'
         return 'swipe'
     })
     const [activeSection, setActiveSection] = useState(initialSection)
@@ -283,17 +283,19 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             subtitle = 'Spiritual States'
         } else if (activeSection === 'situational') {
             subtitle = 'Life Events'
+        } else if (activeSection === 'ramadan') {
+            subtitle = 'Spiritual Season'
         }
 
         return (
             <div className={`sticky top-0 z-20 ${viewMode === 'landing' ? 'pb-12' : 'pb-6'}`} style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
-                    title={(viewMode === 'dualist' || viewMode === 'sublist') && !['rabbana', 'salawat', 'general', 'emotions', 'situational'].includes(activeSection) ? '' : title}
+                    title={(viewMode === 'dualist' || viewMode === 'sublist') && !['rabbana', 'salawat', 'general', 'emotions', 'situational', 'ramadan'].includes(activeSection) ? '' : title}
                     subtitle={(viewMode === 'dualist' || viewMode === 'sublist' || viewMode === 'swipe') ? null : subtitle}
                     onBack={goBack}
                     padding={viewMode === 'landing' ? "px-6 pt-8 pb-0" : (viewMode === 'dualist' || viewMode === 'sublist') ? "px-6 pt-8 pb-1" : "px-6 pt-10 pb-6"}
-                    titleSize={['rabbana', 'salawat', 'general', 'emotions', 'situational'].includes(activeSection) ? "text-xl" : "text-3xl"}
-                    titleWeight={['rabbana', 'salawat', 'general', 'emotions', 'situational'].includes(activeSection) ? 300 : (viewMode === 'dualist' ? 300 : 400)}
+                    titleSize={['rabbana', 'salawat', 'general', 'emotions', 'situational', 'ramadan'].includes(activeSection) ? "text-xl" : "text-3xl"}
+                    titleWeight={['rabbana', 'salawat', 'general', 'emotions', 'situational', 'ramadan'].includes(activeSection) ? 300 : (viewMode === 'dualist' ? 300 : 400)}
                     sticky={false}
                     titleSerif={false}
                     subtitleCase="title"
@@ -445,13 +447,13 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         boxShadow: theme === 'dark' ? 'none' : '0 2px 8px rgba(0,0,0,0.01)'
                                     }}
                                 >
-                                    <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-black text-xs relative overflow-hidden"
+                                    <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-semibold text-xs relative overflow-hidden"
                                         style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
                                         <div className="absolute inset-0 opacity-10" style={{ background: t(theme, 'text-primary') }} />
                                         {i + 1}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-[14px] font-semibold text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                                        <h4 className="text-[14px] font-medium text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
                                             {getTitle(dua)}
                                         </h4>
                                     </div>
