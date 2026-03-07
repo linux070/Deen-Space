@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getHijriDate } from '../utils/hijri.js'
 import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
-import { IconHands, IconBook, IconGrid, IconChevronRight, IconTasbih, IconCalendar, IconStar, IconCrescent } from '../components/Icons'
+import { IconHands, IconBook, IconGrid, IconChevronRight, IconTasbih, IconCalendar, IconStar, IconCrescent, IconDua, IconSparkles, IconNinetyNine, IconHeart, IconMosque } from '../components/Icons'
 import DailyPage from './DailyPage'
 import LibraryPage from './LibraryPage'
 import PageHeader from '../components/PageHeader'
@@ -331,14 +331,14 @@ export default function HomePage({ duas = [], asma = [] }) {
                     <QuickCard
                         title="40 Robbana"
                         subtitle="Quranic Prayers"
-                        icon={IconCrescent}
+                        icon={IconMosque}
                         onClick={() => navigate('/library/rabbana')}
                         theme={theme}
                     />
                     <QuickCard
                         title="99 Names"
                         subtitle="Asmaul Husna"
-                        icon={IconStar}
+                        icon="/assets/icons/99-bold.png"
                         onClick={() => navigate('/praise')}
                         theme={theme}
                     />
@@ -401,8 +401,9 @@ export default function HomePage({ duas = [], asma = [] }) {
 }
 
 /* ── Shared Component for the Hub ── */
-function QuickCard({ title, subtitle, icon: Icon, onClick, theme }) {
+function QuickCard({ title, subtitle, icon, onClick, theme }) {
     const isDark = theme === 'dark'
+    const IconComp = icon;
     return (
         <button
             onClick={onClick}
@@ -422,14 +423,27 @@ function QuickCard({ title, subtitle, icon: Icon, onClick, theme }) {
             />
 
             <div
-                className="relative w-14 h-14 flex items-center justify-center rounded-full mb-5"
+                className="relative w-14 h-14 flex items-center justify-center rounded-full mb-5 transition-transform duration-500 group-hover:scale-110 overflow-hidden"
                 style={{
                     background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff',
                     boxShadow: isDark ? 'none' : '0 4px 15px rgba(0,0,0,0.06)',
                     color: t(theme, 'text-primary'),
                 }}
             >
-                <Icon size={22} />
+                {typeof icon === 'string' ? (
+                    <img
+                        src={icon}
+                        alt=""
+                        className="w-10 h-10 object-contain transition-all duration-500"
+                        style={{
+                            filter: isDark
+                                ? 'invert(1) brightness(2) contrast(1.2)'
+                                : 'brightness(0) opacity(0.85)'
+                        }}
+                    />
+                ) : (
+                    <IconComp size={22} />
+                )}
             </div>
 
             <h3 className="relative text-[15px] font-bold tracking-tight mb-0.5" style={{ color: t(theme, 'text-primary') }}>{title}</h3>

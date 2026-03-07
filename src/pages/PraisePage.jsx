@@ -76,13 +76,12 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                 <div className="sticky top-0 z-20 pb-6" style={{ background: t(theme, 'surface-0') }}>
                     <PageHeader
                         title="Asma-ul-Husna"
-                        subtitle="99 Names of Allah"
                         onBack={goBack}
-                        padding="px-6 pt-16 pb-4"
+                        padding="px-6 pt-8 pb-3"
+                        titleSize="text-xl"
+                        titleWeight={300}
                         sticky={false}
                         titleSerif={false}
-                        titleWeight={400}
-                        subtitleCase="title"
                     />
 
                 </div>

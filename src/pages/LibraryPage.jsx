@@ -13,7 +13,10 @@ import {
     IconGrid,
     IconClock,
     IconStar,
-    IconInfo
+    IconInfo,
+    IconPencil,
+    IconTrash,
+    IconSparkles
 } from '../components/Icons'
 import DuaCard from '../components/DuaCard'
 import PageHeader from '../components/PageHeader'
@@ -36,6 +39,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [search, setSearch] = useState('')
     const [miniTasbihCount, setMiniTasbihCount] = useState(0)
+    const [editingPrayerId, setEditingPrayerId] = useState(null)
     const [customPrayers, setCustomPrayers] = useState(() => {
         try { return JSON.parse(localStorage.getItem('user-custom-prayers') || '[]') } catch { return [] }
     })
@@ -123,6 +127,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // For the swiper, we want all siblings even if we entered from a sub-section
     const swipeDuas = useMemo(() => {
+        if (viewMode === 'custom') return customPrayers.map(p => ({
+            ...p,
+            arabic_text: p.arabic,
+            category: 'custom'
+        }))
         if (!activeSection) return listDuas
         if (['situational', 'emotions', 'general'].includes(activeSection)) {
             if (activeSection === 'emotions') {
@@ -137,7 +146,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 .sort((a, b) => subIds.indexOf(a.category) - subIds.indexOf(b.category))
         }
         return listDuas
-    }, [duas, activeSection, listDuas])
+    }, [duas, activeSection, listDuas, viewMode, customPrayers])
 
     // Scroll handling for swipe view
     const handleSwipeScroll = (e) => {
@@ -189,7 +198,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             return
         }
         if (viewMode === 'custom') {
-            setViewMode('sublist')
+            navigate('/dua')
             return
         }
         if (viewMode === 'landing') {
@@ -260,11 +269,18 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             return emotionTag ? `For ${toTitleCase(emotionTag)}` : 'For the Heart'
         }
         if (cat === 'ramadan') {
-            if (dua.id === 'ramadan-1') return 'Dua for Opening Fast'
-            if (dua.id === 'ramadan-2') return 'Dua for Laylat-al-Qadr'
-            if (dua.id === 'ramadan-3') return 'Dua for Goodness'
-            if (dua.id === 'ramadan-4') return 'Dua for Steadfastness'
-            if (dua.id === 'ramadan-5') return 'Remembrance & Gratitude'
+            if (dua.id === 'ramadan-1') return 'Sighting the Moon'
+            if (dua.id === 'ramadan-2') return 'Intention (Suhoor)'
+            if (dua.id === 'ramadan-3') return 'Breaking Fast (Iftar)'
+            if (dua.id === 'ramadan-4') return 'After Iftar'
+            if (dua.id === 'ramadan-5') return 'First 10 Days (Mercy)'
+            if (dua.id === 'ramadan-6') return 'Middle 10 Days (Forgiveness)'
+            if (dua.id === 'ramadan-7') return 'Last 10 Days (Safety)'
+            if (dua.id === 'ramadan-8') return 'Laylatul Qadr'
+            if (dua.id === 'ramadan-9') return 'World & Hereafter'
+            if (dua.id === 'ramadan-10') return 'For Parents'
+            if (dua.id === 'ramadan-11') return 'Guidance & Provision'
+            if (dua.id === 'ramadan-12') return 'For Knowledge'
             return 'Ramadan Special'
         }
 
@@ -288,17 +304,15 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         }
 
         return (
-            <div className={`sticky top-0 z-20 ${viewMode === 'landing' ? 'pb-12' : 'pb-6'}`} style={{ background: t(theme, 'surface-0') }}>
+            <div className={`sticky top-0 z-20 ${viewMode === 'landing' ? 'pb-2' : 'pb-1'}`} style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
-                    title={(viewMode === 'dualist' || viewMode === 'sublist') && !['rabbana', 'salawat', 'general', 'emotions', 'situational', 'ramadan'].includes(activeSection) ? '' : title}
-                    subtitle={(viewMode === 'dualist' || viewMode === 'sublist' || viewMode === 'swipe') ? null : subtitle}
+                    title={title}
                     onBack={goBack}
-                    padding={viewMode === 'landing' ? "px-6 pt-8 pb-0" : (viewMode === 'dualist' || viewMode === 'sublist') ? "px-6 pt-8 pb-1" : "px-6 pt-10 pb-6"}
-                    titleSize={['rabbana', 'salawat', 'general', 'emotions', 'situational', 'ramadan'].includes(activeSection) ? "text-xl" : "text-3xl"}
-                    titleWeight={['rabbana', 'salawat', 'general', 'emotions', 'situational', 'ramadan'].includes(activeSection) ? 300 : (viewMode === 'dualist' ? 300 : 400)}
+                    padding={(viewMode === 'swipe') ? "px-6 pt-10 pb-6" : "px-6 pt-8 pb-3"}
+                    titleSize="text-xl"
+                    titleWeight={300}
                     sticky={false}
                     titleSerif={false}
-                    subtitleCase="title"
                 />
 
             </div>
@@ -410,11 +424,18 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             const getTitle = (d) => {
                                 if (activeSection === 'ramadan') {
                                     const ramadanTitles = [
-                                        'Dua for Opening Fast',
-                                        'Dua for Laylat-al-Qadr',
-                                        'Dua for Goodness',
-                                        'Dua for Steadfastness',
-                                        'Remembrance & Gratitude'
+                                        'Sighting the Moon',
+                                        'Intention (Suhoor)',
+                                        'Breaking Fast (Iftar)',
+                                        'After Iftar',
+                                        'First 10 Days (Mercy)',
+                                        'Middle 10 Days (Forgiveness)',
+                                        'Last 10 Days (Safety)',
+                                        'Laylatul Qadr',
+                                        'World & Hereafter',
+                                        'For Parents',
+                                        'Guidance & Provision',
+                                        'For Knowledge'
                                     ]
                                     return ramadanTitles[i] || 'Ramadan Dua'
                                 }
@@ -512,8 +533,16 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 }}
                                 label={null}
                                 type="dua"
-                                hideAudio={false}
+                                hideAudio={dua.category === 'custom'}
                                 hideCounter={['rabbana', 'salawat'].includes(activeSection)}
+                                onDelete={dua.category === 'custom' ? () => {
+                                    removePrayer(dua.id)
+                                    if (swipeDuas.length <= 1) {
+                                        setViewMode('custom')
+                                    } else {
+                                        setSelectedIndex(prev => Math.max(0, prev - 1))
+                                    }
+                                } : null}
                             />
                         </div>
                     ))}
@@ -536,11 +565,20 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     if (viewMode === 'custom') {
         const isDark = theme === 'dark'
         const savePrayer = () => {
-            if (!newPrayer.arabic.trim()) return
-            const updated = [...customPrayers, { ...newPrayer, id: Date.now() }]
+            const hasInput = Object.values(newPrayer).some(v => v.trim() !== '')
+            if (!hasInput) return
+
+            let updated;
+            if (editingPrayerId) {
+                updated = customPrayers.map(p => p.id === editingPrayerId ? { ...newPrayer, id: p.id } : p)
+            } else {
+                updated = [...customPrayers, { ...newPrayer, id: Date.now() }]
+            }
+
             setCustomPrayers(updated)
             localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
             setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
+            setEditingPrayerId(null)
             setShowAddModal(false)
         }
         const removePrayer = (id) => {
@@ -548,51 +586,134 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             setCustomPrayers(updated)
             localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
         }
+        const startEdit = (p, e) => {
+            e.stopPropagation()
+            setNewPrayer({
+                arabic: p.arabic || '',
+                transliteration: p.transliteration || '',
+                translation: p.translation || '',
+                reference: p.reference || ''
+            })
+            setEditingPrayerId(p.id)
+            setShowAddModal(true)
+        }
 
         return (
-            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                {/* Header removed as per user request for Custom Dua section */}
-                <div className="px-6 pt-8 pb-6 container mx-auto flex items-center justify-between">
-                    <button onClick={goBack} className="p-3 rounded-2xl transition-all active:scale-95" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}>
-                        <IconChevronLeft size={20} />
-                    </button>
-                    <button
-                        onClick={() => setShowAddModal(true)}
-                        className="px-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-[0.98]"
-                        style={{ background: t(theme, 'accent'), color: theme === 'dark' ? '#000' : '#fff' }}
-                    >
-                        + New prayer
-                    </button>
+            <div className="pb-32 min-h-screen" style={{ background: t(theme, 'surface-0'), paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+                <div className="sticky top-0 z-20 pb-4" style={{ background: t(theme, 'surface-0') }}>
+                    <PageHeader
+                        title="Personal Duas"
+                        onBack={goBack}
+                        padding="px-6 pt-8 pb-1"
+                        titleSize="text-2xl"
+                        titleWeight={400}
+                        titleSerif={true}
+                        sticky={false}
+                        rightElement={
+                            <div className="flex items-center gap-1 opacity-40">
+                                <div className="w-1.5 h-1.5 rounded-full bg-current" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-current mx-0.5" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-current" />
+                            </div>
+                        }
+                    />
                 </div>
 
                 <main className="px-6 animate-fade-in mt-2 container mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Add Prayer Action */}
+                    <button
+                        onClick={() => {
+                            setEditingPrayerId(null)
+                            setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
+                            setShowAddModal(true)
+                        }}
+                        className="w-full flex items-center justify-center gap-2 py-5 rounded-full border-2 border-dashed transition-all active:scale-[0.98] mb-10"
+                        style={{
+                            background: t(theme, 'surface-0'),
+                            borderColor: t(theme, 'border'),
+                            color: t(theme, 'text-primary')
+                        }}
+                    >
+                        <span className="text-[14px] font-bold tracking-[0.05em] uppercase">
+                            + Add Prayer
+                        </span>
+                    </button>
+
+                    <div className="mb-6">
+                        <h2 className="text-[11px] font-bold tracking-[0.15em] opacity-40 uppercase">
+                            Saved Supplications
+                        </h2>
+                    </div>
+
+                    <div className="flex flex-col gap-5">
                         {customPrayers.length === 0 ? (
-                            <div className="col-span-full text-center py-24 opacity-30 text-[11px] font-black uppercase tracking-[0.3em]">No personal prayers yet</div>
+                            <div
+                                className="flex flex-col items-center justify-center gap-4 py-16 px-10 rounded-[2.5rem] border-2 border-dashed text-center"
+                                style={{ borderColor: t(theme, 'border'), opacity: 0.6 }}
+                            >
+                                <div className="p-4 rounded-full" style={{ background: t(theme, 'surface-1') }}>
+                                    <IconSparkles size={32} />
+                                </div>
+                                <p className="text-[14px] font-medium max-w-[200px] leading-relaxed">
+                                    Keep your heart light with regular supplications.
+                                </p>
+                            </div>
                         ) : (
-                            customPrayers.map((p) => (
+                            customPrayers.map((p, i) => (
                                 <div
                                     key={p.id}
-                                    className="group relative flex items-center gap-5 px-6 py-5 rounded-[1.5rem] transition-all duration-500 border hover:shadow-xl hover:-translate-y-1"
+                                    onClick={() => {
+                                        setSelectedIndex(i)
+                                        skippingFirstScroll.current = true
+                                        setViewMode('swipe')
+                                    }}
+                                    className="group relative flex flex-col p-8 rounded-[2rem] transition-all duration-500 border hover:shadow-xl active:scale-[0.99] cursor-pointer overflow-hidden"
                                     style={{
                                         background: t(theme, 'surface-1'),
                                         borderColor: t(theme, 'border'),
-                                        boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.2)' : '0 8px 25px rgba(0,0,0,0.03)'
+                                        boxShadow: isDark ? 'none' : '0 10px 30px -10px rgba(0,0,0,0.05)'
                                     }}
                                 >
-                                    <div className="flex-1 flex flex-col items-start leading-tight min-w-0">
-                                        <span className="text-[16px] font-bold tracking-tight truncate w-full" style={{ color: t(theme, 'text-primary') }}>{p.transliteration || 'Personal Dua'}</span>
-                                        <span className="text-[11px] opacity-50 font-medium line-clamp-1 mt-1.5" style={{ color: t(theme, 'text-muted') }}>{p.translation || 'Private Supplication'}</span>
+                                    <div className="flex items-start justify-between mb-2">
+                                        <h3
+                                            className="text-[20px] font-medium tracking-tight italic"
+                                            style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}
+                                        >
+                                            {p.transliteration || 'Personal Dua'}
+                                        </h3>
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                onClick={(e) => startEdit(p, e)}
+                                                className="p-2 transition-all hover:scale-110 opacity-30 hover:opacity-100"
+                                                style={{ color: t(theme, 'text-primary') }}
+                                            >
+                                                <IconPencil size={18} />
+                                            </button>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); removePrayer(p.id); }}
+                                                className="p-2 transition-all hover:scale-110 opacity-30 hover:opacity-100"
+                                                style={{ color: '#ef4444' }}
+                                            >
+                                                <IconTrash size={18} />
+                                            </button>
+                                        </div>
                                     </div>
-                                    <button
-                                        onClick={() => removePrayer(p.id)}
-                                        className="p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500/10 hover:text-red-500"
-                                        style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-muted') }}
+
+                                    <div className="mb-4">
+                                        <span
+                                            className="text-[10px] font-black tracking-[0.1em] uppercase"
+                                            style={{ color: theme === 'sepia' ? '#8b4513' : theme === 'dark' ? t(theme, 'accent') : '#d97706' }}
+                                        >
+                                            Private Supplication
+                                        </span>
+                                    </div>
+
+                                    <p
+                                        className="text-[15px] leading-relaxed opacity-70 italic font-serif-body"
+                                        style={{ color: t(theme, 'text-primary') }}
                                     >
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M18 6L6 18M6 6l12 12"></path>
-                                        </svg>
-                                    </button>
+                                        "{p.translation || 'No translation provided'}"
+                                    </p>
                                 </div>
                             ))
                         )}
@@ -603,7 +724,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-fade-in">
                         <div className="w-full max-w-lg p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up" style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
                             <div className="flex items-center justify-between mb-8">
-                                <h3 className="text-2xl font-medium" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>New Personal Prayer</h3>
+                                <h3 className="text-2xl font-medium" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
+                                    {editingPrayerId ? 'Edit Personal Prayer' : 'New Personal Prayer'}
+                                </h3>
                                 <button onClick={() => setShowAddModal(false)} className="opacity-40 hover:opacity-100 transition-opacity">
                                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M18 6L6 18M6 6l12 12"></path>
@@ -628,7 +751,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         <div className="flex flex-col gap-2">
                                             <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Transliteration</label>
                                             <input
-                                                placeholder="Bismillah..."
+                                                placeholder="Transliteration"
                                                 value={newPrayer.transliteration}
                                                 onChange={e => setNewPrayer({ ...newPrayer, transliteration: e.target.value })}
                                                 className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
@@ -638,7 +761,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         <div className="flex flex-col gap-2">
                                             <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Reference</label>
                                             <input
-                                                placeholder="e.g. Personal"
+                                                placeholder="Reference (Optional)"
                                                 value={newPrayer.reference}
                                                 onChange={e => setNewPrayer({ ...newPrayer, reference: e.target.value })}
                                                 className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
@@ -650,7 +773,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     <div className="flex flex-col gap-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Translation</label>
                                         <input
-                                            placeholder="In the name of Allah..."
+                                            placeholder="Translation"
                                             value={newPrayer.translation}
                                             onChange={e => setNewPrayer({ ...newPrayer, translation: e.target.value })}
                                             className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
@@ -661,8 +784,12 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
                                 <button
                                     onClick={savePrayer}
-                                    className="w-full py-5 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[0.2em] transition-all active:scale-[0.98] shadow-xl"
-                                    style={{ background: t(theme, 'accent'), color: theme === 'dark' ? '#000' : '#fff' }}
+                                    className="w-full py-5 rounded-[1.5rem] font-bold text-[13px] tracking-tight transition-all active:scale-[0.98] shadow-lg"
+                                    style={{
+                                        background: t(theme, 'accent'),
+                                        color: '#000000',
+                                        boxShadow: `0 8px 25px rgba(0,0,0,${theme === 'dark' ? '0.4' : '0.1'})`
+                                    }}
                                 >
                                     Save Prayer
                                 </button>

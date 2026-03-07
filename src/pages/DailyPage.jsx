@@ -88,16 +88,15 @@ export default function DailyPage({ duas }) {
         const subtitle = (viewMode === 'landing') ? 'Collections of Supplication' : null
 
         return (
-            <div className="sticky top-0 z-20 pb-6" style={{ background: t(theme, 'surface-0') }}>
+            <div className="sticky top-0 z-20 pb-1" style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
-                    title={viewMode === 'dualist' ? '' : title}
-                    subtitle={subtitle}
+                    title={title}
                     onBack={goBack}
-                    padding={(viewMode === 'dualist') ? "px-6 pt-12 pb-4" : "px-6 pt-16 pb-10"}
-                    titleWeight={viewMode === 'dualist' ? 200 : 400}
+                    padding="px-6 pt-8 pb-3"
+                    titleSize="text-xl"
+                    titleWeight={300}
                     sticky={false}
                     titleSerif={false}
-                    subtitleCase="title"
                 />
             </div>
         )

@@ -8,9 +8,16 @@ import {
     IconClock,
     IconMosque,
     IconGrid,
-    IconDua,
     IconTasbih,
-    IconCrescent
+    IconCrescent,
+    IconSparkles,
+    IconCloud,
+    IconFingerprint,
+    IconDua,
+    IconNinetyNine,
+    IconHeart,
+    IconFlower,
+    IconUser
 } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 
@@ -37,35 +44,35 @@ export default function DuaPage() {
             id: 'rabbana',
             title: '40 Robbana',
             subtitle: 'Quranic Prayers',
-            icon: IconCrescent,
+            icon: IconMosque,
             action: () => navigate('/library/rabbana')
         },
         {
             id: 'names',
             title: 'Asma-ul-Husna',
             subtitle: '99 Names of Allah',
-            icon: IconStar,
+            icon: '/assets/icons/99-bold.png',
             action: () => navigate('/praise')
         },
         {
             id: 'salawat',
             title: 'Salawat',
             subtitle: 'Prophetic Blessings',
-            icon: IconTasbih,
+            icon: IconFlower,
             action: () => navigate('/library/salawat')
         },
         {
             id: 'ramadan',
             title: 'Ramadan Special',
             subtitle: 'Spiritual Season',
-            icon: IconMosque,
+            icon: IconCrescent,
             action: () => navigate('/library/ramadan')
         },
         {
             id: 'personal',
             title: 'Personal Prayers',
             subtitle: 'Private Collection',
-            icon: IconGrid,
+            icon: IconUser,
             action: () => navigate('/library/custom-prayers')
         },
     ]
@@ -105,7 +112,8 @@ export default function DuaPage() {
 /* ────────────────────────────────────────────
    QuickCard — Synchronized with Home Page style
    ──────────────────────────────────────────── */
-function QuickCard({ title, subtitle, icon: Icon, onClick, theme, delay }) {
+function QuickCard({ title, subtitle, icon, onClick, theme, delay }) {
+    const IconComp = icon;
     const isDark = theme === 'dark'
     return (
         <button
@@ -127,14 +135,27 @@ function QuickCard({ title, subtitle, icon: Icon, onClick, theme, delay }) {
             />
 
             <div
-                className="relative w-14 h-14 flex items-center justify-center rounded-full mb-5 transition-transform duration-500 group-hover:scale-110"
+                className="relative w-14 h-14 flex items-center justify-center rounded-full mb-5 transition-transform duration-500 group-hover:scale-110 overflow-hidden"
                 style={{
                     background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff',
                     boxShadow: isDark ? 'none' : '0 4px 15px rgba(0,0,0,0.06)',
                     color: t(theme, 'text-primary'),
                 }}
             >
-                <Icon size={22} />
+                {typeof icon === 'string' ? (
+                    <img
+                        src={icon}
+                        alt=""
+                        className="w-10 h-10 object-contain transition-all duration-500"
+                        style={{
+                            filter: isDark
+                                ? 'invert(1) brightness(2) contrast(1.2)'
+                                : 'brightness(0) opacity(0.85)'
+                        }}
+                    />
+                ) : (
+                    <IconComp size={22} />
+                )}
             </div>
 
             <h3 className="relative text-[15px] font-bold tracking-tight mb-0.5" style={{ color: t(theme, 'text-primary') }}>{title}</h3>

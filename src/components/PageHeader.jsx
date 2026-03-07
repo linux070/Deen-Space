@@ -13,7 +13,8 @@ export default function PageHeader({
     subtitleCase = "uppercase",
     titleSize = "text-3xl",
     titleWeight,
-    titleSerif = false
+    titleSerif = false,
+    rightElement = null
 }) {
     const navigate = useNavigate()
     const { theme } = useSettings()
@@ -73,6 +74,11 @@ export default function PageHeader({
                         </p>
                     )}
                 </div>
+                {rightElement && (
+                    <div className="flex-shrink-0">
+                        {rightElement}
+                    </div>
+                )}
             </div>
         </header>
     )

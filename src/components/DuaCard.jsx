@@ -5,7 +5,7 @@ import { useAudioCtx } from '../context/AudioContext'
 import { IconHeartFill, IconHeart, IconVolume, IconRefresh } from './Icons'
 import { t } from '../utils/theme'
 
-export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hideAudio = false, hideCounter = false, label }) {
+export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hideAudio = false, hideCounter = false, label, onDelete }) {
     const { showTranslation, showTransliteration, language, theme } = useSettings()
     const { toggle, isFavorite } = useFavorites()
     const { speak, speaking } = useAudioCtx()
@@ -128,6 +128,18 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
                 </div>
 
                 <div className="flex items-center gap-3">
+                    {onDelete && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                            className="p-2.5 rounded-full transition-all duration-200 active:scale-90 opacity-60 hover:opacity-100 hover:bg-red-500/10"
+                            style={{ color: '#ef4444' }}
+                            aria-label="Delete prayer"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" />
+                            </svg>
+                        </button>
+                    )}
                     {dua.repeat && dua.repeat > 1 && (
                         <span className="text-[14px] font-bold px-3 py-1.5 rounded-xl" style={{
                             color: t(theme, 'text-primary'),
