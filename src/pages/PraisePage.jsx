@@ -94,13 +94,13 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                         >
                             بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ
                         </p>
-                        <p className="text-[10px] font-bold tracking-widest opacity-30 mt-1 text-center uppercase">
-                            In The Name Of Allah
+                        <p className="text-[10px] font-bold tracking-widest opacity-30 mt-1 text-center">
+                            In the name of Allah
                         </p>
                     </div>
 
                     {filteredNames.length === 0 ? (
-                        <div className="text-center py-20 opacity-30 text-[11px] font-black uppercase tracking-widest">No names found</div>
+                        <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest">No names found</div>
                     ) : (
                         filteredNames.map((name, i) => (
                             <button
@@ -123,7 +123,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                                         <h4 className="text-[14px] font-medium text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>{name.transliteration}</h4>
                                         <span className="text-[20px] pb-1" style={{ fontFamily: 'var(--script-font)', direction: 'rtl', color: t(theme, 'text-primary') }}>{name.arabic_name}</span>
                                     </div>
-                                    <p className="text-[11px] font-bold tracking-[0.02em] opacity-40 -mt-1 uppercase" style={{ color: t(theme, 'text-muted') }}>
+                                    <p className="text-[11px] font-bold tracking-[0.02em] opacity-40 -mt-1" style={{ color: t(theme, 'text-muted') }}>
                                         {name.meaning}
                                     </p>
                                 </div>
@@ -197,7 +197,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
 
                                     {name.benefit && (
                                         <div className="p-8 rounded-[2.5rem]" style={{ background: t(theme, 'surface-1'), border: `1px solid ${t(theme, 'border')}` }}>
-                                            <p className="text-[10px] font-black uppercase tracking-widest mb-3 opacity-30">Benefit</p>
+                                            <p className="text-[10px] font-black tracking-widest mb-3 opacity-30">Benefit</p>
                                             <p className="text-sm leading-relaxed" style={{ color: t(theme, 'text-primary') }}>{name.benefit}</p>
                                         </div>
                                     )}

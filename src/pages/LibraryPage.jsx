@@ -470,7 +470,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 {!embedded && <Header />}
                 <main className="px-6 flex flex-col gap-1.5 mt-2 animate-fade-in">
                     {listDuas.length === 0 ? (
-                        <div className="text-center py-20 opacity-30 text-[11px] font-black uppercase tracking-widest">No duas found</div>
+                        <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest">No duas found</div>
                     ) : (
                         listDuas.map((dua, i) => {
                             // Helper to make title more "Institutional"
@@ -629,7 +629,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             <div className="flex flex-col gap-3 w-full">
                                 <button
                                     onClick={confirmDelete}
-                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98]"
+                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98]"
                                     style={{ background: '#ef4444', color: '#ffffff' }}
                                 >
                                     Delete
@@ -695,13 +695,13 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             boxShadow: isDark ? 'none' : '0 4px 12px rgba(0,0,0,0.01)'
                         }}
                     >
-                        <span className="text-[14px] font-bold tracking-[0.05em] uppercase opacity-70">
+                        <span className="text-[14px] font-bold tracking-[0.05em] opacity-70">
                             + Add Prayer
                         </span>
                     </button>
 
                     <div className="mb-6">
-                        <h2 className="text-[11px] font-bold tracking-[0.15em] opacity-40 uppercase">
+                        <h2 className="text-[11px] font-bold tracking-[0.15em] opacity-40">
                             Saved Supplications
                         </h2>
                     </div>
@@ -788,7 +788,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             <div className="flex flex-col gap-8">
                                 <div className="space-y-6">
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Arabic Text (Optional)</label>
+                                        <label className="text-[10px] font-black tracking-widest opacity-40">Arabic Text (Optional)</label>
                                         <textarea
                                             placeholder="بِسْمِ اللَّهِ..."
                                             value={newPrayer.arabic}
@@ -800,7 +800,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Transliteration</label>
+                                            <label className="text-[10px] font-black tracking-widest opacity-40">Transliteration</label>
                                             <input
                                                 placeholder="Transliteration"
                                                 value={newPrayer.transliteration}
@@ -810,7 +810,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                             />
                                         </div>
                                         <div className="flex flex-col gap-2">
-                                            <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Reference</label>
+                                            <label className="text-[10px] font-black tracking-widest opacity-40">Reference</label>
                                             <input
                                                 placeholder="Reference (Optional)"
                                                 value={newPrayer.reference}
@@ -822,7 +822,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40">Translation</label>
+                                        <label className="text-[10px] font-black tracking-widest opacity-40">Translation</label>
                                         <input
                                             placeholder="Translation"
                                             value={newPrayer.translation}
@@ -835,7 +835,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
                                 <button
                                     onClick={savePrayer}
-                                    className="w-full py-5 rounded-[1.5rem] font-bold text-[14px] tracking-[0.05em] uppercase transition-all active:scale-[0.98] shadow-lg hover:shadow-xl group"
+                                    className="w-full py-5 rounded-[1.5rem] font-bold text-[14px] tracking-[0.05em] transition-all active:scale-[0.98] shadow-lg hover:shadow-xl group"
                                     style={{
                                         background: t(theme, 'text-primary'),
                                         color: t(theme, 'surface-0'),
@@ -876,14 +876,14 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             <div className="flex flex-col gap-3 w-full">
                                 <button
                                     onClick={confirmDelete}
-                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98]"
+                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98]"
                                     style={{ background: '#ef4444', color: '#ffffff' }}
                                 >
                                     Delete
                                 </button>
                                 <button
                                     onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }}
-                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98] border"
+                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98] border"
                                     style={{
                                         background: 'transparent',
                                         borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',

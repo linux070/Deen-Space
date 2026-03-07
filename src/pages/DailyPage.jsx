@@ -152,7 +152,7 @@ export default function DailyPage({ duas }) {
                                 <h3 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>
                                     {cat.label} Adhkar
                                 </h3>
-                                <p className="text-[10px] font-bold tracking-[0.05em] opacity-40 uppercase mt-0.5" style={{ color: t(theme, 'text-muted') }}>
+                                <p className="text-[10px] font-bold tracking-[0.05em] opacity-40 mt-0.5" style={{ color: t(theme, 'text-muted') }}>
                                     {cat.subtitle}
                                 </p>
                             </div>
@@ -190,7 +190,7 @@ export default function DailyPage({ duas }) {
                 <Header />
                 <main className="px-6 flex flex-col gap-1.5 mt-2 animate-fade-in">
                     {listDuas.length === 0 ? (
-                        <div className="text-center py-20 opacity-30 text-[11px] font-black uppercase tracking-widest">No duas found</div>
+                        <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest">No duas found</div>
                     ) : (
                         listDuas.map((dua, i) => (
                             <button
@@ -287,9 +287,7 @@ export default function DailyPage({ duas }) {
                     />
                 )}
 
-                <div className="pb-8 pt-4 text-center opacity-30 text-[10px] font-black tracking-widest uppercase">
-                    Swipe left or right
-                </div>
+
             </div>
         )
     }
