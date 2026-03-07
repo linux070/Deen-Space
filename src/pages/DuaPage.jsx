@@ -17,7 +17,8 @@ import {
     IconNinetyNine,
     IconHeart,
     IconFlower,
-    IconUser
+    IconUser,
+    IconCompass
 } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 
@@ -44,14 +45,14 @@ export default function DuaPage() {
             id: 'rabbana',
             title: '40 Robbana',
             subtitle: 'Quranic Prayers',
-            icon: IconMosque,
+            icon: IconCompass,
             action: () => navigate('/library/rabbana')
         },
         {
             id: 'names',
             title: 'Asma-ul-Husna',
             subtitle: '99 Names of Allah',
-            icon: '/assets/icons/99-bold.png',
+            icon: IconNinetyNine,
             action: () => navigate('/praise')
         },
         {
@@ -142,20 +143,7 @@ function QuickCard({ title, subtitle, icon, onClick, theme, delay }) {
                     color: t(theme, 'text-primary'),
                 }}
             >
-                {typeof icon === 'string' ? (
-                    <img
-                        src={icon}
-                        alt=""
-                        className="w-10 h-10 object-contain transition-all duration-500"
-                        style={{
-                            filter: isDark
-                                ? 'invert(1) brightness(2) contrast(1.2)'
-                                : 'brightness(0) opacity(0.85)'
-                        }}
-                    />
-                ) : (
-                    <IconComp size={22} />
-                )}
+                <IconComp size={22} />
             </div>
 
             <h3 className="relative text-[15px] font-bold tracking-tight mb-0.5" style={{ color: t(theme, 'text-primary') }}>{title}</h3>

@@ -5,6 +5,7 @@ import { t } from '../utils/theme'
 import DuaCard from '../components/DuaCard'
 import { IconChevronLeft, IconChevronRight, IconSun, IconMoon, IconMosque, IconBook } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
+import MiniTasbih from '../components/MiniTasbih'
 import { toTitleCase } from '../utils/text'
 
 const CATEGORIES = [
@@ -22,8 +23,10 @@ export default function DailyPage({ duas }) {
     const [viewMode, setViewMode] = useState(category ? 'dualist' : 'landing')
     const [activeCategory, setActiveCategory] = useState(category)
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [miniTasbihCount, setMiniTasbihCount] = useState(0)
 
     const scrollRef = useRef(null)
+    const skippingFirstScroll = useRef(false)
 
     // Sync activeCategory from URL
     useEffect(() => {
@@ -54,9 +57,18 @@ export default function DailyPage({ duas }) {
 
     // Scroll handling for swipe view
     const handleSwipeScroll = (e) => {
+        // Prevent reset to 0 during initial mount-scroll
+        if (skippingFirstScroll.current && e.target.scrollLeft === 0 && selectedIndex > 0) return
+        skippingFirstScroll.current = false
+
         const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth)
         if (idx !== selectedIndex) setSelectedIndex(idx)
     }
+
+    // Reset Tasbih count when swiping to a new dua
+    useEffect(() => {
+        setMiniTasbihCount(0)
+    }, [selectedIndex])
 
     // BACK NAVIGATION
     const goBack = () => {
@@ -81,14 +93,10 @@ export default function DailyPage({ duas }) {
 
     // HEADER — matching LibraryPage's header pattern
     const Header = () => {
-        const title = viewMode === 'swipe'
-            ? `${toTitleCase(activeCategory)} ${selectedIndex + 1} / ${swipeDuas.length}`
-            : (viewMode === 'landing' ? 'Daily Adhkar' : toTitleCase(activeCategory))
-
-        const subtitle = (viewMode === 'landing') ? 'Collections of Supplication' : null
+        const title = viewMode === 'landing' ? 'Daily Adhkar' : toTitleCase(activeCategory)
 
         return (
-            <div className="sticky top-0 z-20 pb-1" style={{ background: t(theme, 'surface-0') }}>
+            <div className={`sticky top-0 z-20 ${viewMode === 'landing' ? 'pb-2' : 'pb-1'}`} style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
                     title={title}
                     onBack={goBack}
@@ -102,13 +110,19 @@ export default function DailyPage({ duas }) {
         )
     }
 
+    const getSwipeTitle = () => {
+        const currentDua = swipeDuas[selectedIndex]
+        if (!currentDua) return toTitleCase(activeCategory)
+        return `${toTitleCase(currentDua.category)} ${selectedIndex + 1} / ${swipeDuas.length}`
+    }
+
     // ─── LANDING: List of categories ───
     if (viewMode === 'landing') {
         const isDark = theme === 'dark'
         return (
             <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 <Header />
-                <main className="px-6 flex flex-col gap-3 mt-4 animate-fade-in">
+                <main className="px-6 flex flex-col gap-2 mt-8 animate-fade-in">
                     {CATEGORIES.map((cat, idx) => (
                         <button
                             key={cat.key}
@@ -116,32 +130,33 @@ export default function DailyPage({ duas }) {
                                 setActiveCategory(cat.key)
                                 setViewMode('dualist')
                             }}
-                            className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
+                            className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                             style={{
                                 background: t(theme, 'surface-1'),
                                 border: `1px solid ${t(theme, 'border')}`,
-                                boxShadow: isDark ? 'none' : '0 4px 12px rgba(0,0,0,0.02)',
+                                boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
                                 animationDelay: `${idx * 150}ms`
                             }}
                         >
                             <div
-                                className="w-14 h-14 flex-shrink-0 flex items-center justify-center rounded-2xl transition-all duration-500"
+                                className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-500 relative overflow-hidden"
                                 style={{
                                     background: t(theme, 'surface-2'),
                                     color: t(theme, 'text-primary'),
                                 }}
                             >
-                                <cat.icon size={24} />
+                                <div className="absolute inset-0 opacity-[0.08]" style={{ background: t(theme, 'text-primary') }} />
+                                <cat.icon size={20} className="relative z-10" />
                             </div>
-                            <div className="flex-1">
-                                <h3 className="text-[15px] font-bold tracking-tight mb-0.5" style={{ color: t(theme, 'text-primary') }}>
+                            <div className="flex-1 min-w-0">
+                                <h3 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>
                                     {cat.label} Adhkar
                                 </h3>
-                                <p className="text-[11px] font-medium tracking-tight opacity-40 uppercase tracking-widest font-black" style={{ color: t(theme, 'text-muted') }}>
+                                <p className="text-[10px] font-bold tracking-[0.05em] opacity-40 uppercase mt-0.5" style={{ color: t(theme, 'text-muted') }}>
                                     {cat.subtitle}
                                 </p>
                             </div>
-                            <IconChevronRight size={18} className="opacity-20 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            <IconChevronRight size={16} className="opacity-10 group-hover:opacity-40 group-hover:translate-x-1 transition-all" />
                         </button>
                     ))}
 
@@ -173,9 +188,9 @@ export default function DailyPage({ duas }) {
         return (
             <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 <Header />
-                <main className="px-6 flex flex-col gap-4 mt-4 animate-fade-in">
+                <main className="px-6 flex flex-col gap-1.5 mt-2 animate-fade-in">
                     {listDuas.length === 0 ? (
-                        <div className="text-center py-20 opacity-30">No duas found</div>
+                        <div className="text-center py-20 opacity-30 text-[11px] font-black uppercase tracking-widest">No duas found</div>
                     ) : (
                         listDuas.map((dua, i) => (
                             <button
@@ -185,18 +200,22 @@ export default function DailyPage({ duas }) {
                                     setSelectedIndex(globalIndex !== -1 ? globalIndex : i)
                                     setViewMode('swipe')
                                 }}
-                                className="group flex gap-5 items-center p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg"
-                                style={{ background: t(theme, 'surface-1'), border: `1px solid ${t(theme, 'border')}` }}
+                                className="group flex gap-3.5 items-center p-3 rounded-2xl text-left transition-all active:scale-[0.98] hover:shadow-lg"
+                                style={{
+                                    background: t(theme, 'surface-1'),
+                                    border: `1px solid ${t(theme, 'border')}`,
+                                    boxShadow: theme === 'dark' ? 'none' : '0 2px 8px rgba(0,0,0,0.01)'
+                                }}
                             >
                                 <div
-                                    className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl font-black text-sm relative overflow-hidden"
-                                    style={{ background: t(theme, 'surface-2'), color: t(theme, 'accent') }}
+                                    className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-semibold text-xs relative overflow-hidden"
+                                    style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
                                 >
-                                    <div className="absolute inset-0 opacity-10" style={{ background: t(theme, 'accent') }} />
+                                    <div className="absolute inset-0 opacity-10" style={{ background: t(theme, 'text-primary') }} />
                                     {i + 1}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="text-[15px] font-medium text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                                    <h4 className="text-[14px] font-medium text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
                                         {activeCategory ? `${toTitleCase(activeCategory)} ${i + 1}` : (toTitleCase(dua.reference) || 'Supplication')}
                                     </h4>
                                 </div>
@@ -210,9 +229,30 @@ export default function DailyPage({ duas }) {
 
     // ─── SWIPE: Full screen gallery (matching LibraryPage swipe) ───
     if (viewMode === 'swipe') {
+        const currentDua = swipeDuas[selectedIndex]
         return (
             <div className="fixed inset-0 z-[100] flex flex-col animate-modal-slide-up" style={{ background: t(theme, 'surface-0') }}>
-                <Header />
+                <div
+                    className="flex items-center justify-between px-6"
+                    style={{
+                        background: t(theme, 'surface-0'),
+                        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
+                        paddingBottom: '1.5rem'
+                    }}
+                >
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={goBack}
+                            className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90"
+                            style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
+                        >
+                            <IconChevronLeft size={22} />
+                        </button>
+                        <span className="text-[15px] font-normal tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                            {getSwipeTitle()}
+                        </span>
+                    </div>
+                </div>
 
                 {/* Swiper Content */}
                 <div
@@ -231,13 +271,21 @@ export default function DailyPage({ duas }) {
                                 dua={dua}
                                 label={toTitleCase(dua.category) + ' Adhkar'}
                                 type="dua"
-                                isCountingMode={false}
                                 hideAudio={true}
                                 hideCounter={false}
                             />
                         </div>
                     ))}
                 </div>
+
+                {/* Mounted mini tasbeeh whenever a Dua is to be read a certain amount of times */}
+                {swipeDuas[selectedIndex]?.repeat > 1 && (
+                    <MiniTasbih
+                        target={swipeDuas[selectedIndex].repeat}
+                        count={miniTasbihCount}
+                        onCountChange={setMiniTasbihCount}
+                    />
+                )}
 
                 <div className="pb-8 pt-4 text-center opacity-30 text-[10px] font-black tracking-widest uppercase">
                     Swipe left or right

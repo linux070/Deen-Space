@@ -334,10 +334,7 @@ export function IconTrash({ size = 20 }) {
 export function IconNinetyNine({ size = 22 }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="7.5" cy="8.5" r="3.5" />
-            <path d="M11 8.5v6a3.5 3.5 0 0 1-3.5 3.5" />
-            <circle cx="16.5" cy="8.5" r="3.5" />
-            <path d="M20 8.5v6a3.5 3.5 0 0 1-3.5 3.5" />
+            <text x="50%" y="54%" textAnchor="middle" dominantBaseline="central" fontSize="15" fontWeight="700" fill="currentColor" stroke="none" style={{ fontFamily: 'var(--font-sans)', letterSpacing: '-0.5px' }}>99</text>
         </svg>
     )
 }

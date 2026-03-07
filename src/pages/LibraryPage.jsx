@@ -25,6 +25,7 @@ import { toTitleCase } from '../utils/text'
 
 export default function LibraryPage({ duas, embedded = false, initialSection = null }) {
     const { theme } = useSettings()
+    const isDark = theme === 'dark'
     const navigate = useNavigate()
 
     // View state
@@ -45,6 +46,8 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     })
     const [showAddModal, setShowAddModal] = useState(false)
     const [newPrayer, setNewPrayer] = useState({ arabic: '', transliteration: '', translation: '', reference: '' })
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+    const [prayerToDeleteId, setPrayerToDeleteId] = useState(null)
 
     const scrollRef = useRef(null)
     const skippingFirstScroll = useRef(false)
@@ -127,9 +130,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // For the swiper, we want all siblings even if we entered from a sub-section
     const swipeDuas = useMemo(() => {
-        if (viewMode === 'custom') return customPrayers.map(p => ({
+        if (viewMode === 'custom' || activeSection === 'custom' || activeSection === 'custom-prayers') return customPrayers.map(p => ({
             ...p,
-            arabic_text: p.arabic,
+            arabic_text: p.arabic || '',
             category: 'custom'
         }))
         if (!activeSection) return listDuas
@@ -147,6 +150,53 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         }
         return listDuas
     }, [duas, activeSection, listDuas, viewMode, customPrayers])
+
+    const savePrayerManual = (prayer, id) => {
+        let updated;
+        if (id) {
+            updated = customPrayers.map(p => p.id === id ? { ...prayer, id } : p)
+        } else {
+            updated = [...customPrayers, { ...prayer, id: Date.now() }]
+        }
+        setCustomPrayers(updated)
+        localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
+    }
+
+    const initiateDelete = (id, e) => {
+        if (e) e.stopPropagation()
+        setPrayerToDeleteId(id)
+        setShowDeleteConfirm(true)
+    }
+
+    const confirmDelete = () => {
+        if (!prayerToDeleteId) return
+        const updated = customPrayers.filter(p => p.id !== prayerToDeleteId)
+        setCustomPrayers(updated)
+        localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
+
+        // Handle navigation if we are in swipe mode and just deleted the last item
+        if (viewMode === 'swipe' && (activeSection === 'custom' || activeSection === 'custom-prayers')) {
+            if (updated.length === 0) {
+                setViewMode('custom')
+            } else {
+                setSelectedIndex(prev => Math.max(0, prev - 1))
+            }
+        }
+        setShowDeleteConfirm(false)
+        setPrayerToDeleteId(null)
+    }
+
+    const startEditManual = (p, e) => {
+        if (e) e.stopPropagation()
+        setNewPrayer({
+            arabic: p.arabic || '',
+            transliteration: p.transliteration || '',
+            translation: p.translation || '',
+            reference: p.reference || ''
+        })
+        setEditingPrayerId(p.id)
+        setShowAddModal(true)
+    }
 
     // Scroll handling for swipe view
     const handleSwipeScroll = (e) => {
@@ -170,6 +220,10 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         }
 
         if (viewMode === 'swipe') {
+            if (activeSection === 'custom' || activeSection === 'custom-prayers') {
+                setViewMode('custom')
+                return
+            }
             setViewMode('dualist')
             return
         }
@@ -322,7 +376,6 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // LANDING: Grid of sections
     if (viewMode === 'landing') {
-        const isDark = theme === 'dark'
         return (
             <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
@@ -370,38 +423,38 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // SUBLIST: List of sub-categories
     if (viewMode === 'sublist') {
-        const isDark = theme === 'dark'
         return (
             <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 {!embedded && <Header />}
-                <main className="px-6 flex flex-col gap-3 mt-4 animate-fade-in">
+                <main className="px-6 flex flex-col gap-2 mt-8 animate-fade-in">
                     {SUB_SECTIONS.map((sub, idx) => {
-                        const Icon = sub.icon
                         return (
                             <button
                                 key={sub.id}
                                 onClick={() => {
-                                    setActiveSubSection(sub.id)
                                     if (sub.id === 'custom-prayers') {
+                                        setActiveSection('custom')
                                         setViewMode('custom')
                                         return
                                     }
                                     // Enter list mode for the selected sub-category
                                     setViewMode('dualist')
+                                    setActiveSubSection(sub.id)
                                 }}
-                                className="group flex items-center gap-5 p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
+                                className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                                 style={{
                                     background: t(theme, 'surface-1'),
                                     border: `1px solid ${t(theme, 'border')}`,
-                                    boxShadow: isDark ? 'none' : '0 4px 12px rgba(0,0,0,0.02)'
+                                    boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)'
                                 }}
                             >
-                                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl font-black text-sm relative overflow-hidden"
+                                <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-semibold text-xs relative overflow-hidden"
                                     style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
-                                    <div className="absolute inset-0 opacity-5" style={{ background: t(theme, 'text-primary') }} />
+                                    <div className="absolute inset-0 opacity-[0.08]" style={{ background: t(theme, 'text-primary') }} />
                                     {idx + 1}
                                 </div>
-                                <h4 className="flex-1 font-medium text-[15px] tracking-tight" style={{ color: t(theme, 'text-primary') }}>{sub.title}</h4>
+                                <h4 className="flex-1 font-semibold text-[14px] tracking-tight" style={{ color: t(theme, 'text-primary') }}>{sub.title}</h4>
+                                <IconChevronRight size={16} className="opacity-10 group-hover:opacity-40 group-hover:translate-x-1 transition-all" />
                             </button>
                         )
                     })}
@@ -535,14 +588,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 type="dua"
                                 hideAudio={dua.category === 'custom'}
                                 hideCounter={['rabbana', 'salawat'].includes(activeSection)}
-                                onDelete={dua.category === 'custom' ? () => {
-                                    removePrayer(dua.id)
-                                    if (swipeDuas.length <= 1) {
-                                        setViewMode('custom')
-                                    } else {
-                                        setSelectedIndex(prev => Math.max(0, prev - 1))
-                                    }
-                                } : null}
+                                onDelete={dua.category === 'custom' ? () => initiateDelete(dua.id) : null}
                             />
                         </div>
                     ))}
@@ -556,6 +602,53 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                         onCountChange={setMiniTasbihCount}
                     />
                 )}
+                {/* Delete Confirmation Modal */}
+                {showDeleteConfirm && (
+                    <div className="fixed inset-0 z-[600] flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-fade-in">
+                        <div className="w-full max-w-sm p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up flex flex-col items-center text-center"
+                            style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
+
+                            {/* Trash Icon */}
+                            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-8 bg-black/5"
+                                style={{
+                                    background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)',
+                                    color: '#ef4444'
+                                }}>
+                                <IconTrash size={32} />
+                            </div>
+
+                            <h3 className="text-[24px] font-medium tracking-tight mb-4 italic"
+                                style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
+                                Delete Supplication?
+                            </h3>
+
+                            <p className="text-[14px] leading-relaxed opacity-50 mb-10 max-w-[240px]">
+                                Are you sure you want to remove this prayer from your list? This action cannot be undone.
+                            </p>
+
+                            <div className="flex flex-col gap-3 w-full">
+                                <button
+                                    onClick={confirmDelete}
+                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98]"
+                                    style={{ background: '#ef4444', color: '#ffffff' }}
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }}
+                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98] border"
+                                    style={{
+                                        background: 'transparent',
+                                        borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                                        color: t(theme, 'text-primary')
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
@@ -563,39 +656,13 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // CUSTOM PRAYERS VIEW
     if (viewMode === 'custom') {
-        const isDark = theme === 'dark'
         const savePrayer = () => {
             const hasInput = Object.values(newPrayer).some(v => v.trim() !== '')
             if (!hasInput) return
-
-            let updated;
-            if (editingPrayerId) {
-                updated = customPrayers.map(p => p.id === editingPrayerId ? { ...newPrayer, id: p.id } : p)
-            } else {
-                updated = [...customPrayers, { ...newPrayer, id: Date.now() }]
-            }
-
-            setCustomPrayers(updated)
-            localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
+            savePrayerManual(newPrayer, editingPrayerId)
             setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
             setEditingPrayerId(null)
             setShowAddModal(false)
-        }
-        const removePrayer = (id) => {
-            const updated = customPrayers.filter(p => p.id !== id)
-            setCustomPrayers(updated)
-            localStorage.setItem('user-custom-prayers', JSON.stringify(updated))
-        }
-        const startEdit = (p, e) => {
-            e.stopPropagation()
-            setNewPrayer({
-                arabic: p.arabic || '',
-                transliteration: p.transliteration || '',
-                translation: p.translation || '',
-                reference: p.reference || ''
-            })
-            setEditingPrayerId(p.id)
-            setShowAddModal(true)
         }
 
         return (
@@ -604,18 +671,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     <PageHeader
                         title="Personal Duas"
                         onBack={goBack}
-                        padding="px-6 pt-8 pb-1"
-                        titleSize="text-2xl"
-                        titleWeight={400}
-                        titleSerif={true}
+                        padding="px-6 pt-10 pb-4"
+                        titleSize="text-xl"
+                        titleWeight={300}
+                        titleSerif={false}
                         sticky={false}
-                        rightElement={
-                            <div className="flex items-center gap-1 opacity-40">
-                                <div className="w-1.5 h-1.5 rounded-full bg-current" />
-                                <div className="w-1.5 h-1.5 rounded-full bg-current mx-0.5" />
-                                <div className="w-1.5 h-1.5 rounded-full bg-current" />
-                            </div>
-                        }
                     />
                 </div>
 
@@ -627,14 +687,15 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
                             setShowAddModal(true)
                         }}
-                        className="w-full flex items-center justify-center gap-2 py-5 rounded-full border-2 border-dashed transition-all active:scale-[0.98] mb-10"
+                        className="w-full h-14 flex items-center justify-center gap-2 rounded-full border transition-all hover:scale-[1.01] active:scale-[0.98] mb-12"
                         style={{
-                            background: t(theme, 'surface-0'),
-                            borderColor: t(theme, 'border'),
-                            color: t(theme, 'text-primary')
+                            background: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff',
+                            borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+                            color: t(theme, 'text-primary'),
+                            boxShadow: isDark ? 'none' : '0 4px 12px rgba(0,0,0,0.01)'
                         }}
                     >
-                        <span className="text-[14px] font-bold tracking-[0.05em] uppercase">
+                        <span className="text-[14px] font-bold tracking-[0.05em] uppercase opacity-70">
                             + Add Prayer
                         </span>
                     </button>
@@ -662,12 +723,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             customPrayers.map((p, i) => (
                                 <div
                                     key={p.id}
-                                    onClick={() => {
-                                        setSelectedIndex(i)
-                                        skippingFirstScroll.current = true
-                                        setViewMode('swipe')
-                                    }}
-                                    className="group relative flex flex-col p-8 rounded-[2rem] transition-all duration-500 border hover:shadow-xl active:scale-[0.99] cursor-pointer overflow-hidden"
+                                    className="group relative flex flex-col p-8 rounded-[2rem] transition-all duration-500 border hover:shadow-xl active:scale-[0.99] overflow-hidden"
                                     style={{
                                         background: t(theme, 'surface-1'),
                                         borderColor: t(theme, 'border'),
@@ -683,16 +739,16 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         </h3>
                                         <div className="flex items-center gap-3">
                                             <button
-                                                onClick={(e) => startEdit(p, e)}
-                                                className="p-2 transition-all hover:scale-110 opacity-30 hover:opacity-100"
+                                                onClick={(e) => startEditManual(p, e)}
+                                                className="p-2 transition-all hover:scale-110 opacity-60 hover:opacity-100"
                                                 style={{ color: t(theme, 'text-primary') }}
                                             >
                                                 <IconPencil size={18} />
                                             </button>
                                             <button
-                                                onClick={(e) => { e.stopPropagation(); removePrayer(p.id); }}
-                                                className="p-2 transition-all hover:scale-110 opacity-30 hover:opacity-100"
-                                                style={{ color: '#ef4444' }}
+                                                onClick={(e) => initiateDelete(p.id, e)}
+                                                className="p-2 transition-all hover:scale-110 opacity-60 hover:opacity-100"
+                                                style={{ color: t(theme, 'text-primary') }}
                                             >
                                                 <IconTrash size={18} />
                                             </button>
@@ -700,12 +756,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     </div>
 
                                     <div className="mb-4">
-                                        <span
-                                            className="text-[10px] font-black tracking-[0.1em] uppercase"
-                                            style={{ color: theme === 'sepia' ? '#8b4513' : theme === 'dark' ? t(theme, 'accent') : '#d97706' }}
-                                        >
-                                            Private Supplication
-                                        </span>
+                                        {/* Tag removed as per institutional minimalism request */}
                                     </div>
 
                                     <p
@@ -784,14 +835,62 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
                                 <button
                                     onClick={savePrayer}
-                                    className="w-full py-5 rounded-[1.5rem] font-bold text-[13px] tracking-tight transition-all active:scale-[0.98] shadow-lg"
+                                    className="w-full py-5 rounded-[1.5rem] font-bold text-[14px] tracking-[0.05em] uppercase transition-all active:scale-[0.98] shadow-lg hover:shadow-xl group"
                                     style={{
-                                        background: t(theme, 'accent'),
-                                        color: '#000000',
-                                        boxShadow: `0 8px 25px rgba(0,0,0,${theme === 'dark' ? '0.4' : '0.1'})`
+                                        background: t(theme, 'text-primary'),
+                                        color: t(theme, 'surface-0'),
+                                        boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.4)' : '0 8px 20px rgba(0,0,0,0.1)'
                                     }}
                                 >
                                     Save Prayer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Delete Confirmation Modal */}
+                {showDeleteConfirm && (
+                    <div className="fixed inset-0 z-[600] flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-fade-in">
+                        <div className="w-full max-w-sm p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up flex flex-col items-center text-center"
+                            style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
+
+                            {/* Trash Icon */}
+                            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-8"
+                                style={{
+                                    background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)',
+                                    color: '#ef4444'
+                                }}>
+                                <IconTrash size={32} />
+                            </div>
+
+                            <h3 className="text-[24px] font-medium tracking-tight mb-4 italic"
+                                style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
+                                Delete Supplication?
+                            </h3>
+
+                            <p className="text-[14px] leading-relaxed opacity-50 mb-10 max-w-[240px]">
+                                Are you sure you want to remove this prayer from your list? This action cannot be undone.
+                            </p>
+
+                            <div className="flex flex-col gap-3 w-full">
+                                <button
+                                    onClick={confirmDelete}
+                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98]"
+                                    style={{ background: '#ef4444', color: '#ffffff' }}
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }}
+                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98] border"
+                                    style={{
+                                        background: 'transparent',
+                                        borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                                        color: t(theme, 'text-primary')
+                                    }}
+                                >
+                                    Cancel
                                 </button>
                             </div>
                         </div>

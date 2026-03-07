@@ -77,7 +77,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                     <PageHeader
                         title="Asma-ul-Husna"
                         onBack={goBack}
-                        padding="px-6 pt-8 pb-3"
+                        padding="px-6 pt-8"
                         titleSize="text-xl"
                         titleWeight={300}
                         sticky={false}
@@ -86,44 +86,44 @@ export default function PraisePage({ duas, asma, embedded = false }) {
 
                 </div>
 
-                <main className="px-6 flex flex-col gap-4">
-                    <div className="flex flex-col items-center py-6 opacity-80 animate-fade-in">
+                <main className="px-6 flex flex-col gap-1.5 -mt-2">
+                    <div className="flex flex-col items-center py-4 opacity-80 animate-fade-in">
                         <p
-                            className="text-[1.5rem] md:text-3xl text-center mb-3 whitespace-nowrap overflow-hidden text-ellipsis"
+                            className="text-[1.3rem] md:text-3xl text-center mb-1 whitespace-nowrap overflow-hidden text-ellipsis"
                             style={{ fontFamily: 'var(--script-font)', color: t(theme, 'text-primary'), direction: 'rtl' }}
                         >
                             بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ
                         </p>
-                        <p className="text-[11px] font-medium tracking-wide opacity-40 mt-1 text-center leading-relaxed">
-                            In The Name Of Allah, The Most Beneficent, The Most Merciful.
+                        <p className="text-[10px] font-bold tracking-widest opacity-30 mt-1 text-center uppercase">
+                            In The Name Of Allah
                         </p>
                     </div>
 
                     {filteredNames.length === 0 ? (
-                        <div className="text-center py-20 opacity-30">No names found</div>
+                        <div className="text-center py-20 opacity-30 text-[11px] font-black uppercase tracking-widest">No names found</div>
                     ) : (
                         filteredNames.map((name, i) => (
                             <button
                                 key={name.id}
                                 onClick={() => { setSelectedIndex(i); skippingFirstScroll.current = true; setViewMode('swipe'); }}
-                                className="group flex gap-5 items-center p-5 rounded-[2.25rem] text-left transition-all active:scale-[0.98] hover:shadow-lg shadow-sm"
+                                className="group flex gap-3.5 items-center p-3 rounded-2xl text-left transition-all active:scale-[0.98] hover:shadow-lg"
                                 style={{
                                     background: t(theme, 'surface-1'),
                                     border: `1px solid ${t(theme, 'border')}`,
-                                    boxShadow: isDark ? 'none' : '0 4px 12px rgba(0,0,0,0.02)'
+                                    boxShadow: isDark ? 'none' : '0 2px 8px rgba(0,0,0,0.01)'
                                 }}
                             >
-                                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl font-black text-xs relative overflow-hidden"
+                                <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-semibold text-xs relative overflow-hidden"
                                     style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
-                                    <div className="absolute inset-0 opacity-5" style={{ background: t(theme, 'text-primary') }} />
+                                    <div className="absolute inset-0 opacity-10" style={{ background: t(theme, 'text-primary') }} />
                                     {name.id}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between gap-4">
-                                        <h4 className="text-[15px] font-medium text-primary truncate tracking-tight">{name.transliteration}</h4>
-                                        <span className="text-2xl" style={{ fontFamily: 'var(--script-font)', direction: 'rtl', color: t(theme, 'text-primary') }}>{name.arabic_name}</span>
+                                        <h4 className="text-[14px] font-medium text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>{name.transliteration}</h4>
+                                        <span className="text-[20px] pb-1" style={{ fontFamily: 'var(--script-font)', direction: 'rtl', color: t(theme, 'text-primary') }}>{name.arabic_name}</span>
                                     </div>
-                                    <p className="text-[12px] font-medium truncate opacity-60 mt-1" style={{ color: t(theme, 'text-muted') }}>
+                                    <p className="text-[11px] font-bold tracking-[0.02em] opacity-40 -mt-1 uppercase" style={{ color: t(theme, 'text-muted') }}>
                                         {name.meaning}
                                     </p>
                                 </div>
@@ -148,23 +148,25 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                         paddingBottom: '1.5rem'
                     }}
                 >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                         <button
                             onClick={() => setViewMode('list')}
-                            className="w-10 h-10 flex items-center justify-center rounded-2xl transition-all active:scale-90"
+                            className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90"
                             style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
                         >
                             <IconChevronLeft size={22} />
                         </button>
-                        <span className="text-[15px] font-normal tracking-tight" style={{ color: t(theme, 'text-primary') }}>Asma-ul-Husna {selectedIndex + 1} / {filteredNames.length}</span>
+                        <span className="text-[15px] font-normal tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                            Asma-ul-Husna {selectedIndex + 1} / {filteredNames.length}
+                        </span>
                     </div>
 
                     <button
                         onClick={() => toggle({ id: `asma-${filteredNames[selectedIndex]?.id}`, type: 'asma' })}
-                        className="w-10 h-10 flex items-center justify-center rounded-2xl transition-all active:scale-90"
+                        className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90"
                         style={{ background: t(theme, 'surface-2'), color: t(theme, 'accent') }}
                     >
-                        {isFavorite(`asma-${filteredNames[selectedIndex]?.id}`) ? <IconHeartFill size={20} className="text-red-500" /> : <IconHeart size={20} />}
+                        {isFavorite(`asma-${filteredNames[selectedIndex]?.id}`) ? <IconHeartFill size={18} className="text-red-500" /> : <IconHeart size={18} />}
                     </button>
                 </div>
 
