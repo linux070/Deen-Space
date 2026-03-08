@@ -29,7 +29,11 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
     }, [count, target, onCountChange])
 
     const progress = target > 0 ? Math.min((count / target) * 100, 100) : 0
+    const isLight = theme === 'light'
     const isDark = theme === 'dark'
+
+    const ringColor = isLight ? '#FACC15' : t(theme, 'accent')
+    const trackColor = isLight ? '#F8FAFC' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)')
 
     return (
         <div
@@ -54,19 +58,23 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
                     <circle
                         cx="50%" cy="50%" r="38%"
                         fill="none"
-                        stroke={isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'}
+                        stroke={trackColor}
                         strokeWidth="3.5"
                     />
                     <circle
                         cx="50%" cy="50%" r="38%"
                         fill="none"
-                        stroke={t(theme, 'accent')}
+                        stroke={ringColor}
                         strokeWidth="4"
                         strokeLinecap="round"
-                        strokeDasharray="100%"
-                        strokeDashoffset={`${100 - progress}%`}
+                        pathLength="100"
+                        strokeDasharray="100"
+                        strokeDashoffset={100 - progress}
                         className="transition-all duration-500 cubic-bezier(0.19, 1, 0.22, 1)"
-                        style={{ filter: `drop-shadow(0 0 6px ${t(theme, 'accent')}44)` }}
+                        style={{ 
+                            filter: `drop-shadow(0 0 6px ${isLight ? '#EAB30855' : t(theme, 'accent')}44)`,
+                            opacity: count === 0 ? 0.05 : 1
+                        }}
                     />
                 </svg>
 
