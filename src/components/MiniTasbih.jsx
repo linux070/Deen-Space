@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { t } from '../utils/theme'
 import { useSettings } from '../context/SettingsContext'
-import { IconRefresh } from './Icons'
 
 export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
     const { theme } = useSettings()
@@ -16,47 +15,32 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
     const handleTap = useCallback((e) => {
         e.stopPropagation()
         if (count < target || target === 0) {
-            if (navigator.vibrate) navigator.vibrate(10)
+            if (navigator.vibrate) navigator.vibrate(15) // Match main Tasbih haptic feedback
             onCountChange(count + 1)
+            
+            // Sync with global total dhikr count just like the main Tasbih page
+            try {
+                const currentTotal = parseInt(localStorage.getItem('dhikr-total') || '0')
+                localStorage.setItem('dhikr-total', String(currentTotal + 1))
+            } catch (err) {}
         } else {
             if (navigator.vibrate) navigator.vibrate([20, 30, 20])
         }
     }, [count, target, onCountChange])
-
-    const handleReset = useCallback((e) => {
-        e.stopPropagation()
-        if (navigator.vibrate) navigator.vibrate(20)
-        onCountChange(0)
-    }, [onCountChange])
 
     const progress = target > 0 ? Math.min((count / target) * 100, 100) : 0
     const isDark = theme === 'dark'
 
     return (
         <div
-            className={`fixed bottom-12 right-6 z-[110] flex flex-col items-center gap-4 transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
+            className={`fixed bottom-24 right-5 z-[110] flex flex-col items-center gap-4 transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}
         >
-            {/* Reset Button (Small, floating above) */}
-            {count > 0 && (
-                <button
-                    onClick={handleReset}
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all active:scale-95 shadow-xl animate-fade-in group"
-                    style={{
-                        background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.8)',
-                        backdropFilter: 'blur(10px)',
-                        color: t(theme, 'text-primary'),
-                        border: `1px solid ${t(theme, 'border')}`
-                    }}
-                >
-                    <IconRefresh size={16} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                </button>
-            )}
-
             {/* Main Tasbih Circle */}
             <button
                 onClick={handleTap}
-                className="relative w-14 h-14 rounded-[1.65rem] flex items-center justify-center transition-all active:scale-[0.8] hover:scale-105 shadow-2xl group overflow-visible"
+                className="relative w-[4.25rem] h-[4.25rem] rounded-[2rem] flex items-center justify-center transition-all active:scale-[0.85] hover:scale-105 shadow-2xl group overflow-visible select-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0"
                 style={{
+                    WebkitTapHighlightColor: 'transparent',
                     background: isDark ? 'rgba(30, 36, 45, 0.85)' : 'rgba(236, 230, 208, 0.95)',
                     backdropFilter: 'blur(20px)',
                     border: `1.5px solid ${t(theme, 'border')}`,
@@ -66,7 +50,7 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
                 }}
             >
                 {/* Progress Ring */}
-                <svg className="absolute -inset-1 w-[calc(100%+8px)] h-[calc(100%+8px)] transform -rotate-90">
+                <svg className="absolute -inset-1.5 w-[calc(100%+12px)] h-[calc(100%+12px)] transform -rotate-90 pointer-events-none">
                     <circle
                         cx="50%" cy="50%" r="38%"
                         fill="none"
@@ -86,11 +70,17 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
                     />
                 </svg>
 
-                <div className="relative flex flex-col items-center leading-none">
-                    <span className="text-[17px] font-black tabular-nums tracking-tighter" style={{ color: t(theme, 'text-primary') }}>
+                <div className="relative flex flex-col items-center leading-none mt-0.5 pointer-events-none">
+                    <span 
+                        className="text-[20px] font-black tabular-nums tracking-tighter" 
+                        style={{ color: t(theme, 'text-primary') }}
+                    >
                         {count}
                     </span>
-                    <span className="text-[7px] font-black opacity-30 uppercase tracking-tighter mt-0.5" style={{ color: t(theme, 'text-muted') }}>
+                    <span 
+                        className="text-[8.5px] font-black opacity-30 uppercase tracking-tighter mt-1" 
+                        style={{ color: t(theme, 'text-muted') }}
+                    >
                         /{target || 100}
                     </span>
                 </div>

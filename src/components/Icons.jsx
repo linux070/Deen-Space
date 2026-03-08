@@ -17,36 +17,9 @@ export function IconMoon({ size = 20 }) {
     )
 }
 
-export function IconSepia({ size = 20 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
-            <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.15" />
-            <circle cx="12" cy="12" r="4" />
-        </svg>
-    )
-}
-
-export function IconHome({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-            <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        </svg>
-    )
-}
-
 export function IconStar({ size = 22 }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a.53.53 0 0 0 .4.29l5.16.753a.53.53 0 0 1 .294.904l-3.733 3.638a.53.53 0 0 0-.153.469l.882 5.14a.53.53 0 0 1-.77.56L12.267 16.3a.53.53 0 0 0-.494 0l-4.614 2.425a.53.53 0 0 1-.77-.56l.882-5.14a.53.53 0 0 0-.152-.47L3.385 8.921a.53.53 0 0 1 .294-.906l5.16-.751a.53.53 0 0 0 .4-.29z" />
-        </svg>
-    )
-}
-
-export function IconStarFill({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a.53.53 0 0 0 .4.29l5.16.753a.53.53 0 0 1 .294.904l-3.733 3.638a.53.53 0 0 0-.153.469l.882 5.14a.53.53 0 0 1-.77.56L12.267 16.3a.53.53 0 0 0-.494 0l-4.614 2.425a.53.53 0 0 1-.77-.56l.882-5.14a.53.53 0 0 0-.152-.47L3.385 8.921a.53.53 0 0 1 .294-.906l5.16-.751a.53.53 0 0 0 .4-.29z" />
         </svg>
     )
@@ -91,14 +64,6 @@ export function IconSearch({ size = 20 }) {
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
-        </svg>
-    )
-}
-
-export function IconPlay({ size = 18 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="none">
-            <path d="M6 3a1 1 0 0 0-1 1v16a1 1 0 0 0 1.5.87l14-8a1 1 0 0 0 0-1.74l-14-8A1 1 0 0 0 6 3z" />
         </svg>
     )
 }
@@ -161,14 +126,6 @@ export function IconVolume({ size = 18 }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 5 6 9H2v6h4l5 4zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />
-        </svg>
-    )
-}
-
-export function IconWifi({ size = 18 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 20h.01M2 8.82a15 15 0 0 1 20 0M5 12.86a10 10 0 0 1 14 0M8.5 16.43a5 5 0 0 1 7 0" />
         </svg>
     )
 }
@@ -283,35 +240,12 @@ export function IconClock({ size = 20 }) {
         </svg>
     )
 }
-export function IconCloud({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M17.5 19c2.5 0 4.5-2 4.5-4.5 0-2.3-1.7-4.2-3.9-4.5a7 7 0 1 0-13.1 2.5c0 .1 0 .2.1.3a5 5 0 1 0 2.4 9.7h10z" />
-        </svg>
-    )
-}
-
 export function IconSparkles({ size = 22 }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="m12 3 1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3Z" />
             <path d="m5 3 1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z" />
             <path d="m17 17 1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z" />
-        </svg>
-    )
-}
-
-export function IconFingerprint({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M2 12c0-3.3 1.4-6.3 3.6-8.4" />
-            <path d="M5 19.4c1.8 1.6 4.3 2.6 7 2.6s5.2-1 7-2.6" />
-            <path d="M15 12h.01" />
-            <path d="M17 12c0-2.8-2.2-5-5-5s-5 2.2-5 5" />
-            <path d="M12 17c-2.8 0-5-2.2-5-5" />
-            <path d="M19 12c0-3.9-3.1-7-7-7s-7 3.1-7 7" />
-            <path d="M12 22v-3" />
-            <path d="M12 7V2" />
         </svg>
     )
 }

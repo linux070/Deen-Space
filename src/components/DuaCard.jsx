@@ -5,7 +5,7 @@ import { useAudioCtx } from '../context/AudioContext'
 import { IconHeartFill, IconHeart, IconVolume, IconRefresh } from './Icons'
 import { t } from '../utils/theme'
 
-export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hideAudio = false, hideCounter = false, label, onDelete }) {
+export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hideAudio = false, hideCounter = false, hideTags = false, label, onDelete }) {
     const { showTranslation, showTransliteration, language, theme } = useSettings()
     const { toggle, isFavorite } = useFavorites()
     const { speak, speaking } = useAudioCtx()
@@ -48,8 +48,9 @@ export default function DuaCard({ dua, type = 'dua', isCountingMode = false, hid
             }}
         >
             {/* Label / Index Tag */}
-            {label && (
-                <div className="px-6 pt-5 pb-0 flex justify-start">
+            {/* Label / Index Tag */}
+            {!hideTags && label && (
+                <div className="px-6 pt-5 pb-0 flex justify-between items-center">
                     <span
                         className="text-[10px] font-black tracking-[0.15em] px-2.5 py-1 rounded-lg"
                         style={{ background: t(theme, 'accent-soft'), color: t(theme, 'accent') }}

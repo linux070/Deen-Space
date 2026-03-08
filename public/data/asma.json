@@ -3,7 +3,7 @@
     "id": 1,
     "arabic_name": "ٱلرَّحْمَـٰنُ",
     "transliteration": "Ar-Rahman",
-    "meaning": "The Beneficent, The All-Compassionate",
+    "meaning": "The Beneficent",
     "benefit": "Recite abundantly for mercy and compassion in all affairs.",
     "audio_url": "/audio/asma/1.mp3"
   },
@@ -11,7 +11,7 @@
     "id": 2,
     "arabic_name": "ٱلرَّحِيمُ",
     "transliteration": "Ar-Raheem",
-    "meaning": "The Merciful, The All-Merciful",
+    "meaning": "The Merciful",
     "benefit": "Recite after every prayer for Allah's special mercy.",
     "audio_url": "/audio/asma/2.mp3"
   },
@@ -19,7 +19,7 @@
     "id": 3,
     "arabic_name": "ٱلْمَلِكُ",
     "transliteration": "Al-Malik",
-    "meaning": "The King, The Absolute Ruler",
+    "meaning": "The King",
     "benefit": "Recite for authority, respect, and spiritual sovereignty.",
     "audio_url": "/audio/asma/3.mp3"
   },
@@ -27,7 +27,7 @@
     "id": 4,
     "arabic_name": "ٱلْقُدُّوسُ",
     "transliteration": "Al-Quddus",
-    "meaning": "The Most Sacred, The Pure One",
+    "meaning": "The Most Holy",
     "benefit": "Recite for purification of the heart and soul.",
     "audio_url": "/audio/asma/4.mp3"
   },
@@ -35,7 +35,7 @@
     "id": 5,
     "arabic_name": "ٱلسَّلَامُ",
     "transliteration": "As-Salam",
-    "meaning": "The Source Of Peace, The Giver Of Peace",
+    "meaning": "The Source of Peace",
     "benefit": "Recite for inner peace and tranquility.",
     "audio_url": "/audio/asma/5.mp3"
   },
@@ -43,7 +43,7 @@
     "id": 6,
     "arabic_name": "ٱلْمُؤْمِنُ",
     "transliteration": "Al-Mu'min",
-    "meaning": "The Infuser Of Faith, The Inspirer Of Faith",
+    "meaning": "The Guardian of Faith",
     "benefit": "Recite for protection from harm and strengthening faith.",
     "audio_url": "/audio/asma/6.mp3"
   },
@@ -51,7 +51,7 @@
     "id": 7,
     "arabic_name": "ٱلْمُهَيْمِنُ",
     "transliteration": "Al-Muhaymin",
-    "meaning": "The Preserver Of Safety, The Guardian",
+    "meaning": "The Protector",
     "benefit": "Recite for Allah's protection over your affairs.",
     "audio_url": "/audio/asma/7.mp3"
   },
@@ -59,7 +59,7 @@
     "id": 8,
     "arabic_name": "ٱلْعَزِيزُ",
     "transliteration": "Al-Aziz",
-    "meaning": "All Mighty, The Victorious",
+    "meaning": "The Almighty",
     "benefit": "Recite for strength and honor in difficult times.",
     "audio_url": "/audio/asma/8.mp3"
   },
@@ -67,7 +67,7 @@
     "id": 9,
     "arabic_name": "ٱلْجَبَّارُ",
     "transliteration": "Al-Jabbar",
-    "meaning": "The Compeller, The Restorer",
+    "meaning": "The Compeller",
     "benefit": "Recite for mending broken hearts and restoring order.",
     "audio_url": "/audio/asma/9.mp3"
   },
@@ -75,7 +75,7 @@
     "id": 10,
     "arabic_name": "ٱلْمُتَكَبِّرُ",
     "transliteration": "Al-Mutakabbir",
-    "meaning": "The Supreme, The Majestic",
+    "meaning": "The Supreme",
     "benefit": "Recite for humility and recognizing Allah's greatness.",
     "audio_url": "/audio/asma/10.mp3"
   },
@@ -83,7 +83,7 @@
     "id": 11,
     "arabic_name": "ٱلْخَالِقُ",
     "transliteration": "Al-Khaliq",
-    "meaning": "The Creator, The Maker",
+    "meaning": "The Creator",
     "benefit": "Recite for creativity and to overcome difficulties.",
     "audio_url": "/audio/asma/11.mp3"
   },
@@ -91,7 +91,7 @@
     "id": 12,
     "arabic_name": "ٱلْبَارِئُ",
     "transliteration": "Al-Bari'",
-    "meaning": "The Evolver, The Maker Of Order",
+    "meaning": "The Originator",
     "benefit": "Recite for new beginnings and fresh starts.",
     "audio_url": "/audio/asma/12.mp3"
   },
@@ -99,7 +99,7 @@
     "id": 13,
     "arabic_name": "ٱلْمُصَوِّرُ",
     "transliteration": "Al-Musawwir",
-    "meaning": "The Fashioner, The Shaper Of Beauty",
+    "meaning": "The Fashioner",
     "benefit": "Recite for beauty and well-formed outcomes in your projects.",
     "audio_url": "/audio/asma/13.mp3"
   },
@@ -107,7 +107,7 @@
     "id": 14,
     "arabic_name": "ٱلْغَفَّارُ",
     "transliteration": "Al-Ghaffar",
-    "meaning": "The Constant Forgiver, The Ever-Forgiving",
+    "meaning": "The Forgiver",
     "benefit": "Recite abundantly for forgiveness of sins.",
     "audio_url": "/audio/asma/14.mp3"
   },
@@ -115,7 +115,7 @@
     "id": 15,
     "arabic_name": "ٱلْقَهَّارُ",
     "transliteration": "Al-Qahhar",
-    "meaning": "The All-Prevailing One, The Subduer",
+    "meaning": "The Subduer",
     "benefit": "Recite for overcoming oppression and injustice.",
     "audio_url": "/audio/asma/15.mp3"
   },
@@ -123,7 +123,7 @@
     "id": 16,
     "arabic_name": "ٱلْوَهَّابُ",
     "transliteration": "Al-Wahhab",
-    "meaning": "The Supreme Bestower, The Giver Of All",
+    "meaning": "The Giver of All",
     "benefit": "Recite for gifts from Allah and increase in blessings.",
     "audio_url": "/audio/asma/16.mp3"
   },
@@ -131,7 +131,7 @@
     "id": 17,
     "arabic_name": "ٱلرَّزَّاقُ",
     "transliteration": "Ar-Razzaq",
-    "meaning": "The Provider, The Sustainer",
+    "meaning": "The Provider",
     "benefit": "Recite for sustenance and provision in all matters.",
     "audio_url": "/audio/asma/17.mp3"
   },
@@ -139,7 +139,7 @@
     "id": 18,
     "arabic_name": "ٱلْفَتَّاحُ",
     "transliteration": "Al-Fattah",
-    "meaning": "The Supreme Solver, The Opener",
+    "meaning": "The Opener",
     "benefit": "Recite for opening doors of opportunity and guidance.",
     "audio_url": "/audio/asma/18.mp3"
   },
@@ -147,7 +147,7 @@
     "id": 19,
     "arabic_name": "ٱلْعَلِيمُ",
     "transliteration": "Al-'Alim",
-    "meaning": "The All-Knowing, The Knower Of All",
+    "meaning": "The All-Knowing",
     "benefit": "Recite for knowledge, understanding, and wisdom.",
     "audio_url": "/audio/asma/19.mp3"
   },
@@ -155,7 +155,7 @@
     "id": 20,
     "arabic_name": "ٱلْقَابِضُ",
     "transliteration": "Al-Qabid",
-    "meaning": "The Withholder, The Constrictor",
+    "meaning": "The Withholder",
     "benefit": "Recite for patience during times of withholding.",
     "audio_url": "/audio/asma/20.mp3"
   },
@@ -163,7 +163,7 @@
     "id": 21,
     "arabic_name": "ٱلْبَاسِطُ",
     "transliteration": "Al-Basit",
-    "meaning": "The Extender, The Reliever",
+    "meaning": "The Expander",
     "benefit": "Recite for expansion in wealth, happiness, and ease.",
     "audio_url": "/audio/asma/21.mp3"
   },
@@ -171,7 +171,7 @@
     "id": 22,
     "arabic_name": "ٱلْخَافِضُ",
     "transliteration": "Al-Khafid",
-    "meaning": "The Reducer, The Abaser",
+    "meaning": "The Abaser",
     "benefit": "Recite for humbling oppressors and arrogant ones.",
     "audio_url": "/audio/asma/22.mp3"
   },
@@ -187,7 +187,7 @@
     "id": 24,
     "arabic_name": "ٱلْمُعِزُّ",
     "transliteration": "Al-Mu'izz",
-    "meaning": "The Honorer, The Bestower",
+    "meaning": "The Bestower of Honor",
     "benefit": "Recite for honor, dignity, and respect.",
     "audio_url": "/audio/asma/24.mp3"
   },
@@ -195,7 +195,7 @@
     "id": 25,
     "arabic_name": "ٱلْمُذِلُّ",
     "transliteration": "Al-Mudhill",
-    "meaning": "The Dishonorer, The Humiliator",
+    "meaning": "The Humiliator",
     "benefit": "Recite for protection from disgrace and humiliation.",
     "audio_url": "/audio/asma/25.mp3"
   },
@@ -235,7 +235,7 @@
     "id": 30,
     "arabic_name": "ٱللَّطِيفُ",
     "transliteration": "Al-Latif",
-    "meaning": "The Subtle One, The Most Gracious",
+    "meaning": "The Subtle",
     "benefit": "Recite for gentleness in affairs and hidden blessings.",
     "audio_url": "/audio/asma/30.mp3"
   },
@@ -251,7 +251,7 @@
     "id": 32,
     "arabic_name": "ٱلْحَلِيمُ",
     "transliteration": "Al-Halim",
-    "meaning": "The Forbearing, The Indulgent",
+    "meaning": "The Forbearing",
     "benefit": "Recite for patience and forbearance in trials.",
     "audio_url": "/audio/asma/32.mp3"
   },
@@ -259,7 +259,7 @@
     "id": 33,
     "arabic_name": "ٱلْعَظِيمُ",
     "transliteration": "Al-'Azim",
-    "meaning": "The Magnificent, The Great",
+    "meaning": "The Magnificent",
     "benefit": "Recite for recognizing the greatness of Allah.",
     "audio_url": "/audio/asma/33.mp3"
   },
@@ -275,7 +275,7 @@
     "id": 35,
     "arabic_name": "ٱلشَّكُورُ",
     "transliteration": "Ash-Shakur",
-    "meaning": "The Appreciative, The Most Grateful",
+    "meaning": "The Appreciative",
     "benefit": "Recite for gratitude and increase in blessings.",
     "audio_url": "/audio/asma/35.mp3"
   },
@@ -283,7 +283,7 @@
     "id": 36,
     "arabic_name": "ٱلْعَلِيُّ",
     "transliteration": "Al-'Ali",
-    "meaning": "The Most High, The Sublime",
+    "meaning": "The Most High",
     "benefit": "Recite for aspiring to high ranks and nearness to Allah.",
     "audio_url": "/audio/asma/36.mp3"
   },
@@ -291,7 +291,7 @@
     "id": 37,
     "arabic_name": "ٱلْكَبِيرُ",
     "transliteration": "Al-Kabir",
-    "meaning": "The Greatest, The Most Great",
+    "meaning": "The Greatest",
     "benefit": "Recite for acknowledging the greatness of Allah in all things.",
     "audio_url": "/audio/asma/37.mp3"
   },
@@ -299,7 +299,7 @@
     "id": 38,
     "arabic_name": "ٱلْحَفِيظُ",
     "transliteration": "Al-Hafiz",
-    "meaning": "The Preserver, The Protector",
+    "meaning": "The Protector",
     "benefit": "Recite for protection of health, family, and property.",
     "audio_url": "/audio/asma/38.mp3"
   },
@@ -307,7 +307,7 @@
     "id": 39,
     "arabic_name": "ٱلْمُقِيتُ",
     "transliteration": "Al-Muqit",
-    "meaning": "The Maintainer, The Feeder",
+    "meaning": "The Sustainer",
     "benefit": "Recite for nourishment of body and soul.",
     "audio_url": "/audio/asma/39.mp3"
   },
@@ -323,7 +323,7 @@
     "id": 41,
     "arabic_name": "ٱلْجَلِيلُ",
     "transliteration": "Al-Jalil",
-    "meaning": "The Majestic, The Glorious",
+    "meaning": "The Majestic",
     "benefit": "Recite for honor and reverence of the divine.",
     "audio_url": "/audio/asma/41.mp3"
   },
@@ -355,7 +355,7 @@
     "id": 45,
     "arabic_name": "ٱلْوَاسِعُ",
     "transliteration": "Al-Wasi'",
-    "meaning": "The All-Embracing, The All-Encompassing",
+    "meaning": "The All-Embracing",
     "benefit": "Recite for vastness in provision and opportunities.",
     "audio_url": "/audio/asma/45.mp3"
   },
@@ -411,7 +411,7 @@
     "id": 52,
     "arabic_name": "ٱلْوَكِيلُ",
     "transliteration": "Al-Wakil",
-    "meaning": "The Trustee, The Disposer Of Affairs",
+    "meaning": "The Trustee",
     "benefit": "Recite for placing your trust entirely in Allah.",
     "audio_url": "/audio/asma/52.mp3"
   },
@@ -427,7 +427,7 @@
     "id": 54,
     "arabic_name": "ٱلْمَتِينُ",
     "transliteration": "Al-Matin",
-    "meaning": "The Firm, The Steadfast",
+    "meaning": "The Firm",
     "benefit": "Recite for firmness and steadfastness in faith.",
     "audio_url": "/audio/asma/54.mp3"
   },
@@ -435,7 +435,7 @@
     "id": 55,
     "arabic_name": "ٱلْوَلِيُّ",
     "transliteration": "Al-Waliyy",
-    "meaning": "The Protecting Friend, The Supporter",
+    "meaning": "The Supporter",
     "benefit": "Recite for divine friendship, guidance, and support.",
     "audio_url": "/audio/asma/55.mp3"
   },
@@ -451,7 +451,7 @@
     "id": 57,
     "arabic_name": "ٱلْمُحْصِيُ",
     "transliteration": "Al-Muhsi",
-    "meaning": "The Accounter, The Counter",
+    "meaning": "The Accounter",
     "benefit": "Recite for accountability and self-reflection.",
     "audio_url": "/audio/asma/57.mp3"
   },
@@ -459,7 +459,7 @@
     "id": 58,
     "arabic_name": "ٱلْمُبْدِئُ",
     "transliteration": "Al-Mubdi'",
-    "meaning": "The Originator, The Producer",
+    "meaning": "The Originator",
     "benefit": "Recite for starting new ventures and projects.",
     "audio_url": "/audio/asma/58.mp3"
   },
@@ -467,7 +467,7 @@
     "id": 59,
     "arabic_name": "ٱلْمُعِيدُ",
     "transliteration": "Al-Mu'id",
-    "meaning": "The Restorer, The Reproducer",
+    "meaning": "The Restorer",
     "benefit": "Recite for restoration of what was lost.",
     "audio_url": "/audio/asma/59.mp3"
   },
@@ -475,7 +475,7 @@
     "id": 60,
     "arabic_name": "ٱلْمُحْيِي",
     "transliteration": "Al-Muhyi",
-    "meaning": "The Giver Of Life",
+    "meaning": "The Giver of Life",
     "benefit": "Recite for vitality, energy, and spiritual life.",
     "audio_url": "/audio/asma/60.mp3"
   },
@@ -483,7 +483,7 @@
     "id": 61,
     "arabic_name": "ٱلْمُمِيتُ",
     "transliteration": "Al-Mumit",
-    "meaning": "The Taker Of Life, The Creator Of Death",
+    "meaning": "The Creator of Death",
     "benefit": "Recite for accepting the decree of Allah.",
     "audio_url": "/audio/asma/61.mp3"
   },
@@ -499,7 +499,7 @@
     "id": 63,
     "arabic_name": "ٱلْقَيُّومُ",
     "transliteration": "Al-Qayyum",
-    "meaning": "The Sustainer Of All, The Self-Subsisting",
+    "meaning": "The Self-Subsisting",
     "benefit": "Recite for self-sufficiency and reliance on Allah alone.",
     "audio_url": "/audio/asma/63.mp3"
   },
@@ -507,7 +507,7 @@
     "id": 64,
     "arabic_name": "ٱلْوَاجِدُ",
     "transliteration": "Al-Wajid",
-    "meaning": "The Finder, The Perceiver",
+    "meaning": "The Finder",
     "benefit": "Recite for finding lost items and achieving goals.",
     "audio_url": "/audio/asma/64.mp3"
   },
@@ -515,7 +515,7 @@
     "id": 65,
     "arabic_name": "ٱلْمَاجِدُ",
     "transliteration": "Al-Majid",
-    "meaning": "The Noble, The Illustrious",
+    "meaning": "The Noble",
     "benefit": "Recite for nobility of character and grace.",
     "audio_url": "/audio/asma/65.mp3"
   },
@@ -523,7 +523,7 @@
     "id": 66,
     "arabic_name": "ٱلْوَاحِدُ",
     "transliteration": "Al-Wahid",
-    "meaning": "The Unique, The One",
+    "meaning": "The Unique",
     "benefit": "Recite for strengthening belief in the Oneness of Allah.",
     "audio_url": "/audio/asma/66.mp3"
   },
@@ -539,7 +539,7 @@
     "id": 68,
     "arabic_name": "ٱلصَّمَدُ",
     "transliteration": "As-Samad",
-    "meaning": "The Eternal, The Absolute",
+    "meaning": "The Eternal",
     "benefit": "Recite for freedom from need and self-sufficiency.",
     "audio_url": "/audio/asma/68.mp3"
   },
@@ -547,7 +547,7 @@
     "id": 69,
     "arabic_name": "ٱلْقَادِرُ",
     "transliteration": "Al-Qadir",
-    "meaning": "The Able, The All-Powerful",
+    "meaning": "The Able",
     "benefit": "Recite for ability and capability to accomplish goals.",
     "audio_url": "/audio/asma/69.mp3"
   },
@@ -555,7 +555,7 @@
     "id": 70,
     "arabic_name": "ٱلْمُقْتَدِرُ",
     "transliteration": "Al-Muqtadir",
-    "meaning": "The Powerful, The All-Determining",
+    "meaning": "The Powerful",
     "benefit": "Recite for empowerment and overcoming obstacles.",
     "audio_url": "/audio/asma/70.mp3"
   },
@@ -563,7 +563,7 @@
     "id": 71,
     "arabic_name": "ٱلْمُقَدِّمُ",
     "transliteration": "Al-Muqaddim",
-    "meaning": "The Expediter, The Foremost",
+    "meaning": "The Expediter",
     "benefit": "Recite for hastening good and beneficial outcomes.",
     "audio_url": "/audio/asma/71.mp3"
   },
@@ -571,7 +571,7 @@
     "id": 72,
     "arabic_name": "ٱلْمُؤَخِّرُ",
     "transliteration": "Al-Mu'akhkhir",
-    "meaning": "The Delayer, The Postponer",
+    "meaning": "The Delayer",
     "benefit": "Recite for patience when things are delayed.",
     "audio_url": "/audio/asma/72.mp3"
   },
@@ -595,7 +595,7 @@
     "id": 75,
     "arabic_name": "ٱلظَّاهِرُ",
     "transliteration": "Az-Zahir",
-    "meaning": "The Manifest, The Apparent",
+    "meaning": "The Manifest",
     "benefit": "Recite for discovering truth and removing veils of ignorance.",
     "audio_url": "/audio/asma/75.mp3"
   },
@@ -603,7 +603,7 @@
     "id": 76,
     "arabic_name": "ٱلْبَاطِنُ",
     "transliteration": "Al-Batin",
-    "meaning": "The Hidden, The Concealed",
+    "meaning": "The Hidden",
     "benefit": "Recite for understanding hidden matters and inner knowledge.",
     "audio_url": "/audio/asma/76.mp3"
   },
@@ -611,7 +611,7 @@
     "id": 77,
     "arabic_name": "ٱلْوَالِي",
     "transliteration": "Al-Wali",
-    "meaning": "The Governor, The Patron",
+    "meaning": "The Governor",
     "benefit": "Recite for good governing of your affairs.",
     "audio_url": "/audio/asma/77.mp3"
   },
@@ -619,7 +619,7 @@
     "id": 78,
     "arabic_name": "ٱلْمُتَعَالِ",
     "transliteration": "Al-Muta'ali",
-    "meaning": "The Most Exalted, The High Exalted",
+    "meaning": "The Most Exalted",
     "benefit": "Recite for rising above worldly attachments.",
     "audio_url": "/audio/asma/78.mp3"
   },
@@ -627,7 +627,7 @@
     "id": 79,
     "arabic_name": "ٱلْبَرُّ",
     "transliteration": "Al-Barr",
-    "meaning": "The Source Of All Goodness, The Kind And Righteous",
+    "meaning": "The Source of Goodness",
     "benefit": "Recite for goodness and kindness in all dealings.",
     "audio_url": "/audio/asma/79.mp3"
   },
@@ -635,7 +635,7 @@
     "id": 80,
     "arabic_name": "ٱلتَّوَّابُ",
     "transliteration": "At-Tawwab",
-    "meaning": "The Acceptor Of Repentance",
+    "meaning": "The Acceptor of Repentance",
     "benefit": "Recite for repentance and returning to Allah.",
     "audio_url": "/audio/asma/80.mp3"
   },
@@ -659,7 +659,7 @@
     "id": 83,
     "arabic_name": "ٱلرَّءُوفُ",
     "transliteration": "Ar-Ra'uf",
-    "meaning": "The Most Kind, The Compassionate",
+    "meaning": "The Most Kind",
     "benefit": "Recite for kindness and gentleness from Allah.",
     "audio_url": "/audio/asma/83.mp3"
   },
@@ -667,7 +667,7 @@
     "id": 84,
     "arabic_name": "مَالِكُ ٱلْمُلْكِ",
     "transliteration": "Malik-ul-Mulk",
-    "meaning": "Owner Of All Sovereignty",
+    "meaning": "The Owner of All Sovereignty",
     "benefit": "Recite for control over your affairs and circumstances.",
     "audio_url": "/audio/asma/84.mp3"
   },
@@ -675,7 +675,7 @@
     "id": 85,
     "arabic_name": "ذُو ٱلْجَلَالِ وَٱلْإِكْرَامِ",
     "transliteration": "Dhul-Jalali wal-Ikram",
-    "meaning": "Lord Of Majesty And Honor",
+    "meaning": "The Lord of Majesty and Honor",
     "benefit": "Recite for honor and blessings from Allah.",
     "audio_url": "/audio/asma/85.mp3"
   },
@@ -683,7 +683,7 @@
     "id": 86,
     "arabic_name": "ٱلْمُقْسِطُ",
     "transliteration": "Al-Muqsit",
-    "meaning": "The Just, The Equitable",
+    "meaning": "The Equitable",
     "benefit": "Recite for fairness and equity in all matters.",
     "audio_url": "/audio/asma/86.mp3"
   },
@@ -699,7 +699,7 @@
     "id": 88,
     "arabic_name": "ٱلْغَنِيُّ",
     "transliteration": "Al-Ghaniyy",
-    "meaning": "The Rich, The Independent",
+    "meaning": "The Rich",
     "benefit": "Recite for spiritual and material richness.",
     "audio_url": "/audio/asma/88.mp3"
   },
@@ -715,7 +715,7 @@
     "id": 90,
     "arabic_name": "ٱلْمَانِعُ",
     "transliteration": "Al-Mani'",
-    "meaning": "The Preventer, The Withholder",
+    "meaning": "The Preventer",
     "benefit": "Recite for protection from harmful things.",
     "audio_url": "/audio/asma/90.mp3"
   },
@@ -723,7 +723,7 @@
     "id": 91,
     "arabic_name": "ٱلضَّارُّ",
     "transliteration": "Ad-Darr",
-    "meaning": "The Distresser, The Harmer",
+    "meaning": "The Distresser",
     "benefit": "Recite for seeking only Allah as the source of tribulation and relief.",
     "audio_url": "/audio/asma/91.mp3"
   },
@@ -771,7 +771,7 @@
     "id": 97,
     "arabic_name": "ٱلْوَارِثُ",
     "transliteration": "Al-Warith",
-    "meaning": "The Inheritor Of All",
+    "meaning": "The Inheritor",
     "benefit": "Recite for leaving a legacy of good deeds.",
     "audio_url": "/audio/asma/97.mp3"
   },
@@ -779,7 +779,7 @@
     "id": 98,
     "arabic_name": "ٱلرَّشِيدُ",
     "transliteration": "Ar-Rashid",
-    "meaning": "The Righteous Teacher, The Guide To The Right Path",
+    "meaning": "The Guide to the Right Path",
     "benefit": "Recite for righteous guidance and correct direction.",
     "audio_url": "/audio/asma/98.mp3"
   },
@@ -787,7 +787,7 @@
     "id": 99,
     "arabic_name": "ٱلصَّبُورُ",
     "transliteration": "As-Sabur",
-    "meaning": "The Patient One, The Most Patient",
+    "meaning": "The Patient",
     "benefit": "Recite for patience in adversity and endurance.",
     "audio_url": "/audio/asma/99.mp3"
   }

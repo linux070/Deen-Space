@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getHijriDate } from '../utils/hijri.js'
 import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
-import { IconHands, IconBook, IconGrid, IconChevronRight, IconTasbih, IconCalendar, IconStar, IconCrescent, IconDua, IconSparkles, IconNinetyNine, IconHeart, IconMosque, IconCompass } from '../components/Icons'
+import { IconHands, IconBook, IconCalendar, IconNinetyNine, IconCompass } from '../components/Icons'
 import DailyPage from './DailyPage'
 import LibraryPage from './LibraryPage'
 import PageHeader from '../components/PageHeader'
@@ -329,7 +329,7 @@ export default function HomePage({ duas = [], asma = [] }) {
                         theme={theme}
                     />
                     <QuickCard
-                        title="40 Robbana"
+                        title="40 Rabbana"
                         subtitle="Quranic Prayers"
                         icon={IconCompass}
                         onClick={() => navigate('/library/rabbana')}

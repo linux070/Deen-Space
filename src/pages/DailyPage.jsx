@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
 import DuaCard from '../components/DuaCard'
-import { IconChevronLeft, IconChevronRight, IconSun, IconMoon, IconMosque, IconBook } from '../components/Icons'
+import { IconChevronLeft, IconChevronRight, IconSun, IconMoon, IconMosque } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 import MiniTasbih from '../components/MiniTasbih'
 import { toTitleCase } from '../utils/text'
@@ -73,7 +73,14 @@ export default function DailyPage({ duas }) {
     // BACK NAVIGATION
     const goBack = () => {
         if (viewMode === 'swipe') {
-            setViewMode('dualist')
+            // If the user came from a specific category list (dualist mode),
+            // go back to that list instead of jumping to landing.
+            if (activeCategory && category) {
+                setViewMode('dualist')
+                return
+            }
+            setViewMode('landing')
+            setActiveCategory(null)
             return
         }
         if (viewMode === 'dualist') {
@@ -113,7 +120,12 @@ export default function DailyPage({ duas }) {
     const getSwipeTitle = () => {
         const currentDua = swipeDuas[selectedIndex]
         if (!currentDua) return toTitleCase(activeCategory)
-        return `${toTitleCase(currentDua.category)} ${selectedIndex + 1} / ${swipeDuas.length}`
+        
+        // Calculate the index relative to the category for clearer pagination
+        const catDuas = swipeDuas.filter(d => d.category === currentDua.category)
+        const catIdx = catDuas.findIndex(d => d.id === currentDua.id)
+        
+        return `${toTitleCase(currentDua.category)} ${catIdx + 1} / ${catDuas.length}`
     }
 
     // ─── LANDING: List of categories ───
@@ -128,7 +140,10 @@ export default function DailyPage({ duas }) {
                             key={cat.key}
                             onClick={() => {
                                 setActiveCategory(cat.key)
-                                setViewMode('dualist')
+                                // Jump directly to the first dua of this category in the swipe list
+                                const firstIndex = swipeDuas.findIndex(sd => sd.category === cat.key)
+                                setSelectedIndex(firstIndex !== -1 ? firstIndex : 0)
+                                setViewMode('swipe')
                             }}
                             className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
                             style={{
@@ -150,13 +165,12 @@ export default function DailyPage({ duas }) {
                             </div>
                             <div className="flex-1 min-w-0">
                                 <h3 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>
-                                    {cat.label} Adhkar
+                                    {cat.label}
                                 </h3>
                                 <p className="text-[10px] font-bold tracking-[0.05em] opacity-40 mt-0.5" style={{ color: t(theme, 'text-muted') }}>
                                     {cat.subtitle}
                                 </p>
                             </div>
-                            <IconChevronRight size={16} className="opacity-10 group-hover:opacity-40 group-hover:translate-x-1 transition-all" />
                         </button>
                     ))}
 
@@ -269,10 +283,10 @@ export default function DailyPage({ duas }) {
                         <div key={dua.id} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto h-full">
                             <DuaCard
                                 dua={dua}
-                                label={toTitleCase(dua.category) + ' Adhkar'}
                                 type="dua"
                                 hideAudio={true}
                                 hideCounter={false}
+                                hideTags={true}
                             />
                         </div>
                     ))}

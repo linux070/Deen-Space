@@ -4,19 +4,9 @@ import { t } from '../utils/theme'
 import {
     IconHands,
     IconBook,
-    IconStar,
-    IconClock,
-    IconMosque,
-    IconGrid,
-    IconTasbih,
-    IconCrescent,
-    IconSparkles,
-    IconCloud,
-    IconFingerprint,
-    IconDua,
     IconNinetyNine,
-    IconHeart,
     IconFlower,
+    IconCrescent,
     IconUser,
     IconCompass
 } from '../components/Icons'
@@ -43,7 +33,7 @@ export default function DuaPage() {
         },
         {
             id: 'rabbana',
-            title: '40 Robbana',
+            title: '40 Rabbana',
             subtitle: 'Quranic Prayers',
             icon: IconCompass,
             action: () => navigate('/library/rabbana')

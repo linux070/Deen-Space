@@ -1367,19 +1367,28 @@
     "repeat": 1
   },
   {
+    "id": "eating-0",
+    "arabic_text": "بِسْمِ اللَّهِ",
+    "transliteration": "Bismillah.",
+    "translation": {
+      "en": "(Before Eating) In the name of Allah."
+    },
+    "audio_url": "/audio/duas/eating-0.mp3",
+    "reference": "Abu Dawud 3767",
+    "tags": ["eating", "general", "daily"],
+    "category": "eating",
+    "repeat": 1
+  },
+  {
     "id": "eating-1",
     "arabic_text": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا الطَّعَامَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
     "transliteration": "Alhamdu lillahil-ladhi at'amani hadhat-ta'ama wa razaqanihi min ghayri hawlin minni wa la quwwatin.",
     "translation": {
-      "en": "All praise is for Allah who fed me this food and provided it for me without any might or power from myself."
+      "en": "(After Eating) All praise is for Allah who fed me this food and provided it for me without any might or power from myself."
     },
     "audio_url": "/audio/duas/eating-1.mp3",
     "reference": "Abu Dawud 4023",
-    "tags": [
-      "eating",
-      "general",
-      "daily"
-    ],
+    "tags": ["eating", "general", "daily"],
     "category": "eating",
     "repeat": 1
   },
@@ -1388,17 +1397,36 @@
     "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبْثِ وَالْخَبَائِثِ",
     "transliteration": "Allahumma inni a'udhu bika minal-khubthi wal-khaba'ith.",
     "translation": {
-      "en": "O Allah, I seek refuge in You from the male and female evil spirits."
+      "en": "(Entering Restroom) O Allah, I seek refuge in You from the male and female evil spirits."
     },
     "audio_url": "/audio/duas/toilet-1.mp3",
     "reference": "Sahih Bukhari 142",
-    "tags": [
-      "toilet",
-      "general",
-      "protection",
-      "daily"
-    ],
+    "tags": ["toilet", "general", "protection", "daily"],
     "category": "toilet",
+    "repeat": 1
+  },
+  {
+    "id": "toilet-2",
+    "arabic_text": "غُفْرَانَكَ",
+    "transliteration": "Ghufranak.",
+    "translation": {
+      "en": "(Leaving Restroom) I ask Your forgiveness."
+    },
+    "reference": "Abu Dawud 30",
+    "tags": ["toilet", "general", "daily"],
+    "category": "toilet",
+    "repeat": 1
+  },
+  {
+    "id": "home-0",
+    "arabic_text": "بِسْمِ اللَّهِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلِجِ، وَخَيْرَ الْمَخْرَجِ",
+    "transliteration": "Bismillahi, Allahumma inni as'aluka khayral-mauliji, wa khayral-makhraj.",
+    "translation": {
+      "en": "(Entering Home) In the name of Allah, O Allah, I ask You for a good entry and a good exit."
+    },
+    "reference": "Abu Dawud 5096",
+    "tags": ["home", "general", "daily"],
+    "category": "home",
     "repeat": 1
   },
   {
@@ -1406,17 +1434,24 @@
     "arabic_text": "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
     "transliteration": "Bismillahi tawakkaltu 'alal-lahi, wa la hawla wa la quwwata illa billah.",
     "translation": {
-      "en": "In the name of Allah, I place my trust in Allah, and there is no might nor power except with Allah."
+      "en": "(Leaving Home) In the name of Allah, I place my trust in Allah, and there is no might nor power except with Allah."
     },
     "audio_url": "/audio/duas/home-1.mp3",
     "reference": "Abu Dawud 5095",
-    "tags": [
-      "home",
-      "general",
-      "protection",
-      "daily"
-    ],
+    "tags": ["home", "general", "protection", "daily"],
     "category": "home",
+    "repeat": 1
+  },
+  {
+    "id": "dressing-0",
+    "arabic_text": "بِسْمِ اللَّهِ",
+    "transliteration": "Bismillah.",
+    "translation": {
+      "en": "(Undressing) In the name of Allah."
+    },
+    "reference": "At-Tirmidhi 606",
+    "tags": ["dressing", "protection"],
+    "category": "dressing",
     "repeat": 1
   },
   {
@@ -1424,15 +1459,11 @@
     "arabic_text": "الْحَمْدُ لِلَّهِ الَّذِي كَسَانِي هَذَا الثَّوْبَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
     "transliteration": "Alhamdu lillahil-ladhi kasani hadhath-thawba wa razaqanihi min ghayri hawlin minni wa la quwwatin.",
     "translation": {
-      "en": "All praise is for Allah who clothed me with this garment and provided it for me without any might or power from myself."
+      "en": "(Dressing) All praise is for Allah who clothed me with this garment and provided it for me without any might or power from myself."
     },
     "audio_url": "/audio/duas/dressing-1.mp3",
     "reference": "Abu Dawud 4023",
-    "tags": [
-      "dressing",
-      "general",
-      "daily"
-    ],
+    "tags": ["dressing", "general", "daily"],
     "category": "dressing",
     "repeat": 1
   },
@@ -1634,6 +1665,414 @@
       "knowledge"
     ],
     "category": "ramadan",
+    "repeat": 1
+  },
+  {
+    "id": "market-1",
+    "arabic_text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، يُحْيِي وَيُمِيتُ، وَهُوَ حَيٌّ لَا يَمُوتُ، بِيَدِهِ الْخَيْرُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    "transliteration": "La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu, yuhyi wa yumitu, wa huwa hayyun la yamutu, bi yadihil-khayru, wa huwa 'ala kulli shay'in qadir.",
+    "translation": {
+      "en": "None has the right to be worshipped except Allah, alone, without partner. To Him belongs all sovereignty and praise. He gives life and causes death, and He is living and does not die. In His hand is all good, and He is over all things competent."
+    },
+    "reference": "At-Tirmidhi 3428, Ibn Majah 2235",
+    "tags": ["situational", "market", "reward"],
+    "category": "travel",
+    "repeat": 1
+  },
+  {
+    "id": "wudu-2",
+    "arabic_text": "اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ",
+    "transliteration": "Allahumma-j'alni minat-tawwabeen waj'alni minal-mutatahhireen.",
+    "translation": {
+      "en": "O Allah, make me among those who constantly repent and those who purify themselves."
+    },
+    "reference": "At-Tirmidhi 55",
+    "tags": ["prophetic", "wudu", "purification"],
+    "category": "prophetic",
+    "repeat": 1
+  },
+  {
+    "id": "mosque-1",
+    "arabic_text": "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+    "transliteration": "Allahumma iftah li abwaba rahmatik.",
+    "translation": {
+      "en": "O Allah, open for me the doors of Your mercy."
+    },
+    "reference": "Sahih Muslim 713",
+    "tags": ["prophetic", "mosque", "mercy"],
+    "category": "prophetic",
+    "repeat": 1
+  },
+  {
+    "id": "mosque-2",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+    "transliteration": "Allahumma inni as'aluka min fadlik.",
+    "translation": {
+      "en": "O Allah, I ask for Your favor."
+    },
+    "reference": "Sahih Muslim 713",
+    "tags": ["prophetic", "mosque", "favor"],
+    "category": "prophetic",
+    "repeat": 1
+  },
+  {
+    "id": "anxiety-2",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحُزْنِ وَالْعَجْزِ وَالْكَسَلِ وَالْبُخْلِ وَالْجُبْنِ وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
+    "transliteration": "Allahumma inni a'udhu bika minal-hammi wal-huzni wal-'ajzi wal-kasali wal-bukhli wal-jubni wa dala'id-dayni wa ghalabatir-rijal.",
+    "translation": {
+      "en": "O Allah, I seek refuge in You from anxiety and sorrow, weakness and laziness, miserliness and cowardice, the burden of debts and from being overpowered by men."
+    },
+    "reference": "Sahih Bukhari 6369",
+    "tags": ["emotions", "anxiety", "sorrow", "refuge"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "dhikr-4",
+    "arabic_text": "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ",
+    "transliteration": "Subhanakallahumma wa bihamdika, ashhadu an la ilaha illa anta, astaghfiruka wa atubu ilayk.",
+    "translation": {
+      "en": "O Allah, You are free from every imperfection, and I praise You. I bear witness that there is no deity worthy of worship except You. I seek Your forgiveness and turn to You in repentance."
+    },
+    "reference": "At-Tirmidhi 3433",
+    "tags": ["dhikr", "gathering", "forgiveness"],
+    "category": "dhikr",
+    "repeat": 1
+  },
+  {
+    "id": "guidance-2",
+    "arabic_text": "اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي",
+    "transliteration": "Allahumma ihdini wa saddidni.",
+    "translation": {
+      "en": "O Allah, guide me and grant me success."
+    },
+    "reference": "Sahih Muslim 2725",
+    "tags": ["prophetic", "guidance"],
+    "category": "prophetic",
+    "repeat": 1
+  },
+  {
+    "id": "doubt-1",
+    "arabic_text": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ، آمَنْتُ بِاللَّهِ وَرُسُلِهِ",
+    "transliteration": "A'udhu billahi minash-Shaytanir-rajeem, amantu billahi wa rusulihi.",
+    "translation": {
+      "en": "I seek refuge in Allah from Satan the outcast, I believe in Allah and His Messengers."
+    },
+    "reference": "Ibn Majah 1298, Muslim 134",
+    "tags": ["emotions", "doubt", "faith", "refuge"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "distress-1",
+    "arabic_text": "الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي مِمَّا ابْتَلاَكَ بِهِ وَفَضَّلَنِي عَلَى كَثِيرٍ مِمَّنْ خَلَقَ تَفْضِيلاً",
+    "transliteration": "Alhamdu lillāhil-ladhī `āfānī mimmab-talāka bihiwa faḍḍalanī `alā kathīrin mimman khalaqa tafḍīlā.",
+    "translation": {
+      "en": "Praise is to Allah Who has spared me what He has afflicted you with, and preferred me greatly above much of what He has created."
+    },
+    "reference": "At-Tirmidhi 3432",
+    "tags": ["situational", "distress", "mercy"],
+    "category": "illness",
+    "repeat": 1
+  },
+  {
+    "id": "protection-1",
+    "arabic_text": "اللّهُـمَّ إِنِّي أَسْأَلُكَ الْعَـفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللّهُـمَّ إِنِّي أَسْأَلُكَ الْعَـفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللّهُـمَّ اسْتُـرْ عَوْرَاتِـي وَآمِنْ رَوْعَاتِـي، اللّهُـمَّ احْفَظْنِـي مِنْ بَـيْنِ يَدَيَّ وَمِنْ خَلْفِـي وَعَنْ يَمِـينِي وَعَنْ شِمَـالِي وَمِنْ فَوْقِـي وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَـالَ مِنْ تَحْتِـي",
+    "transliteration": "Allaahumma 'innee 'as'alukal-'afwa wal'aafiyata fid-dunyaa wal'aakhira. Allaahumma 'innee 'as'alukal-'afwa wal'aafiyata fee deenee wa dunyaaya wa 'ahlee wa maalee. Allaahummastur 'awraatee wa 'aamin raw'aatee. Allaahummah-fadhnee mim-bayni yadayya wa min khalfee wa 'an yameenee wa 'an shimaalee wa min fawqee wa 'a'oothu bi'adhamatika 'an 'ughtaala min tahtee.",
+    "translation": {
+      "en": "O Allah, I seek Your forgiveness and Your protection in this world and the next. O Allah, I seek Your forgiveness and Your protection in my religion, in my worldly affairs, in my family and in my wealth. O Allah, conceal my secrets and preserve me from anguish. O Allah, guard me from what is in front of me and behind me, from my right, and from my left, and from above me. I seek refuge in Your Greatness from being struck down from beneath me."
+    },
+    "reference": "Abu Dawud, Ibn Majah",
+    "tags": ["prophetic", "protection", "comprehensive"],
+    "category": "prophetic",
+    "repeat": 1
+  },
+  {
+    "id": "parents-1",
+    "arabic_text": "رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+    "transliteration": "Rabbir hamhumaa kamaa rabbayaanee sagheera.",
+    "translation": {
+      "en": "My Lord, have mercy upon them as they brought me up [when I was] small."
+    },
+    "reference": "Quran 17:24",
+    "tags": ["prophetic", "parents", "mercy"],
+    "category": "prophetic",
+    "repeat": 1
+  },
+  {
+    "id": "fear-2",
+    "arabic_text": "اللّهُـمَّ إِنّا نَجْـعَلُكَ في نُحـورِهِـم وَنَعـوذُ بِكَ مِنْ شُرورِهـمْ",
+    "transliteration": "Allaahumma 'innaa naj'aluka fee nuhoorihim wa na'oothu bika min shuroorihim.",
+    "translation": {
+      "en": "O Allah, we ask You to restrain them by their necks, and we seek refuge in You from their evil."
+    },
+    "reference": "Abu Dawud 2/89",
+    "tags": ["emotions", "fear", "protection"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "ease-1",
+    "arabic_text": "اللَّهُمَّ لاَ سَهْلَ إِلاَّ مَا جَعَلْتَهُ سَهْلاً وَأَنْتَ تَجْعَلُ الْحَزْنَ إِذَا شِئْتَ سَهْلاً",
+    "transliteration": "Allāhumma lā sahla illā mā ja'altahu sahlā wa anta taj'alu al-ḥazna idhā shi'ta sahlā.",
+    "translation": {
+      "en": "O Allah, there is no ease except what You make easy. And You make the difficult easy if You wish."
+    },
+    "reference": "Ibn Hibban, Ibn As-Sunni",
+    "tags": ["situational", "ease", "difficulty"],
+    "category": "travel",
+    "repeat": 1
+  },
+  {
+    "id": "gratitude-2",
+    "arabic_text": "جَـزاكَ اللهُ خَـيْراً",
+    "transliteration": "Jazākallāhu khayra.",
+    "translation": {
+      "en": "May Allah reward you with goodness."
+    },
+    "reference": "At-Tirmidhi 2035",
+    "tags": ["emotions", "gratitude", "reward"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "clothes-1",
+    "arabic_text": "اللّهُـمَّ لَـكَ الحَـمْـدُ أنْـتَ كَسَـوْتَنيهِ، أََسْأََلُـكَ مِـنْ خَـيرِهِ وَخَـيْـرِ مَا صُنِعَ لَـه، وَأَعوذُ بِكَ مِـنْ شَـرِّهِ وَشَـرِّ مـا صُنِعَ لَـهُ",
+    "transliteration": "Allaahumma lakal-hamdu 'Anta kasawtaneehi, 'as'aluka min khayrihi wa khayri maa suni'a lahu, wa 'a'oothu bika min sharrihi wa sharri maa suni'a lahu.",
+    "translation": {
+      "en": "O Allah, for You is all praise, You have clothed me with it (i.e. the garment). I ask You for the good of it and the good for which it was made, and I seek refuge with You from the evil of it and the evil for which it was made."
+    },
+    "reference": "Abu Dawud, At-Tirmidhi",
+    "tags": ["prophetic", "clothes", "dressing"],
+    "category": "dressing",
+    "repeat": 1
+  },
+  {
+    "id": "travel-2",
+    "arabic_text": "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ. اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ، وَالْخَلِيفَةُ فِي الأَهْلِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوءِ الْمُنْقَلَبِ فِي الْمَالِ وَالأَهْلِ",
+    "transliteration": "Subhanal-ladhee sakh-khara lana hadha, wa ma kunna lahu muqrineen, wa inna ila Rabbina lamunqaliboon. Allahumma inna nas'aluka fee safarina hadhal-birra wat-taqwa, wa minal-'amali ma tarda. Allahumma hawwin 'alayna safarana hadha, watwi 'anna bu'dahu. Allahumma Antas-Sahibu fis-safari, wal-Khaleefatu fil-'ahli. Allahumma inni a'oodhu bika min wa'tha'is-safari, wa ka'aabatil-manthari, wa soo'il-munqalabi fil-mali wal-'ahli.",
+    "translation": {
+      "en": "How perfect He is, The One Who has placed this (transport) at our service, and we ourselves would not have been capable of that, and to our Lord is our final destiny. O Allah, we ask You for righteousness and piety in this journey of ours, and we ask You for deeds which please You. O Allah, facilitate our journey and let us cover its distance quickly. O Allah, You are The Companion on the journey and The Guardian over the family. O Allah, I seek refuge in You from the hardships of travel, from having a change of hearts and being in a bad predicament, and I seek refuge in You from an ill-fated outcome with wealth and family."
+    },
+    "reference": "Sahih Muslim 1342",
+    "tags": ["situational", "travel", "journey"],
+    "category": "travel",
+    "repeat": 1
+  },
+  {
+    "id": "morning-6",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَـفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي",
+    "transliteration": "Allahumma inni as'alukal-'afwa wal-'afiyata fid-dunya wal-akhirah, Allahumma inni as'alukal-'afwa wal-'afiyata fee deeni wa dunya-ya wa ahli wa mali.",
+    "translation": {
+      "en": "O Allah, I seek Your forgiveness and Your protection in this world and the next. O Allah, I seek Your forgiveness and Your protection in my religion, in my worldly affairs, in my family and in my wealth."
+    },
+    "reference": "Abu Dawud, Ibn Majah",
+    "tags": ["morning", "adhkar", "protection"],
+    "category": "morning",
+    "repeat": 1
+  },
+  {
+    "id": "evening-4",
+    "arabic_text": "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ",
+    "transliteration": "Ya Hayyu ya Qayyoom, bi-rahmatika astagheeth, aslih lee sha'nee kullahu wa la takilnee ila nafsee tarfata 'aynin.",
+    "translation": {
+      "en": "O Ever Living One, O Self-Sustaining One, in Your mercy I seek relief. Correct all of my affairs for me and do not leave me to myself even for the blinking of an eye."
+    },
+    "reference": "Al-Hakim 1/545",
+    "tags": ["evening", "adhkar", "relief"],
+    "category": "evening",
+    "repeat": 1
+  },
+  {
+    "id": "salah-7",
+    "arabic_text": "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+    "transliteration": "Allahumma a'innee 'ala dhikrika wa shukrika wa husni 'ibadatika.",
+    "translation": {
+      "en": "O Allah, help me to remember You, to give thanks to You and to worship You in the best way."
+    },
+    "reference": "Abu Dawud 2/86, An-Nasa'i 3/53",
+    "tags": ["after-salah", "adhkar", "worship"],
+    "category": "after-salah",
+    "repeat": 1
+  },
+  {
+    "id": "dhikr-5",
+    "arabic_text": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+    "transliteration": "Astaghfirullaha wa atoobu ilayhi.",
+    "translation": {
+      "en": "I seek Allah's forgiveness and turn to Him in repentance."
+    },
+    "reference": "Sahih Bukhari 6307, Sahih Muslim 2702",
+    "tags": ["dhikr", "general", "forgiveness"],
+    "category": "dhikr",
+    "repeat": 100
+  },
+  {
+    "id": "travel-3",
+    "arabic_text": "آيِبُونَ تَائِبُونَ عَابِدُونَ لِرَبِّنَا حَامِدُونَ",
+    "transliteration": "Aayiboona, taa'iboona, 'aabidoona, li-Rabbina hamidoona.",
+    "translation": {
+      "en": "We return, repent, worship and praise our Lord."
+    },
+    "reference": "Sahih Muslim 1342",
+    "tags": ["situational", "travel", "return"],
+    "category": "travel",
+    "repeat": 1
+  },
+  {
+    "id": "anxiety-3",
+    "arabic_text": "لَا إِلَهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ، لَا إِلَهَ إِلَّا اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ، لَا إِلَهَ إِلَّا اللَّهُ رَبُّ السَّمَاوَاتِ وَرَبُّ الْأَرْضِ وَرَبُّ الْعَرْشِ الْكَرِيمِ",
+    "transliteration": "La ilaha illallahu-l-'Adheemul-Haleem, la ilaha illallahu Rabbul-'Arshil-'Adheem, la ilaha illallahu Rabbus-samawati wa Rabbul-ardi wa Rabbul-'Arshil-Kareem.",
+    "translation": {
+      "en": "There is no god but Allah, the Magnificent, the Forbearing. There is no god but Allah, Lord of the Magnificent Throne. There is no god but Allah, Lord of the heavens and Lord of the earth and Lord of the Noble Throne."
+    },
+    "reference": "Sahih Bukhari 6345, Sahih Muslim 2730",
+    "tags": ["emotions", "anxiety", "relief"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "gratitude-3",
+    "arabic_text": "الْحَمْدُ لِلَّهِ حَمْدًا كَثِيرًا طَيِّبًا مُبَارَكًا فِيهِ",
+    "transliteration": "Alhamdu lillahi hamdan katheeran tayyiban mubarakan feehi.",
+    "translation": {
+      "en": "All praise is due to Allah, an abundant, good and blessed praise."
+    },
+    "reference": "Sahih Bukhari 2/284",
+    "tags": ["emotions", "gratitude", "praise"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "home-3",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ أَنْ أَضِلَّ أَوْ أُضَلَّ، أَوْ أَزِلَّ أَوْ أُزَلَّ، أَوْ أَظْلِمَ أَوْ أُظْلَمَ، أَوْ أَجْهَلَ أَوْ يُجْهَلَ عَلَيَّ",
+    "transliteration": "Allahumma innee a'oodhu bika an adilla aw udalla, aw azilla aw uzalla, aw adhlima aw udhlama, aw ajhala aw yujhala 'alayya.",
+    "translation": {
+      "en": "O Allah, I seek refuge in You from leading others astray or being led astray, or causing others to slip or being made to slip, or treating others unjustly or being treated unjustly, or acting ignorantly or having others act ignorantly towards me."
+    },
+    "reference": "Abu Dawud, At-Tirmidhi, An-Nasa'i",
+    "tags": ["prophetic", "home", "leaving"],
+    "category": "home",
+    "repeat": 1
+  },
+  {
+    "id": "sleeping-7",
+    "arabic_text": "قُلْ هُوَ اللَّهُ أَحَدٌ... قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ... قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+    "transliteration": "Surah Al-Ikhlas, Al-Falaq, An-Nas.",
+    "translation": {
+      "en": "Recite the three Quls and blow into palms, then rub over body (before sleep)."
+    },
+    "reference": "Sahih Bukhari 5017",
+    "tags": ["prophetic", "sleeping", "protection"],
+    "category": "sleeping",
+    "repeat": 3
+  },
+  {
+    "id": "trust-1",
+    "arabic_text": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+    "transliteration": "Hasbunallahu wa ni'mal-wakeel.",
+    "translation": {
+      "en": "Allah is sufficient for us and He is the Best Disposer of affairs."
+    },
+    "reference": "Sahih Bukhari 4563",
+    "tags": ["emotions", "trust", "strength"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "light-1",
+    "arabic_text": "اللَّهُمَّ اجْعَلْ فِي قَلْبِي نُورًا، وَفِي لِسَانِي نُورًا، وَفِي سَمْعِي نُورًا، وَفِي بَصَرِي نُورًا",
+    "transliteration": "Allahummaj-'al fee qalbee nooran, wa fee lisanee nooran, wa fee sam'ee nooran, wa fee basaree nooran.",
+    "translation": {
+      "en": "O Allah, place light in my heart, light on my tongue, light in my hearing and light in my sight."
+    },
+    "reference": "Sahih Muslim 763",
+    "tags": ["prophetic", "light", "guidance"],
+    "category": "prophetic",
+    "repeat": 1
+  },
+  {
+    "id": "sadness-2",
+    "arabic_text": "اللَّهُمَّ إِنِّي عَبْدُكَ، وَابْنُ عَبْدِكَ، وَابْنُ أَمَتِكَ، نَاصِيَتِي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ",
+    "transliteration": "Allahumma innee 'abduk, wabnu 'abdik, wabnu amatik, nasiyatee biyadik, madhin fiyya hukmuk, 'adlun fiyya qada'uk.",
+    "translation": {
+      "en": "O Allah, I am Your slave, and the son of Your slave, and the son of Your maidservant. My forelock is in Your hand, Your decision for me has passed, and Your decree upon me is just."
+    },
+    "reference": "Ahmad 1/391",
+    "tags": ["emotions", "sadness", "relief"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "sneezing-1",
+    "arabic_text": "الْحَمْدُ للهِ",
+    "transliteration": "Alhamdu lillah.",
+    "translation": {
+      "en": "(Upon Sneezing) All praise is for Allah."
+    },
+    "reference": "Sahih Bukhari 6224",
+    "tags": ["prophetic", "sneezing"],
+    "category": "etiquette",
+    "repeat": 1
+  },
+  {
+    "id": "sneezing-2",
+    "arabic_text": "يَرْحَمُكَ الله",
+    "transliteration": "Yarhamukallah.",
+    "translation": {
+      "en": "(Hearing someone sneeze) May Allah have mercy upon you."
+    },
+    "reference": "Sahih Bukhari 6224",
+    "tags": ["prophetic", "sneezing", "social"],
+    "category": "etiquette",
+    "repeat": 1
+  },
+  {
+    "id": "sneezing-3",
+    "arabic_text": "يَهْدِيكُمُ اللهُ وَيُصْلِحُ بَالَكُمْ",
+    "transliteration": "Yahdeekumullahu wa yuslihu baalakum.",
+    "translation": {
+      "en": "(Sneezer's response) May Allah guide you and rectify your condition."
+    },
+    "reference": "Sahih Bukhari 6224",
+    "tags": ["prophetic", "sneezing", "guidance"],
+    "category": "etiquette",
+    "repeat": 1
+  },
+  {
+    "id": "yawning-1",
+    "arabic_text": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+    "transliteration": "A'oodhu billahi minash-shaytanir-rajeem.",
+    "translation": {
+      "en": "(Upon Yawning) I seek refuge in Allah from the accursed Satan (while resisting and covering mouth)."
+    },
+    "reference": "Sahih Bukhari 6223,6226",
+    "tags": ["prophetic", "yawning", "refuge"],
+    "category": "etiquette",
+    "repeat": 1
+  },
+  {
+    "id": "animal-1",
+    "arabic_text": "أَعُوذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+    "transliteration": "A'oodhu billahi minash-shaytanir-rajeem.",
+    "translation": {
+      "en": "(Hearing a donkey bray or dog barking at night) I seek refuge in Allah from the accursed Satan."
+    },
+    "reference": "Abu Dawud 5103, Sahih Muslim 2729",
+    "tags": ["situational", "animals", "refuge"],
+    "category": "animals",
+    "repeat": 1
+  },
+  {
+    "id": "animal-2",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+    "transliteration": "Allahumma innee as'aluka min fadlik.",
+    "translation": {
+      "en": "(Hearing a cock crow) O Allah, I ask You from Your favor."
+    },
+    "reference": "Sahih Bukhari 3303, Sahih Muslim 2729",
+    "tags": ["situational", "animals", "favor"],
+    "category": "animals",
     "repeat": 1
   }
 ]

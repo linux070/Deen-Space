@@ -45,13 +45,23 @@ export default function PraisePage({ duas, asma, embedded = false }) {
     }
 
     const handleSwipeScroll = (e) => {
-        if (skippingFirstScroll.current && e.target.scrollLeft === 0 && selectedIndex > 0) return
-        skippingFirstScroll.current = false
-
-        const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth)
-        if (idx !== selectedIndex) setSelectedIndex(idx)
+        if (skippingFirstScroll.current) {
+            skippingFirstScroll.current = false
+            return
+        }
+        if (!e.target) return
+        const width = e.target.offsetWidth
+        const scrollLeft = e.target.scrollLeft
+        // Calculate the index exactly
+        const exactIndex = scrollLeft / width
+        // Only update index when perfectly snapped
+        if (Math.abs(exactIndex - Math.round(exactIndex)) < 0.05) {
+            const index = Math.round(exactIndex)
+            if (index !== selectedIndex) {
+                setSelectedIndex(index)
+            }
+        }
     }
-
     const goBack = () => {
         if (search) {
             setSearch('')
@@ -94,8 +104,8 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                         >
                             بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ
                         </p>
-                        <p className="text-[10px] font-bold tracking-widest opacity-30 mt-1 text-center">
-                            In the name of Allah
+                        <p className="text-[10px] font-bold tracking-[0.2em] opacity-40 mt-1 text-center">
+                            In the Name of Allah, the Most Beneficent, the Most Merciful
                         </p>
                     </div>
 
@@ -157,7 +167,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                             <IconChevronLeft size={22} />
                         </button>
                         <span className="text-[15px] font-normal tracking-tight" style={{ color: t(theme, 'text-primary') }}>
-                            Asma-ul-Husna {selectedIndex + 1} / {filteredNames.length}
+                            {filteredNames[selectedIndex]?.transliteration} {selectedIndex + 1} / {filteredNames.length}
                         </span>
                     </div>
 
