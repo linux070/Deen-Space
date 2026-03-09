@@ -32,11 +32,11 @@ export default function DuaPage() {
             action: () => navigate('/daily')
         },
         {
-            id: 'rabbana',
-            title: '40 Rabbana',
+            id: 'robbana',
+            title: '40 Robbana',
             subtitle: 'Quranic Prayers',
             icon: IconCompass,
-            action: () => navigate('/library/rabbana')
+            action: () => navigate('/library/robbana')
         },
         {
             id: 'names',

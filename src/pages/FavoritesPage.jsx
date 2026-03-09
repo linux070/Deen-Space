@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useSettings } from '../context/SettingsContext'
 import { useFavorites } from '../context/FavoritesContext'
 import DuaCard from '../components/DuaCard'
-import { IconHeartFill, IconSparkles } from '../components/Icons'
+import { IconHeartFill } from '../components/Icons'
 import { t } from '../utils/theme'
 import PageHeader from '../components/PageHeader'
 
@@ -47,11 +47,7 @@ export default function FavoritesPage({ duas, asma }) {
             <main className="px-4 flex flex-col gap-4">
                 {isEmpty ? (
                     <div className="text-center py-20">
-                        <div className="flex flex-col items-center justify-center py-24 px-6 text-center animate-fade-in relative mt-4">
-                            <IconSparkles size={40} className="mb-6 opacity-40" style={{ color: t(theme, 'text-primary') }} />
-                            <h3 className="text-2xl min-[390px]:text-[28px] italic tracking-tight font-medium mb-4" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
-                                Your heart is a clean slate
-                            </h3>
+                        <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-fade-in relative mt-4">
                             <p className="text-[14px] min-[390px]:text-[15px] font-normal max-w-[280px] leading-relaxed" style={{ color: t(theme, 'text-secondary') }}>
                                 Keep your spiritual journey close by adding your first personal dua.
                             </p>

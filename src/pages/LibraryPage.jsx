@@ -13,8 +13,7 @@ import {
     IconStar,
     IconInfo,
     IconPencil,
-    IconTrash,
-    IconSparkles
+    IconTrash
 } from '../components/Icons'
 import DuaCard from '../components/DuaCard'
 import PageHeader from '../components/PageHeader'
@@ -30,7 +29,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const [viewMode, setViewMode] = useState(() => {
         if (!initialSection) return 'landing'
         if (initialSection === 'custom-prayers') return 'custom'
-        if (['situational', 'emotions', 'general', 'rabbana', 'salawat', 'ramadan'].includes(initialSection)) return 'dualist'
+        if (['situational', 'emotions', 'general', 'robbana', 'salawat', 'ramadan'].includes(initialSection)) return 'dualist'
         return 'swipe'
     })
     const [activeSection, setActiveSection] = useState(initialSection)
@@ -312,7 +311,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 setSelectedIndex(0)
                 return
             }
-            if (['rabbana', 'salawat', 'ramadan'].includes(activeSection) || initialSection) {
+            if (['robbana', 'salawat', 'ramadan'].includes(activeSection) || initialSection) {
                 if (initialSection) navigate('/dua')
                 else {
                     setViewMode('landing')
@@ -381,7 +380,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             if (dua.arabic_text.includes('الْحَمْدُ لِلَّهِ')) return 'Dressing'
             return 'Undressing'
         }
-        if (cat === 'rabbana') return 'Quranic Rabbana'
+        if (cat === 'robbana') return 'Quranic Robbana'
         if (cat === 'salawat') return 'Prophetic Salawat'
         if (cat === 'illness') return 'Dua for Sickness'
         if (cat === 'travel') return 'Dua for Travel'
@@ -456,7 +455,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 if (dua?.id === 'trust-1') return 'Trust'
             }
             
-            if (activeSection === 'rabbana') return `Robbana ${selectedIndex + 1}`
+            if (activeSection === 'robbana') return `Robbana ${selectedIndex + 1}`
             if (activeSection === 'salawat') return `Salawat ${selectedIndex + 1}`
             
             if (dua) return getDuaLabel(dua)
@@ -470,7 +469,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (!activeSection) return 'Supplications'
 
         const cat = activeSection
-        if (cat === 'rabbana') return 'Rabbana Duas'
+        if (cat === 'robbana') return 'Robbana Duas'
         if (cat === 'salawat') return 'Durood & Salawat'
         if (cat === 'emotions') return 'Spiritual States'
         if (cat === 'situational') return 'Life Events'
@@ -485,7 +484,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
         if (activeSubSection) {
             subtitle = toTitleCase(activeSubSection)
-        } else if (activeSection === 'rabbana') {
+        } else if (activeSection === 'robbana') {
             subtitle = 'Prophetic Prayers'
         } else if (activeSection === 'emotions') {
             subtitle = 'Spiritual States'
@@ -695,7 +694,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 }
                                 if (d.category === 'waking') return 'Upon Waking'
                                 if (d.category === 'sleeping') return 'Before Sleeping'
-                                if (d.category === 'rabbana') return `Rabbana ${i + 1}`
+                                if (d.category === 'robbana') return `Robbana ${i + 1}`
                                 if (d.category === 'salawat') return `Salawat ${i + 1}`
                                 if (['morning', 'evening', 'after-salah'].includes(d.category)) return `${toTitleCase(d.category)} ${i + 1}`
                                 return toTitleCase(d.category) || toTitleCase(d.reference) || 'Supplication'
@@ -783,7 +782,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 label={null}
                                 type="dua"
                                 hideAudio={dua.category === 'custom'}
-                                hideCounter={['rabbana', 'salawat'].includes(activeSection)}
+                                hideCounter={['robbana', 'salawat'].includes(activeSection)}
                                 onDelete={dua.category === 'custom' ? () => initiateDelete(dua.id) : null}
                             />
                         </div>
@@ -904,11 +903,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
                     <div className="flex flex-col gap-5">
                         {customPrayers.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-24 px-6 text-center animate-fade-in relative mt-4">
-                                <IconSparkles size={40} className="mb-6 opacity-40" style={{ color: t(theme, 'text-primary') }} />
-                                <h3 className="text-2xl min-[390px]:text-[28px] italic tracking-tight font-medium mb-4" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
-                                    Your heart is a clean slate
-                                </h3>
+                            <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-fade-in relative mt-4">
                                 <p className="text-[14px] min-[390px]:text-[15px] font-normal max-w-[280px] leading-relaxed" style={{ color: t(theme, 'text-secondary') }}>
                                     Keep your spiritual journey close by adding your first personal dua.
                                 </p>

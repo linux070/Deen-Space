@@ -95,7 +95,7 @@ const VERSES = [
     },
     {
         arabic: 'رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ',
-        transliteration: "Rabbanaa taqabbal minnaa innaka antas samee'ul 'aleem",
+        transliteration: "Robbanaa taqabbal minnaa innaka antas samee'ul 'aleem",
         translation: '"Our Lord, accept [this] from us. Indeed You are the Hearing, the Knowing."',
         reference: 'Surah Al-Baqarah 2:127'
     },
@@ -125,7 +125,7 @@ const VERSES = [
     },
     {
         arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً',
-        transliteration: 'Rabbanaa aatinaa fid dunyaa hasanatan wa-fil aakhirati hasanah',
+        transliteration: 'Robbanaa aatinaa fid dunyaa hasanatan wa-fil aakhirati hasanah',
         translation: '"Our Lord, give us in this world [that which is] good and in the Hereafter [that which is] good."',
         reference: 'Surah Al-Baqarah 2:201'
     },
@@ -329,10 +329,10 @@ export default function HomePage({ duas = [], asma = [] }) {
                         theme={theme}
                     />
                     <QuickCard
-                        title="40 Rabbana"
+                        title="40 Robbana"
                         subtitle="Quranic Prayers"
                         icon={IconCompass}
-                        onClick={() => navigate('/library/rabbana')}
+                        onClick={() => navigate('/library/robbana')}
                         theme={theme}
                     />
                     <QuickCard
