@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useParams, useLocation } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { SettingsProvider, useSettings } from './context/SettingsContext'
 import { FavoritesProvider } from './context/FavoritesContext'
 import { AudioProvider } from './context/AudioContext'
@@ -65,6 +66,7 @@ function LoadingScreen() {
     )
 }
 
+
 export default function App() {
     return (
         <SettingsProvider>
@@ -72,6 +74,7 @@ export default function App() {
                 <AudioProvider>
                     <BrowserRouter>
                         <AppContent />
+                        <Analytics />
                     </BrowserRouter>
                 </AudioProvider>
             </FavoritesProvider>
