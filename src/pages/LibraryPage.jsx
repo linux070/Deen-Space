@@ -13,7 +13,8 @@ import {
     IconStar,
     IconInfo,
     IconPencil,
-    IconTrash
+    IconTrash,
+    IconSparkles
 } from '../components/Icons'
 import DuaCard from '../components/DuaCard'
 import PageHeader from '../components/PageHeader'
