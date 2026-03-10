@@ -165,6 +165,17 @@ export function IconMosque({ size = 22 }) {
     )
 }
 
+export function IconSalah({ size = 22 }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M7 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" fill="currentColor" stroke="none" />
+            <path d="M12 11c-2 0-3.5 1-4.5 3L4 18l1.5 1.5 3-3.5 3.5-1.5 3.5 1.5 3.5 3.5 1.5-1.5-3.5-4c-1-2-2.5-3-4.5-3z" />
+            <path d="M22 22H2" />
+            <path d="M12 11V7l-4-3" />
+        </svg>
+    )
+}
+
 export function IconTasbih({ size = 22 }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -297,6 +308,68 @@ export function IconFlower({ size = 22 }) {
             <path d="M9.88 14.12l-4.24 4.24" />
             <path d="M18.36 18.36l-4.24-4.24" />
             <path d="M9.88 9.88l-4.24-4.24" />
+        </svg>
+    )
+}
+
+/* ─── Premium Daily Guidance icons ─── */
+
+export function IconPrayerMat({ size = 22 }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 20h16" />
+            <path d="M4 20V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12" />
+            <path d="M12 6v2" />
+            <path d="M12 11a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+            <path d="M8 6l-2 2" />
+            <path d="M16 6l2 2" />
+        </svg>
+    )
+}
+
+export function IconSunrise({ size = 22 }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2v4" />
+            <path d="m4.93 5.93 1.41 1.41" />
+            <path d="M2 13h4" />
+            <path d="m17.66 7.34 1.41-1.41" />
+            <path d="M18 13h4" />
+            <path d="M6.34 13a6 6 0 0 1 11.32 0" />
+            <path d="M2 17h20" />
+            <path d="M4 21h16" />
+        </svg>
+    )
+}
+
+export function IconSunset({ size = 22 }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 10v-4" />
+            <path d="m4.93 5.93 1.41 1.41" />
+            <path d="M2 13h4" />
+            <path d="m17.66 7.34 1.41-1.41" />
+            <path d="M18 13h4" />
+            <path d="M6.34 13a6 6 0 0 1 11.32 0" />
+            <path d="M2 17h20" />
+            <path d="M4 21h16" />
+        </svg>
+    )
+}
+
+export function IconBeads({ size = 22 }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="4" r="1.5" />
+            <circle cx="17.5" cy="6.5" r="1.5" />
+            <circle cx="20" cy="12" r="1.5" />
+            <circle cx="17.5" cy="17.5" r="1.5" />
+            <circle cx="12" cy="20" r="1.5" />
+            <circle cx="6.5" cy="17.5" r="1.5" />
+            <circle cx="4" cy="12" r="1.5" />
+            <circle cx="6.5" cy="6.5" r="1.5" />
+            <path d="M12 5.5a7.5 7.5 0 0 1 0 13" />
+            <path d="M12 5.5a7.5 7.5 0 0 0 0 13" />
         </svg>
     )
 }

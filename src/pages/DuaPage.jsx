@@ -8,7 +8,8 @@ import {
     IconFlower,
     IconCrescent,
     IconUser,
-    IconCompass
+    IconCompass,
+    IconMosque
 } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 
@@ -26,10 +27,13 @@ export default function DuaPage() {
         },
         {
             id: 'daily',
-            title: 'Daily Adhkar',
+            title: 'Daily Guidance',
             subtitle: 'Morning & Evening',
             icon: IconBook,
-            action: () => navigate('/daily')
+            action: () => {
+                const saved = localStorage.getItem('last-daily-category')
+                navigate(saved ? `/daily/${saved}` : '/daily')
+            }
         },
         {
             id: 'robbana',

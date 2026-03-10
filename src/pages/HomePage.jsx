@@ -322,10 +322,13 @@ export default function HomePage({ duas = [], asma = [] }) {
                         theme={theme}
                     />
                     <QuickCard
-                        title="Daily Adhkar"
+                        title="Daily Guidance"
                         subtitle="Morning & Evening"
                         icon={IconBook}
-                        onClick={() => navigate('/daily')}
+                        onClick={() => {
+                            const saved = localStorage.getItem('last-daily-category')
+                            navigate(saved ? `/daily/${saved}` : '/daily')
+                        }}
                         theme={theme}
                     />
                     <QuickCard

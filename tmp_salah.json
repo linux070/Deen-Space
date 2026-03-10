@@ -1,0 +1,164 @@
+[
+  {
+    "id": "salah-1",
+    "category": "after-salah",
+    "tags": [
+      "after-salah",
+      "adhkar",
+      "forgiveness"
+    ],
+    "firstWords": "I seek the forgiveness of Alla"
+  },
+  {
+    "id": "salah-2",
+    "category": "after-salah",
+    "tags": [
+      "after-salah",
+      "adhkar"
+    ],
+    "firstWords": "O Allah, You are the Source of"
+  },
+  {
+    "id": "salah-3",
+    "category": "after-salah",
+    "tags": [
+      "after-salah",
+      "adhkar",
+      "dhikr"
+    ],
+    "firstWords": "Glory be to Allah."
+  },
+  {
+    "id": "salah-4",
+    "category": "after-salah",
+    "tags": [
+      "after-salah",
+      "adhkar",
+      "dhikr"
+    ],
+    "firstWords": "All praise is due to Allah."
+  },
+  {
+    "id": "salah-5",
+    "category": "after-salah",
+    "tags": [
+      "after-salah",
+      "adhkar",
+      "dhikr"
+    ],
+    "firstWords": "Allah is the Greatest."
+  },
+  {
+    "id": "salah-6",
+    "category": "after-salah",
+    "tags": [
+      "after-salah",
+      "adhkar",
+      "protection",
+      "quran"
+    ],
+    "firstWords": "Ayat al-Kursi: Allah - there i"
+  },
+  {
+    "id": "salah-7",
+    "category": "after-salah",
+    "tags": [
+      "after-salah",
+      "adhkar",
+      "worship"
+    ],
+    "firstWords": "O Allah, help me to remember Y"
+  },
+  {
+    "id": "salah-motion-1",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "ruku"
+    ],
+    "firstWords": "Glory be to my Lord, the Supre"
+  },
+  {
+    "id": "salah-motion-2",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "rising"
+    ],
+    "firstWords": "Allah listens to him who prais"
+  },
+  {
+    "id": "salah-motion-3",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "standing"
+    ],
+    "firstWords": "Our Lord, and to You be all pr"
+  },
+  {
+    "id": "salah-motion-4",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "sujud"
+    ],
+    "firstWords": "Glory be to my Lord, the Most "
+  },
+  {
+    "id": "salah-motion-5",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "sitting"
+    ],
+    "firstWords": "My Lord, forgive me. (Recited "
+  },
+  {
+    "id": "salah-motion-6",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "tashahhud"
+    ],
+    "firstWords": "All compliments, prayers and p"
+  },
+  {
+    "id": "salah-motion-7",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "protection",
+      "after-tashahhud"
+    ],
+    "firstWords": "O Allah, I seek refuge in You "
+  },
+  {
+    "id": "salah-adhan-1",
+    "category": "salah",
+    "tags": [
+      "adhan",
+      "congregation"
+    ],
+    "firstWords": "There is no might and no power"
+  },
+  {
+    "id": "salah-adhan-2",
+    "category": "salah",
+    "tags": [
+      "adhan",
+      "after-adhan"
+    ],
+    "firstWords": "O Allah, Lord of this perfect "
+  },
+  {
+    "id": "salah-opening",
+    "category": "salah",
+    "tags": [
+      "salah",
+      "opening",
+      "iftitah"
+    ],
+    "firstWords": "Glory be to You, O Allah, and "
+  }
+]

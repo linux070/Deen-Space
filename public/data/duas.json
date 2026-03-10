@@ -2354,6 +2354,42 @@
     "repeat": 1
   },
   {
+    "id": "trust-2",
+    "arabic_text": "تَوَكَّلْتُ عَلَى اللَّهِ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+    "transliteration": "Tawakkaltu 'alallahi, la hawla wa la quwwata illa billah.",
+    "translation": {
+      "en": "I have placed my trust in Allah; there is no might and no power except with Allah."
+    },
+    "reference": "Abu Dawud 5095, At-Tirmidhi 3426",
+    "tags": ["emotions", "trust", "reliance"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "trust-3",
+    "arabic_text": "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَتَوَفَّنَا مُسْلِمِينَ",
+    "transliteration": "Robbana afrigh 'alayna sabran wa tawaffana muslimeen.",
+    "translation": {
+      "en": "Our Lord, pour upon us patience and let us die as Muslims."
+    },
+    "reference": "Quran 7:126",
+    "tags": ["emotions", "trust", "patience"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
+    "id": "fear-3",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْجُبْنِ، وَأَعُوذُ بِكَ مِنْ أَنْ أُرَدَّ إِلَى أَرْذَلِ الْعُمُرِ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الدُّنْيَا، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ",
+    "transliteration": "Allahumma inni a'udhu bika minal-jubni, wa a'udhu bika min an uradda ila ardhalil-'umuri, wa a'udhu bika min fitnatid-dunya, wa a'udhu bika min 'adhabil-qabr.",
+    "translation": {
+      "en": "O Allah, I seek refuge in You from cowardice, and I seek refuge in You from being brought back to feeble old age, and I seek refuge in You from the trials of this world, and I seek refuge in You from the punishment of the grave."
+    },
+    "reference": "Sahih Bukhari 6390",
+    "tags": ["emotions", "fear", "protection"],
+    "category": "emotions",
+    "repeat": 1
+  },
+  {
     "id": "light-1",
     "arabic_text": "اللَّهُمَّ اجْعَلْ فِي قَلْبِي نُورًا، وَفِي لِسَانِي نُورًا، وَفِي سَمْعِي نُورًا، وَفِي بَصَرِي نُورًا",
     "transliteration": "Allahummaj-'al fee qalbee nooran, wa fee lisanee nooran, wa fee sam'ee nooran, wa fee basaree nooran.",
@@ -2447,6 +2483,126 @@
     "reference": "Sahih Bukhari 3303, Sahih Muslim 2729",
     "tags": ["situational", "animals", "favor"],
     "category": "animals",
+    "repeat": 1
+  },
+  {
+    "id": "salah-motion-1",
+    "arabic_text": "سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+    "transliteration": "Subhana Rabbiyal-Azeem.",
+    "translation": {
+      "en": "Glory be to my Lord, the Supreme. (Recited during Ruku)"
+    },
+    "reference": "Sahih Muslim 772",
+    "tags": ["salah", "ruku"],
+    "category": "salah",
+    "repeat": 3
+  },
+  {
+    "id": "salah-motion-2",
+    "arabic_text": "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ",
+    "transliteration": "Sami'allahu liman hamidah.",
+    "translation": {
+      "en": "Allah listens to him who praises Him. (Recited while rising from Ruku)"
+    },
+    "reference": "Sahih Bukhari 789",
+    "tags": ["salah", "rising"],
+    "category": "salah",
+    "repeat": 1
+  },
+  {
+    "id": "salah-motion-3",
+    "arabic_text": "رَبَّنَا وَلَكَ الْحَمْدُ",
+    "transliteration": "Rabbana wa lakal-hamd.",
+    "translation": {
+      "en": "Our Lord, and to You be all praise. (Recited standing after Ruku)"
+    },
+    "reference": "Sahih Bukhari 795",
+    "tags": ["salah", "standing"],
+    "category": "salah",
+    "repeat": 1
+  },
+  {
+    "id": "salah-motion-4",
+    "arabic_text": "سُبْحَانَ رَبِّيَ الْأَعْلَى",
+    "transliteration": "Subhana Rabbiyal-A'la.",
+    "translation": {
+      "en": "Glory be to my Lord, the Most High. (Recited during Sujud)"
+    },
+    "reference": "Sahih Muslim 772",
+    "tags": ["salah", "sujud"],
+    "category": "salah",
+    "repeat": 3
+  },
+  {
+    "id": "salah-motion-5",
+    "arabic_text": "رَبِّ اغْفِرْ لِي",
+    "transliteration": "Rabbighfirlee.",
+    "translation": {
+      "en": "My Lord, forgive me. (Recited while sitting between Sujud)"
+    },
+    "reference": "Abu Dawud 874",
+    "tags": ["salah", "sitting"],
+    "category": "salah",
+    "repeat": 2
+  },
+  {
+    "id": "salah-motion-6",
+    "arabic_text": "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+    "transliteration": "At-Tahiyyatu lillahi was-salawatu wat-tayyibatu, as-salamu 'alayka ayyuhan-Nabiyyu wa rahmatullahi wa barakatuhu, as-salamu 'alayna wa 'ala 'ibadillahis-saliheen, ashhadu an la ilaha illallahu wa ashhadu anna Muhammadan 'abduhu wa rasooluhu.",
+    "translation": {
+      "en": "All compliments, prayers and pure words are due to Allah. Peace be upon you, O Prophet, and the mercy of Allah and His blessings. Peace be upon us and upon the righteous servants of Allah. I bear witness that there is no god but Allah, and I bear witness that Muhammad is His servant and messenger. (Tashahhud)"
+    },
+    "reference": "Sahih Bukhari 831",
+    "tags": ["salah", "tashahhud"],
+    "category": "salah",
+    "repeat": 1
+  },
+  {
+    "id": "salah-motion-7",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، وَمِنْ عَذَابِ جَهَنَّمَ، وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ، وَمِنْ شَرِّ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ",
+    "transliteration": "Allahumma innee a'oodhu bika min 'adhabil-qabri, wa min 'adhabi jahannama, wa min fitnatil-mahya wal-mamati, wa min sharri fitnatil-maseehid-dajjal.",
+    "translation": {
+      "en": "O Allah, I seek refuge in You from the punishment of the grave, from the punishment of Hellfire, from the trials of life and death, and from the evil of the trial of Dajjal. (Recited after Tashahhud)"
+    },
+    "reference": "Sahih Muslim 588",
+    "tags": ["salah", "protection", "after-tashahhud"],
+    "category": "salah",
+    "repeat": 1
+  },
+  {
+    "id": "salah-adhan-1",
+    "arabic_text": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+    "transliteration": "La hawla wa la quwwata illa billah.",
+    "translation": {
+      "en": "There is no might and no power except with Allah. (Recited by the congregation when the Mu'adhin says 'Hayya 'alas-salah' and 'Hayya 'alal-falah')"
+    },
+    "reference": "Sahih Muslim 385",
+    "tags": ["adhan", "congregation"],
+    "category": "salah",
+    "repeat": 1
+  },
+  {
+    "id": "salah-adhan-2",
+    "arabic_text": "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّداً الْوَسِيلَةَ وَالْفَضِيلَةَ، وَابْعَثْهُ مَقَاماً مَحْمُوداً الَّذِي وَعَدْتَهُ",
+    "transliteration": "Allahumma Rabba hadhihi-d-da'wat-it-tammah, was-salatil-qa'imah, ati Muhammadan-il-waseelata wal-fadhilata, wab'ath-hu maqaman mahmoodan-illadhi wa'adtah.",
+    "translation": {
+      "en": "O Allah, Lord of this perfect call and established prayer, grant Muhammad the intercession and favor, and raise him to the honored station You have promised him."
+    },
+    "reference": "Sahih Bukhari 614",
+    "tags": ["adhan", "after-adhan"],
+    "category": "salah",
+    "repeat": 1
+  },
+  {
+    "id": "salah-opening",
+    "arabic_text": "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبَارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلَا إِلَهَ غَيْرُكَ",
+    "transliteration": "Subhanakal-lahumma wa bi-hamdika, wa tabarakasmuka, wa ta'ala jadduka, wa la ilaha ghayruka.",
+    "translation": {
+      "en": "Glory be to You, O Allah, and praise be to You, and blessed is Your Name, and exalted is Your Majesty, and there is no deity worthy of worship but You. (Opening supplication recited after the first Takbir)"
+    },
+    "reference": "At-Tirmidhi 243, Abu Dawud 775",
+    "tags": ["salah", "opening", "iftitah"],
+    "category": "salah",
     "repeat": 1
   }
 ]
