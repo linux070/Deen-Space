@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
 import DuaCard from '../components/DuaCard'
-import { IconChevronLeft, IconChevronRight, IconSun, IconMoon, IconMosque } from '../components/Icons'
+import { IconChevronLeft, IconChevronRight, IconSun, IconMoon, IconMosque, IconRemembrance } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 import MiniTasbih from '../components/MiniTasbih'
 import { toTitleCase } from '../utils/text'
@@ -12,6 +12,7 @@ const CATEGORIES = [
     { key: 'morning', label: 'Morning', subtitle: 'Adhkar As-Sabah', icon: IconSun },
     { key: 'evening', label: 'Evening', subtitle: 'Adhkar Al-Masa', icon: IconMoon },
     { key: 'after-salah', label: 'After Salah', subtitle: 'Post-Prayer Dhikr', icon: IconMosque },
+    { key: 'remembrance', label: 'Remembrance of Allah', subtitle: 'Dhikr', icon: IconRemembrance },
 ]
 
 export default function DailyPage({ duas }) {
@@ -44,7 +45,7 @@ export default function DailyPage({ duas }) {
 
     // Sequence of all daily duas (Morning -> Evening -> After Salah) for the swiper
     const swipeDuas = useMemo(() => {
-        const order = ['morning', 'evening', 'after-salah']
+        const order = ['morning', 'evening', 'after-salah', 'remembrance']
         return duas
             .filter(d => order.includes(d.category))
             .sort((a, b) => order.indexOf(a.category) - order.indexOf(b.category))

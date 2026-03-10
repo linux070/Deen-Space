@@ -240,7 +240,7 @@
     "repeat": 1
   },
   {
-    "id": "dhikr-1",
+    "id": "remembrance-1",
     "arabic_text": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ",
     "transliteration": "SubhanAllahi wa bihamdihi, SubhanAllahil-'Adheem.",
     "translation": {
@@ -249,15 +249,15 @@
     "audio_url": "/audio/duas/dhikr-1.mp3",
     "reference": "Sahih Bukhari 6406",
     "tags": [
-      "dhikr",
+      "remembrance",
       "general",
       "daily"
     ],
-    "category": "dhikr",
+    "category": "remembrance",
     "repeat": 100
   },
   {
-    "id": "dhikr-2",
+    "id": "remembrance-2",
     "arabic_text": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
     "transliteration": "La hawla wa la quwwata illa billah.",
     "translation": {
@@ -266,16 +266,16 @@
     "audio_url": "/audio/duas/dhikr-2.mp3",
     "reference": "Sahih Bukhari 4205, Sahih Muslim 2704",
     "tags": [
-      "dhikr",
+      "remembrance",
       "general",
       "daily",
       "strength"
     ],
-    "category": "dhikr",
+    "category": "remembrance",
     "repeat": 100
   },
   {
-    "id": "dhikr-3",
+    "id": "remembrance-3",
     "arabic_text": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
     "transliteration": "La ilaha illallahu wahdahu la shareeka lahu, lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadeer.",
     "translation": {
@@ -284,13 +284,387 @@
     "audio_url": "/audio/duas/dhikr-3.mp3",
     "reference": "Sahih Bukhari 6403",
     "tags": [
-      "dhikr",
+      "remembrance",
       "general",
       "daily",
       "tawheed"
     ],
-    "category": "dhikr",
+    "category": "remembrance",
     "repeat": 100
+  },
+  {
+    "id": "remembrance-4",
+    "arabic_text": "سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ",
+    "transliteration": "SubhanAllah, wal-Hamdilillah, wa la ilaha illallah, wallahu Akbar.",
+    "translation": {
+      "en": "Glory be to Allah, and praise be to Allah, and there is none worthy of worship except Allah, and Allah is the Greatest."
+    },
+    "audio_url": "/audio/duas/remembrance-4.mp3",
+    "reference": "Sahih Muslim 2695",
+    "tags": [
+      "remembrance",
+      "general",
+      "adhkar"
+    ],
+    "category": "remembrance",
+    "repeat": 100
+  },
+  {
+    "id": "remembrance-5",
+    "arabic_text": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+    "transliteration": "Astaghfirullaha wa atoobu ilayh.",
+    "translation": {
+      "en": "I seek Allah's forgiveness and repent to Him."
+    },
+    "audio_url": "/audio/duas/remembrance-5.mp3",
+    "reference": "Sahih Muslim 2702",
+    "tags": [
+      "remembrance",
+      "forgiveness",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 100
+  },
+  {
+    "id": "remembrance-6",
+    "arabic_text": "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ",
+    "transliteration": "SubhanAllahi wa bihamdihi: 'adada khalqihi, wa rida nafsihi, wa zinata 'arshihi, wa midada kalimatihi.",
+    "translation": {
+      "en": "Glory and praise be to Allah, as much as the number of His creation, and as much as pleases Him, and as much as the weight of His Throne, and as much as the ink of His words."
+    },
+    "audio_url": "/audio/duas/remembrance-6.mp3",
+    "reference": "Sahih Muslim 2726",
+    "tags": [
+      "remembrance",
+      "praise",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 3
+  },
+  {
+    "id": "remembrance-7",
+    "arabic_text": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+    "transliteration": "Allahumma anta Rabbi la ilaha illa anta, Khalaqtani wa ana 'abduka, wa ana 'ala 'ahdika wa wa'dika mastata'tu, A'udhu bika min sharri ma sana'tu, abu'u laka bini'matika 'alayya, wa abu'u bidhanbi faghfir li fa'innahu la yaghfiru-dh-dhunuba illa anta.",
+    "translation": {
+      "en": "O Allah, You are my Lord, none has the right to be worshipped except You, You created me and I am Your servant and I abide by Your covenant and promise as best I can, I take refuge in You from the evil of what I have committed. I acknowledge Your favor upon me, and I acknowledge my sin; so forgive me, for none forgives sins except You."
+    },
+    "audio_url": "/audio/duas/remembrance-7.mp3",
+    "reference": "Sahih Bukhari 6306",
+    "tags": [
+      "remembrance",
+      "forgiveness",
+      "protection"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-8",
+    "arabic_text": "لا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+    "transliteration": "La ilaha illa Anta subhanaka inni kuntu minad-dhalimin.",
+    "translation": {
+      "en": "There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers."
+    },
+    "audio_url": "/audio/duas/remembrance-8.mp3",
+    "reference": "Quran 21:87, Tirmidhi 3505",
+    "tags": [
+      "remembrance",
+      "relief",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-9",
+    "arabic_text": "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+    "transliteration": "Allahumma a'inni 'ala dhikrika wa shukrika wa husni 'ibadatik.",
+    "translation": {
+      "en": "O Allah, help me to remember You, to give You thanks, and to perform Your worship in the best manner."
+    },
+    "audio_url": "/audio/duas/remembrance-9.mp3",
+    "reference": "Abu Dawud 1522, An-Nasa'i 1303",
+    "tags": [
+      "remembrance",
+      "gratitude",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-10",
+    "arabic_text": "سُبْحَانَ اللَّهِ الْعَظِيمِ وَبِحَمْدِهِ",
+    "transliteration": "SubhanAllahil 'Adheem wa bihamdihi.",
+    "translation": {
+      "en": "Glory be to Allah, the Most Great, and praise be to Him."
+    },
+    "audio_url": "/audio/duas/remembrance-10.mp3",
+    "reference": "Tirmidhi 3464",
+    "tags": [
+      "remembrance",
+      "praise",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 100
+  },
+  {
+    "id": "remembrance-11",
+    "arabic_text": "رَضِيتُ بِاللَّهِ رَبَّاً، وَبِالإِسْلامِ دِيناً، وَبِمُحَمَّدٍ نَبِيَّاً",
+    "transliteration": "Radheetu billahi Rabban, wa bil-Islami deenan, wa bi-Muhammadin Nabiyyan.",
+    "translation": {
+      "en": "I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad as my Prophet."
+    },
+    "audio_url": "/audio/duas/remembrance-11.mp3",
+    "reference": "Abu Dawud 5072, Tirmidhi 3389",
+    "tags": [
+      "remembrance",
+      "faith",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 3
+  },
+  {
+    "id": "remembrance-12",
+    "arabic_text": "حَسْبِيَ اللَّهُ لا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+    "transliteration": "Hasbiyallahu la ilaha illa Huwa 'alayhi tawakkaltu wa Huwa Rabbul-'Arshil-'Adheem.",
+    "translation": {
+      "en": "Allah is sufficient for me; there is no deity except Him. Upon Him I have relied, and He is the Lord of the Great Throne."
+    },
+    "audio_url": "/audio/duas/remembrance-12.mp3",
+    "reference": "Abu Dawud 5081",
+    "tags": [
+      "remembrance",
+      "reliance",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 7
+  },
+  {
+    "id": "remembrance-13",
+    "arabic_text": "أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
+    "transliteration": "Astaghfirullaha al-ladhi la ilaha illa Huwal-Hayyul-Qayyoomu wa atoobu ilayh.",
+    "translation": {
+      "en": "I seek the forgiveness of Allah, Whom there is none worthy of worship except Him, the Living, the Sustainer, and I turn to Him in repentance."
+    },
+    "audio_url": "/audio/duas/remembrance-13.mp3",
+    "reference": "Abu Dawud 1517, Tirmidhi 3577",
+    "tags": [
+      "remembrance",
+      "forgiveness",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 3
+  },
+  {
+    "id": "remembrance-14",
+    "arabic_text": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+    "transliteration": "Allahumma salli 'ala Muhammadin wa 'ala ali Muhammadin kama sallayta 'ala Ibraheema wa 'ala ali Ibraheema innaka Hameedun Majeed. Allahumma barik 'ala Muhammadin wa 'ala ali Muhammadin kama barakta 'ala Ibraheema wa 'ala ali Ibraheema innaka Hameedun Majeed.",
+    "translation": {
+      "en": "O Allah, send Your grace, honor and blessings upon Muhammad and upon the family of Muhammad, as You sent Your grace, honor and blessings upon Ibrahim and the family of Ibrahim. Indeed, You are Praiseworthy, Most Glorious."
+    },
+    "audio_url": "/audio/duas/remembrance-14.mp3",
+    "reference": "Sahih al-Bukhari 3370",
+    "tags": [
+      "remembrance",
+      "salawat",
+      "blessings"
+    ],
+    "category": "remembrance",
+    "repeat": 10
+  },
+  {
+    "id": "remembrance-15",
+    "arabic_text": "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ",
+    "transliteration": "Ya Hayyu Ya Qayyoomu birahmatika astagheeth, aslih lee sha'ni kullahu wa la takilnee ila nafsee tarfata 'ayn.",
+    "translation": {
+      "en": "O Ever Living One, O Eternal One, by Your mercy I call on You to set right all my affairs and do not leave me to myself even for the blinking of an eye."
+    },
+    "audio_url": "/audio/duas/remembrance-15.mp3",
+    "reference": "Tirmidhi 3524, An-Nasa'i",
+    "tags": [
+      "remembrance",
+      "relief",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-16",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلاً",
+    "transliteration": "Allahumma innee as'aluka 'ilman naafi'an, wa rizqan tayyiban, wa 'amalan mutaqabbalan.",
+    "translation": {
+      "en": "O Allah, I ask You for knowledge that is of benefit, a good provision, and deeds that will be accepted."
+    },
+    "audio_url": "/audio/duas/remembrance-16.mp3",
+    "reference": "Ibn Majah 925",
+    "tags": [
+      "remembrance",
+      "provision",
+      "knowledge"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-17",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى",
+    "transliteration": "Allahumma innee as'aluka al-huudaa wat-tuqaa wal-'afaafa wal-ghinaa.",
+    "translation": {
+      "en": "O Allah, I ask You for guidance, piety, chastity and self-sufficiency."
+    },
+    "audio_url": "/audio/duas/remembrance-17.mp3",
+    "reference": "Sahih Muslim 2721",
+    "tags": [
+      "remembrance",
+      "guidance",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-18",
+    "arabic_text": "اللَّهُمَّ مُصَرِّفَ الْقُلُوبِ صَرِّفْ قُلُوبَنَا عَلَى طَاعَتِكَ",
+    "transliteration": "Allahumma musarrifal-quloobi sarrif quloobana 'ala ta'atik.",
+    "translation": {
+      "en": "O Allah, Turner of the hearts, direct our hearts to Your obedience."
+    },
+    "audio_url": "/audio/duas/remembrance-18.mp3",
+    "reference": "Sahih Muslim 2654",
+    "tags": [
+      "remembrance",
+      "hearts",
+      "obedience"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-19",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ زَوَالِ نِعْمَتِكَ، وَتَحَوُّلِ عَافِيَتِكَ، وَفُجَاءَةِ نِقْمَتِكَ، وَجَمِيعِ سَخَطِكَ",
+    "transliteration": "Allahumma innee a'oodhu bika min zawali ni'matik, wa tahawwuli 'afiyatik, wa fujaa'ati niqmatik, wa jami'i sakhatik.",
+    "translation": {
+      "en": "O Allah, I seek refuge in You from the withdrawal of Your blessing, and the loss of the well-being that You gave me, and the suddenness of Your wrath, and all that which displeases You."
+    },
+    "audio_url": "/audio/duas/remembrance-19.mp3",
+    "reference": "Sahih Muslim 2739",
+    "tags": [
+      "remembrance",
+      "protection",
+      "blessings"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-20",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَالْجُبْنِ وَالْهَرَمِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ",
+    "transliteration": "Allahumma innee a'oodhu bika minal-'ajzi wal-kasali, wal-jubni wal-harami wal-bukhli, wa a'oodhu bika min 'adhabil-qabri, wa a'oodhu bika min fitnatil-mahya wal-mamati.",
+    "translation": {
+      "en": "O Allah, I seek refuge in You from incapacity and laziness, and from cowardice, senility, and miserliness; and I seek refuge in You from the punishment of the grave, and from the trials of life and death."
+    },
+    "audio_url": "/audio/duas/remembrance-20.mp3",
+    "reference": "Sahih Muslim 2706",
+    "tags": [
+      "remembrance",
+      "protection",
+      "laziness"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-21",
+    "arabic_text": "رَبِّ اغْفِرْ لِي، وَتُبْ عَلَيَّ، إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+    "transliteration": "Rabbighfir lee wa tub 'alayya innaka antat-Tawwabur-Raheem.",
+    "translation": {
+      "en": "My Lord, forgive me and accept my repentance, for You are the One Who accepts repentance, the Most Merciful."
+    },
+    "audio_url": "/audio/duas/remembrance-21.mp3",
+    "reference": "Abu Dawud 1516, Tirmidhi 3434",
+    "tags": [
+      "remembrance",
+      "forgiveness",
+      "repentance"
+    ],
+    "category": "remembrance",
+    "repeat": 100
+  },
+  {
+    "id": "remembrance-22",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
+    "transliteration": "Allahumma innee a'oodhu bika minal-hammi wal-hazani, wal-'ajzi wal-kasali, wal-bukhli wal-jubni, wa dala'id-dayni wa ghalabatir-rijaal.",
+    "translation": {
+      "en": "O Allah, I seek refuge in You from grief and sadness, from weakness and laziness, from miserliness and cowardice, from being overcome by debt and from being overpowered by men."
+    },
+    "audio_url": "/audio/duas/remembrance-22.mp3",
+    "reference": "Sahih Bukhari 2893",
+    "tags": [
+      "remembrance",
+      "protection",
+      "anxiety"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-23",
+    "arabic_text": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+    "transliteration": "Hasbunallahu wa ni'mal wakeel.",
+    "translation": {
+      "en": "Allah is Sufficient for us, and He is the Best Disposer of affairs."
+    },
+    "audio_url": "/audio/duas/remembrance-23.mp3",
+    "reference": "Quran 3:173, Sahih Bukhari 4563",
+    "tags": [
+      "remembrance",
+      "reliance",
+      "daily"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-24",
+    "arabic_text": "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+    "transliteration": "Ya Muqallibal-quloobi thabbit qalbee 'ala deenik.",
+    "translation": {
+      "en": "O Turner of the hearts, make my heart steadfast in Your religion."
+    },
+    "audio_url": "/audio/duas/remembrance-24.mp3",
+    "reference": "Tirmidhi 3522",
+    "tags": [
+      "remembrance",
+      "hearts",
+      "faith"
+    ],
+    "category": "remembrance",
+    "repeat": 1
+  },
+  {
+    "id": "remembrance-25",
+    "arabic_text": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ",
+    "transliteration": "Allahumma innee as'alukal-'afwa wal-'afiyata fid-dunya wal-akhirah.",
+    "translation": {
+      "en": "O Allah, I ask You for forgiveness and well-being in this world and in the Hereafter."
+    },
+    "audio_url": "/audio/duas/remembrance-25.mp3",
+    "reference": "Tirmidhi 3512, Abu Dawud 5074",
+    "tags": [
+      "remembrance",
+      "protection",
+      "well-being"
+    ],
+    "category": "remembrance",
+    "repeat": 1
   },
   {
     "id": "robbana-1",
