@@ -219,7 +219,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 }
             } else if (activeSection === 'situational') {
                 if (activeSubSection === 'protection') {
-                    result = result.filter(d => d.tags?.includes('protection') && (d.category === 'prophetic' || d.category === 'travel'))
+                    result = result.filter(d => d.id === 'protection-1')
                 } else if (activeSubSection === 'travel') {
                     result = result.filter(d => d.category === 'travel' && !d.tags?.includes('animals'))
                 } else {
@@ -227,7 +227,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 }
             } else if (activeSection === 'general') {
                 if (activeSubSection === 'prophetic') {
-                    result = result.filter(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque', 'animals'].includes(t)))
+                    result = result.filter(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque', 'animals', 'home'].includes(t)) && d.id !== 'home-3')
                 } else {
                     result = result.filter(d => d.category === activeSubSection)
                 }
