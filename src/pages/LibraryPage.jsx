@@ -39,33 +39,49 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     // View state
     const [viewMode, setViewMode] = useState(() => {
         const v = searchParams.get('view')
-        if (v) return v
+        if (v && ['landing', 'list', 'swipe', 'custom'].includes(v)) return v
         if (!initialSection) return 'landing'
         if (initialSection === 'custom-prayers') return 'custom'
-        if (['situational', 'emotions', 'general', 'robbana', 'salawat', 'salah', 'ramadan'].includes(initialSection)) return 'list'
-        return 'swipe'
+        // Fallback: If section is provided in URL path, we go to list
+        return 'list'
     })
     const [activeSection, setActiveSection] = useState(() => {
-        if (initialSection) return initialSection
-        return searchParams.get('sec')
+        const sec = initialSection || searchParams.get('sec')
+        // Ensure section is valid, otherwise default to null (shows landing)
+        const validSections = ['general', 'emotions', 'situational', 'ramadan', 'robbana', 'salawat', 'salah', 'custom-prayers']
+        return validSections.includes(sec) ? sec : null
     })
-    const [activeSubSection, setActiveSubSection] = useState(() => {
-        return searchParams.get('sub')
-    })
+    const [activeSubSection, setActiveSubSection] = useState(() => searchParams.get('sub'))
     const [selectedIndex, setSelectedIndex] = useState(() => {
         const idx = parseInt(searchParams.get('idx'))
         return isNaN(idx) ? 0 : idx
     })
+
+    // Reset view if critical state is missing
+    useEffect(() => {
+        if (viewMode !== 'landing' && viewMode !== 'custom' && !activeSection) {
+            setViewMode('landing')
+        }
+    }, [viewMode, activeSection])
+
+    // Scroll to top on navigation/refresh
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [viewMode, activeSection, activeSubSection])
+
+    // Sync search params when state changes
     const [search, setSearch] = useState('')
     const [miniTasbihCount, setMiniTasbihCount] = useState(0)
 
     // Sync search params when state changes
     useEffect(() => {
         const params = new URLSearchParams()
-        if (viewMode !== 'landing') params.set('view', viewMode)
-        if (activeSection) params.set('sec', activeSection)
-        if (activeSubSection) params.set('sub', activeSubSection)
-        if (viewMode === 'swipe') params.set('idx', selectedIndex)
+        if (viewMode !== 'landing') {
+            params.set('view', viewMode)
+            if (activeSection) params.set('sec', activeSection)
+            if (activeSubSection) params.set('sub', activeSubSection)
+            if (viewMode === 'swipe') params.set('idx', selectedIndex)
+        }
         setSearchParams(params, { replace: true })
     }, [viewMode, activeSection, activeSubSection, selectedIndex, setSearchParams])
     const [editingPrayerId, setEditingPrayerId] = useState(null)
@@ -793,26 +809,20 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     }
 
 
-    // LANDING: Grid of sections
-    if (viewMode === 'landing') {
-        return (
-            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                {!embedded && <Header />}
-                <main className="px-6 flex flex-col gap-2 mt-8 animate-fade-in">
-                    {SECTIONS.map((s, idx) => {
+    const renderContent = () => {
+        if (viewMode === 'landing') {
+            return (
+                <main className="px-6 flex flex-col gap-2 mt-2 animate-fade-in">
+                    {SECTIONS.map((s) => {
                         const Icon = s.icon
                         return (
                             <button
                                 key={s.id}
                                 onClick={() => {
                                     setActiveSection(s.id)
-                                    setActiveSubSection(null) // Reset sub-section when switching main sections
-                                    // Logic: Unified Daily Duas / Spiritual States flow — skipped sublist
+                                    setActiveSubSection(null)
                                     if (['general', 'emotions', 'situational', 'ramadan'].includes(s.id)) {
                                         setViewMode('list')
-                                        setActiveSubSection(null)
-                                    } else if (s.id === 'custom-prayers') {
-                                        setViewMode('custom')
                                     } else {
                                         const fIdx = swipeDuas.findIndex(d => d.category === s.id)
                                         setSelectedIndex(fIdx !== -1 ? fIdx : 0)
@@ -844,28 +854,53 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                         )
                     })}
                 </main>
-            </div>
-        )
-    }
+            )
+        }
 
-    // SUB-LIST / LIST: Grouped or flat list of duas (matches DailyPage structure)
-    if (viewMode === 'sublist' || viewMode === 'list') {
-        const isDark = theme === 'dark'
-        const title = viewMode === 'list' && activeSubSection ? getListTitle() : getPageTitle()
-
-        // For root sections (general, emotions, situational), render grouped sections
-        const renderGroupedList = () => (
-            <main className="px-6 flex flex-col gap-1 mt-2 animate-fade-in">
-                {(groupedSections || []).map((group, gIdx) => (
-                    <div key={gIdx} className="mb-4">
-                        <h4
-                            className="text-[11px] font-black tracking-[0.12em] uppercase px-2 pt-4 pb-2"
-                            style={{ color: t(theme, 'text-muted'), opacity: 0.5 }}
-                        >
-                            {group.title}
-                        </h4>
-                        <div className="flex flex-col gap-1.5">
-                            {group.items.map((dua) => {
+        if (viewMode === 'list') {
+            const isGrouped = ['general', 'emotions', 'situational'].includes(activeSection) && !activeSubSection
+            return (
+                <main className="px-6 flex flex-col gap-1 mt-2 animate-fade-in">
+                    {isGrouped ? (
+                        (groupedSections || []).map((group, gIdx) => (
+                            <div key={gIdx} className="mb-4">
+                                <h4 className="text-[11px] font-black tracking-[0.12em] uppercase px-2 pt-4 pb-2" style={{ color: t(theme, 'text-muted'), opacity: 0.5 }}>
+                                    {group.title}
+                                </h4>
+                                <div className="flex flex-col gap-1.5">
+                                    {group.items.map((dua) => {
+                                        const absoluteIdx = swipeDuas.findIndex(d => d.id === dua.id)
+                                        return (
+                                            <button
+                                                key={dua.id}
+                                                onClick={() => {
+                                                    setSelectedIndex(absoluteIdx !== -1 ? absoluteIdx : 0)
+                                                    skippingFirstScroll.current = true
+                                                    setViewMode('swipe')
+                                                }}
+                                                className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
+                                                style={{
+                                                    background: t(theme, 'surface-1'),
+                                                    border: `1px solid ${t(theme, 'border')}`,
+                                                    boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)'
+                                                }}
+                                            >
+                                                <div className="flex-1 min-w-0">
+                                                    <h4 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>
+                                                        {getTitle(dua)}
+                                                    </h4>
+                                                </div>
+                                            </button>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        listDuas.length === 0 ? (
+                            <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest uppercase">No supplications found</div>
+                        ) : (
+                            listDuas.map((dua) => {
                                 const absoluteIdx = swipeDuas.findIndex(d => d.id === dua.id)
                                 return (
                                     <button
@@ -889,196 +924,60 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         </div>
                                     </button>
                                 )
-                            })}
-                        </div>
-                    </div>
-                ))}
-            </main>
-        )
-
-        // For other views (Salawat, Robbana, or specific sub-sections), render a flat list
-        const renderFlatList = () => (
-            <main className="px-6 flex flex-col gap-1.5 mt-2 animate-fade-in">
-                {listDuas.length === 0 ? (
-                    <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest uppercase">No supplications found</div>
-                ) : (
-                    listDuas.map((dua, i) => {
-                        const absoluteIdx = swipeDuas.findIndex(d => d.id === dua.id)
-                        return (
-                            <button
-                                key={dua.id}
-                                onClick={() => {
-                                    setSelectedIndex(absoluteIdx !== -1 ? absoluteIdx : 0)
-                                    skippingFirstScroll.current = true
-                                    setViewMode('swipe')
-                                }}
-                                className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
-                                style={{
-                                    background: t(theme, 'surface-1'),
-                                    border: `1px solid ${t(theme, 'border')}`,
-                                    boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)'
-                                }}
-                            >
-                                <div className="flex-1 min-w-0">
-                                    <h4 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>
-                                        {getTitle(dua)}
-                                    </h4>
-                                </div>
-                            </button>
+                            })
                         )
-                    })
-                )}
-            </main>
-        )
-
-        return (
-            <div className="pb-32 min-h-screen" style={{ background: t(theme, 'surface-0'), paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                {!embedded && <Header />}
-                {/* For root sections (general, emotions, situational), render grouped sections */}
-                {/* For other views (Salawat, Robbana, or specific sub-sections), render a flat list */}
-                {(['general', 'emotions', 'situational'].includes(activeSection) && !activeSubSection) ? renderGroupedList() : renderFlatList()}
-            </div>
-        )
-    }
-
-    // DUALIST: Removed as requested (this was the 'third list')
-    
-
-
-
-    // SWIPE: Full screen gallery
-    if (viewMode === 'swipe') {
-        const currentDua = swipeDuas[selectedIndex]
-        return (
-            <div className="fixed inset-0 z-[100] flex flex-col animate-modal-slide-up" style={{ background: t(theme, 'surface-0') }}>
-                <div
-                    className="flex items-center justify-between px-6"
-                    style={{
-                        background: t(theme, 'surface-0'),
-                        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
-                        paddingBottom: '1.5rem'
-                    }}
-                >
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={goBack}
-                            className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90"
-                            style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
-                        >
-                            <IconChevronLeft size={22} />
-                        </button>
-                        <span className="text-[15px] font-normal tracking-tight truncate max-w-[240px]" style={{ color: t(theme, 'text-primary') }}>
-                            {getPageTitle()}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Swiper Content */}
-                <div
-                    ref={(el) => {
-                        scrollRef.current = el;
-                        if (el && viewMode === 'swipe' && el.scrollLeft === 0 && selectedIndex > 0) {
-                            el.scrollLeft = selectedIndex * el.offsetWidth;
-                        }
-                    }}
-                    onScroll={handleSwipeScroll}
-                    className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
-                >
-                    {swipeDuas.map((dua, i) => (
-                        <div key={`${dua?.id}-${i}`} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto h-full pb-40">
-                            <DuaCard
-                                dua={{
-                                    ...dua,
-                                    reference: toTitleCase(dua.reference) || 'Supplication'
-                                }}
-                                label=""
-                                type="dua"
-                                hideAudio={true}
-                                hideCounter={['robbana', 'salawat', 'salah', 'general', 'emotions', 'situational'].includes(dua.category) || ['robbana', 'salawat', 'salah'].includes(activeSection)}
-                                hideTags={true}
-                                onDelete={dua.category === 'custom' ? () => initiateDelete(dua.id) : null}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {/* Mounted mini tasbeeh whenever a Dua is to be read a certain amount of times */}
-                {swipeDuas[selectedIndex]?.repeat > 1 && swipeDuas[selectedIndex]?.category !== 'salah' && (
-                    <MiniTasbih
-                        target={swipeDuas[selectedIndex].repeat}
-                        count={miniTasbihCount}
-                        onCountChange={setMiniTasbihCount}
-                    />
-                )}
-                {/* Delete Confirmation Modal */}
-                {showDeleteConfirm && (
-                    <div className="fixed inset-0 z-[600] flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-fade-in">
-                        <div className="w-full max-w-sm p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up flex flex-col items-center text-center"
-                            style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
-
-                            {/* Trash Icon */}
-                            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-8 bg-black/5"
-                                style={{
-                                    background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)',
-                                    color: '#ef4444'
-                                }}>
-                                <IconTrash size={32} />
-                            </div>
-
-                            <h3 className="text-[24px] font-medium tracking-tight mb-4 italic"
-                                style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
-                                Delete Supplication?
-                            </h3>
-
-                            <p className="text-[14px] leading-relaxed opacity-50 mb-10 max-w-[240px]">
-                                Are you sure you want to remove this prayer from your list? This action cannot be undone.
-                            </p>
-
-                            <div className="flex flex-col gap-3 w-full">
-                                <button
-                                    onClick={confirmDelete}
-                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98]"
-                                    style={{ background: '#ef4444', color: '#ffffff' }}
-                                >
-                                    Delete
-                                </button>
-                                <button
-                                    onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }}
-                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98] border"
-                                    style={{
-                                        background: 'transparent',
-                                        borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                                        color: t(theme, 'text-primary')
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-        )
-    }
-
-
-    // CUSTOM PRAYERS VIEW
-    if (viewMode === 'custom') {
-        const savePrayer = () => {
-            const hasInput = Object.values(newPrayer).some(v => v.trim() !== '')
-            if (!hasInput) return
-            savePrayerManual(newPrayer, editingPrayerId)
-            setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
-            setEditingPrayerId(null)
-            setShowAddModal(false)
+                    )}
+                </main>
+            )
         }
 
-        return (
-            <div className="pb-32 min-h-screen" style={{ background: t(theme, 'surface-0'), paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                {!embedded && <Header />}
+        if (viewMode === 'swipe') {
+            return (
+                <div className="fixed inset-0 z-[100] flex flex-col animate-modal-slide-up" style={{ background: t(theme, 'surface-0') }}>
+                    <div className="flex items-center justify-between px-6" style={{ background: t(theme, 'surface-0'), paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)', paddingBottom: '1.5rem' }}>
+                        <div className="flex items-center gap-3">
+                            <button onClick={goBack} className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90" style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
+                                <IconChevronLeft size={22} />
+                            </button>
+                            <span className="text-[15px] font-normal tracking-tight truncate max-w-[240px]" style={{ color: t(theme, 'text-primary') }}>
+                                {getPageTitle()}
+                            </span>
+                        </div>
+                    </div>
+                    <div
+                        ref={(el) => {
+                            scrollRef.current = el;
+                            if (el && viewMode === 'swipe' && el.scrollLeft === 0 && selectedIndex > 0) {
+                                el.scrollLeft = selectedIndex * el.offsetWidth;
+                            }
+                        }}
+                        onScroll={handleSwipeScroll}
+                        className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
+                    >
+                        {swipeDuas.map((dua, i) => (
+                            <div key={`${dua?.id}-${i}`} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto h-full pb-40">
+                                <DuaCard
+                                    dua={{ ...dua, reference: toTitleCase(dua.reference) || 'Supplication' }}
+                                    label=""
+                                    type="dua"
+                                    hideAudio={true}
+                                    hideCounter={['robbana', 'salawat', 'salah', 'general', 'emotions', 'situational'].includes(dua.category) || ['robbana', 'salawat', 'salah'].includes(activeSection)}
+                                    hideTags={true}
+                                    onDelete={dua.category === 'custom' ? () => initiateDelete(dua.id) : null}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    {swipeDuas[selectedIndex]?.repeat > 1 && swipeDuas[selectedIndex]?.category !== 'salah' && (
+                        <MiniTasbih target={swipeDuas[selectedIndex].repeat} count={miniTasbihCount} onCountChange={setMiniTasbihCount} />
+                    )}
+                </div>
+            )
+        }
 
+        if (viewMode === 'custom') {
+            return (
                 <main className="px-6 animate-fade-in mt-2 container mx-auto">
-                    {/* Add Prayer Action */}
                     <button
                         onClick={() => {
                             setEditingPrayerId(null)
@@ -1093,23 +992,13 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             boxShadow: isDark ? 'none' : '0 4px 12px rgba(0,0,0,0.01)'
                         }}
                     >
-                        <span className="text-[14px] font-bold tracking-[0.05em] opacity-70">
-                            + Add Prayer
-                        </span>
+                        <span className="text-[14px] font-bold tracking-[0.05em] opacity-70">+ Add Prayer</span>
                     </button>
-
-                    <div className="mb-6">
-                        <h2 className="text-[11px] font-bold tracking-[0.15em] opacity-40">
-                            Saved Supplications
-                        </h2>
-                    </div>
-
+                    <div className="mb-6"><h2 className="text-[11px] font-bold tracking-[0.15em] opacity-40">Saved Supplications</h2></div>
                     <div className="flex flex-col gap-5">
                         {customPrayers.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-fade-in relative mt-4">
-                                <p className="text-[14px] min-[390px]:text-[15px] font-normal max-w-[280px] leading-relaxed" style={{ color: t(theme, 'text-secondary') }}>
-                                    Keep your spiritual journey close by adding your first personal dua.
-                                </p>
+                                <p className="text-[14px] min-[390px]:text-[15px] font-normal max-w-[280px] leading-relaxed" style={{ color: t(theme, 'text-secondary') }}>Keep your spiritual journey close by adding your first personal dua.</p>
                             </div>
                         ) : (
                             customPrayers.map((p, i) => (
@@ -1121,181 +1010,88 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         setViewMode('swipe')
                                     }}
                                     className="group relative flex flex-col p-8 rounded-[2rem] text-left transition-all duration-500 border hover:shadow-xl active:scale-[0.99] overflow-hidden"
-                                    style={{
-                                        background: t(theme, 'surface-1'),
-                                        borderColor: t(theme, 'border'),
-                                        boxShadow: isDark ? 'none' : '0 10px 30px -10px rgba(0,0,0,0.05)'
-                                    }}
+                                    style={{ background: t(theme, 'surface-1'), borderColor: t(theme, 'border'), boxShadow: isDark ? 'none' : '0 10px 30px -10px rgba(0,0,0,0.05)' }}
                                 >
                                     <div className="flex items-start justify-between mb-2 w-full">
-                                        <h3
-                                            className="text-[20px] font-medium tracking-tight italic"
-                                            style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}
-                                        >
-                                            {p.transliteration || 'Personal Prayer'}
-                                        </h3>
+                                        <h3 className="text-[20px] font-medium tracking-tight italic" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>{p.transliteration || 'Personal Prayer'}</h3>
                                         <div className="flex items-center gap-3">
-                                            <button
-                                                onClick={(e) => startEditManual(p, e)}
-                                                className="p-2 transition-all hover:scale-110 opacity-60 hover:opacity-100"
-                                                style={{ color: t(theme, 'text-primary') }}
-                                            >
-                                                <IconPencil size={18} />
-                                            </button>
-                                            <button
-                                                onClick={(e) => initiateDelete(p.id, e)}
-                                                className="p-2 transition-all hover:scale-110 opacity-60 hover:opacity-100"
-                                                style={{ color: t(theme, 'text-primary') }}
-                                            >
-                                                <IconTrash size={18} />
-                                            </button>
+                                            <button onClick={(e) => startEditManual(p, e)} className="p-2 transition-all hover:scale-110 opacity-60 hover:opacity-100" style={{ color: t(theme, 'text-primary') }}><IconPencil size={18} /></button>
+                                            <button onClick={(e) => initiateDelete(p.id, e)} className="p-2 transition-all hover:scale-110 opacity-60 hover:opacity-100" style={{ color: t(theme, 'text-primary') }}><IconTrash size={18} /></button>
                                         </div>
                                     </div>
-
-                                    <div className="mb-4">
-                                        {/* Tag removed as per institutional minimalism request */}
-                                    </div>
-
-                                    <p
-                                        className="text-[15px] leading-relaxed opacity-70 italic font-serif-body"
-                                        style={{ color: t(theme, 'text-primary') }}
-                                    >
-                                        "{p.translation || 'No translation provided'}"
-                                    </p>
+                                    <p className="text-[15px] leading-relaxed opacity-70 italic font-serif-body" style={{ color: t(theme, 'text-primary') }}>"{p.translation || 'No translation provided'}"</p>
                                 </button>
                             ))
                         )}
                     </div>
                 </main>
-
-                {showAddModal && (
-                    <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-fade-in">
-                        <div className="w-full max-w-lg p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up" style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
-                            <div className="flex items-center justify-between mb-8">
-                                <h3 className="text-2xl font-medium" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
-                                    {editingPrayerId ? 'Edit Personal Prayer' : 'New Personal Prayer'}
-                                </h3>
-                                <button onClick={() => setShowAddModal(false)} className="opacity-40 hover:opacity-100 transition-opacity">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M18 6L6 18M6 6l12 12"></path>
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div className="flex flex-col gap-8">
-                                <div className="space-y-6">
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-[10px] font-black tracking-widest opacity-40">Arabic Text (Optional)</label>
-                                        <textarea
-                                            placeholder="بِسْمِ اللَّهِ..."
-                                            value={newPrayer.arabic}
-                                            onChange={e => setNewPrayer({ ...newPrayer, arabic: e.target.value })}
-                                            className="w-full p-5 rounded-[1.5rem] text-right min-h-[120px] outline-none transition-all focus:ring-2 focus:ring-accent/20 resize-none text-xl"
-                                            style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary'), direction: 'rtl', fontFamily: 'var(--font-serif-arabic)' }}
-                                        />
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="flex flex-col gap-2">
-                                            <label className="text-[10px] font-black tracking-widest opacity-40">Transliteration</label>
-                                            <input
-                                                placeholder="Transliteration"
-                                                value={newPrayer.transliteration}
-                                                onChange={e => setNewPrayer({ ...newPrayer, transliteration: e.target.value })}
-                                                className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
-                                                style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-2">
-                                            <label className="text-[10px] font-black tracking-widest opacity-40">Reference</label>
-                                            <input
-                                                placeholder="Reference (Optional)"
-                                                value={newPrayer.reference}
-                                                onChange={e => setNewPrayer({ ...newPrayer, reference: e.target.value })}
-                                                className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
-                                                style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-[10px] font-black tracking-widest opacity-40">Translation</label>
-                                        <input
-                                            placeholder="Translation"
-                                            value={newPrayer.translation}
-                                            onChange={e => setNewPrayer({ ...newPrayer, translation: e.target.value })}
-                                            className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20"
-                                            style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <button
-                                    onClick={savePrayer}
-                                    className="w-full py-5 rounded-[1.5rem] font-bold text-[14px] tracking-[0.05em] transition-all active:scale-[0.98] shadow-lg hover:shadow-xl group"
-                                    style={{
-                                        background: t(theme, 'text-primary'),
-                                        color: t(theme, 'surface-0'),
-                                        boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.4)' : '0 8px 20px rgba(0,0,0,0.1)'
-                                    }}
-                                >
-                                    Save Prayer
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Delete Confirmation Modal */}
-                {showDeleteConfirm && (
-                    <div className="fixed inset-0 z-[600] flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-fade-in">
-                        <div className="w-full max-w-sm p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up flex flex-col items-center text-center"
-                            style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
-
-                            {/* Trash Icon */}
-                            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-8"
-                                style={{
-                                    background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)',
-                                    color: '#ef4444'
-                                }}>
-                                <IconTrash size={32} />
-                            </div>
-
-                            <h3 className="text-[24px] font-medium tracking-tight mb-4 italic"
-                                style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>
-                                Delete Supplication?
-                            </h3>
-
-                            <p className="text-[14px] leading-relaxed opacity-50 mb-10 max-w-[240px]">
-                                Are you sure you want to remove this prayer from your list? This action cannot be undone.
-                            </p>
-
-                            <div className="flex flex-col gap-3 w-full">
-                                <button
-                                    onClick={confirmDelete}
-                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98]"
-                                    style={{ background: '#ef4444', color: '#ffffff' }}
-                                >
-                                    Delete
-                                </button>
-                                <button
-                                    onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }}
-                                    className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98] border"
-                                    style={{
-                                        background: 'transparent',
-                                        borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                                        color: t(theme, 'text-primary')
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-        )
+            )
+        }
+        return null
     }
 
-    return null
+    const savePrayer = () => {
+        const hasInput = Object.values(newPrayer).some(v => v.trim() !== '')
+        if (!hasInput) return
+        savePrayerManual(newPrayer, editingPrayerId)
+        setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
+        setEditingPrayerId(null)
+        setShowAddModal(false)
+    }
+
+    return (
+        <div className="pb-32 min-h-screen" style={{ background: t(theme, 'surface-0') }}>
+            {!embedded && viewMode !== 'swipe' && <Header />}
+            {renderContent()}
+
+            {/* Modals outside main scroll flow */}
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 z-[600] flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-fade-in">
+                    <div className="w-full max-w-sm p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up flex flex-col items-center text-center"
+                        style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-8" style={{ background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)', color: '#ef4444' }}><IconTrash size={32} /></div>
+                        <h3 className="text-[24px] font-medium tracking-tight mb-4 italic" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>Delete Supplication?</h3>
+                        <p className="text-[14px] leading-relaxed opacity-50 mb-10 max-w-[240px]">Are you sure you want to remove this prayer from your list?</p>
+                        <div className="flex flex-col gap-3 w-full">
+                            <button onClick={confirmDelete} className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98]" style={{ background: '#ef4444', color: '#ffffff' }}>Delete</button>
+                            <button onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }} className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98] border" style={{ background: 'transparent', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', color: t(theme, 'text-primary') }}>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showAddModal && (
+                <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-fade-in">
+                    <div className="w-full max-w-lg p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up" style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-2xl font-medium" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>{editingPrayerId ? 'Edit Personal Prayer' : 'New Personal Prayer'}</h3>
+                            <button onClick={() => setShowAddModal(false)} className="opacity-40 hover:opacity-100 transition-opacity"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+                        </div>
+                        <div className="flex flex-col gap-8">
+                            <div className="space-y-6">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-[10px] font-black tracking-widest opacity-40">Arabic Text (Optional)</label>
+                                    <textarea placeholder="بِسْمِ اللَّهِ..." value={newPrayer.arabic} onChange={e => setNewPrayer({ ...newPrayer, arabic: e.target.value })} className="w-full p-5 rounded-[1.5rem] text-right min-h-[120px] outline-none transition-all focus:ring-2 focus:ring-accent/20 resize-none text-xl" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary'), direction: 'rtl', fontFamily: 'var(--font-serif-arabic)' }} />
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] font-black tracking-widest opacity-40">Transliteration</label>
+                                        <input placeholder="Transliteration" value={newPrayer.transliteration} onChange={e => setNewPrayer({ ...newPrayer, transliteration: e.target.value })} className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }} />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] font-black tracking-widest opacity-40">Reference</label>
+                                        <input placeholder="Reference (Optional)" value={newPrayer.reference} onChange={e => setNewPrayer({ ...newPrayer, reference: e.target.value })} className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }} />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-[10px] font-black tracking-widest opacity-40">Translation</label>
+                                    <input placeholder="Translation" value={newPrayer.translation} onChange={e => setNewPrayer({ ...newPrayer, translation: e.target.value })} className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }} />
+                                </div>
+                            </div>
+                            <button onClick={savePrayer} className="w-full py-5 rounded-[1.5rem] font-bold text-[14px] tracking-[0.05em] transition-all active:scale-[0.98] shadow-lg hover:shadow-xl group" style={{ background: t(theme, 'text-primary'), color: t(theme, 'surface-0'), boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.4)' : '0 8px 20px rgba(0,0,0,0.1)' }}>Save Prayer</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    )
 }
