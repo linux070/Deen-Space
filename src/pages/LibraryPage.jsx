@@ -45,8 +45,13 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (['situational', 'emotions', 'general', 'robbana', 'salawat', 'salah', 'ramadan'].includes(initialSection)) return 'list'
         return 'swipe'
     })
-    const [activeSection, setActiveSection] = useState(initialSection)
-    const [activeSubSection, setActiveSubSection] = useState(null)
+    const [activeSection, setActiveSection] = useState(() => {
+        if (initialSection) return initialSection
+        return searchParams.get('sec')
+    })
+    const [activeSubSection, setActiveSubSection] = useState(() => {
+        return searchParams.get('sub')
+    })
     const [selectedIndex, setSelectedIndex] = useState(() => {
         const idx = parseInt(searchParams.get('idx'))
         return isNaN(idx) ? 0 : idx
@@ -58,9 +63,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     useEffect(() => {
         const params = new URLSearchParams()
         if (viewMode !== 'landing') params.set('view', viewMode)
+        if (activeSection) params.set('sec', activeSection)
+        if (activeSubSection) params.set('sub', activeSubSection)
         if (viewMode === 'swipe') params.set('idx', selectedIndex)
         setSearchParams(params, { replace: true })
-    }, [viewMode, selectedIndex, setSearchParams])
+    }, [viewMode, activeSection, activeSubSection, selectedIndex, setSearchParams])
     const [editingPrayerId, setEditingPrayerId] = useState(null)
     const [customPrayers, setCustomPrayers] = useState(() => {
         try { return JSON.parse(localStorage.getItem('user-custom-prayers') || '[]') } catch { return [] }
