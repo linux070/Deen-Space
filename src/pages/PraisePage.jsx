@@ -45,22 +45,10 @@ export default function PraisePage({ duas, asma, embedded = false }) {
     }
 
     const handleSwipeScroll = (e) => {
-        if (skippingFirstScroll.current) {
-            skippingFirstScroll.current = false
-            return
-        }
-        if (!e.target) return
-        const width = e.target.offsetWidth
-        const scrollLeft = e.target.scrollLeft
-        // Calculate the index exactly
-        const exactIndex = scrollLeft / width
-        // Only update index when perfectly snapped
-        if (Math.abs(exactIndex - Math.round(exactIndex)) < 0.05) {
-            const index = Math.round(exactIndex)
-            if (index !== selectedIndex) {
-                setSelectedIndex(index)
-            }
-        }
+        if (skippingFirstScroll.current && e.target.scrollLeft === 0 && selectedIndex > 0) return
+        skippingFirstScroll.current = false
+        const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth)
+        if (idx !== selectedIndex) setSelectedIndex(idx)
     }
     const goBack = () => {
         if (search) {

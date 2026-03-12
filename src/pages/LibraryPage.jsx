@@ -14,23 +14,21 @@ import {
     IconInfo,
     IconPencil,
     IconTrash,
-    IconSparkles
+    IconSparkles,
+    IconMoon,
+    IconSun,
+    IconRemembrance,
+    IconFlower,
+    IconHome,
+    IconTag,
+    IconMessage
 } from '../components/Icons'
 import DuaCard from '../components/DuaCard'
 import PageHeader from '../components/PageHeader'
 import MiniTasbih from '../components/MiniTasbih'
 import { toTitleCase } from '../utils/text'
 
-const salawatTitles = {
-    'salawat-1': 'The Ibrahimic Salawat',
-    'salawat-2': 'Salutation of Peace',
-    'salawat-3': 'Blessings and Mercy',
-    'salawat-4': 'Blessings on the Ahlo-Bait',
-    'salawat-5': 'The Unlettered Prophet',
-    'salawat-6': 'Blessings of the Universe',
-    'salawat-7': 'Salutation of Service',
-    'salawat-8': 'The Highest Station'
-}
+
 
 export default function LibraryPage({ duas, embedded = false, initialSection = null }) {
     const { theme } = useSettings()
@@ -44,8 +42,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (v) return v
         if (!initialSection) return 'landing'
         if (initialSection === 'custom-prayers') return 'custom'
-        if (['situational', 'emotions', 'general', 'ramadan'].includes(initialSection)) return 'sublist'
-        if (['robbana', 'salawat'].includes(initialSection)) return 'list'
+        if (['situational', 'emotions', 'general', 'robbana', 'salawat', 'salah', 'ramadan'].includes(initialSection)) return 'list'
         return 'swipe'
     })
     const [activeSection, setActiveSection] = useState(initialSection)
@@ -78,21 +75,23 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // TOP LEVEL SECTIONS
     const SECTIONS = [
-        { id: 'general', title: 'Daily Duas', subtitle: 'Prophetic Traditions', icon: IconDua },
-        { id: 'emotions', title: 'Spiritual State', subtitle: 'Emotional Well-being', icon: IconHeart },
+        { id: 'general', title: 'Daily Duas', subtitle: 'Prophetic Traditions', icon: IconSun },
+        { id: 'emotions', title: 'Spiritual State', subtitle: 'Emotional Well-being', icon: IconRemembrance },
         { id: 'situational', title: 'Life Event', subtitle: 'Situational Supplications', icon: IconCompass },
     ]
 
     const sectionWideDuas = useMemo(() => {
         let result = duas
         if (activeSection === 'emotions') {
-            result = result.filter(d => d.category === 'emotions')
+            const emotionsIds = ['anxiety', 'sadness', 'fear', 'gratitude', 'trust']
+            result = result.filter(d => d.category === 'emotions' && emotionsIds.some(tag => d.tags?.includes(tag)))
         } else if (activeSection === 'situational') {
-            const situationalIds = ['travel', 'illness', 'istikhara', 'protection']
-            result = result.filter(d => situationalIds.includes(d.category) || d.tags?.includes('protection'))
+            const situationalCats = ['travel', 'illness', 'istikhara']
+            // Strictly exclude robbana and other random protection-tagged duas. Limit to protection-1 specifically.
+            result = result.filter(d => (situationalCats.includes(d.category) || d.id === 'protection-1') && d.category !== 'robbana')
         } else if (activeSection === 'general') {
             const generalIds = ['waking', 'sleeping', 'eating', 'dressing', 'home', 'toilet', 'prophetic', 'etiquette', 'animals']
-            result = result.filter(d => generalIds.includes(d.category))
+            result = result.filter(d => generalIds.includes(d.category) && d.id !== 'light-1')
         } else if (activeSection === 'ramadan') {
             result = result.filter(d => d.category === 'ramadan')
         } else if (activeSection) {
@@ -106,7 +105,8 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     if (d.tags?.includes('sadness')) return 1;
                     if (d.tags?.includes('fear') && !d.tags?.includes('trust')) return 2;
                     if (d.tags?.includes('gratitude')) return 3;
-                    if (d.tags?.includes('trust')) return 4;
+                    if (d.tags?.includes('trust') && !d.tags?.includes('patience') && d.id !== 'trust-3') return 4;
+                    if (d.tags?.includes('patience') || d.id === 'trust-3') return 5;
                 }
                 else if (activeSection === 'situational') {
                     if (d.tags?.includes('protection')) return 3; // Priority for protection (it spans across categories)
@@ -158,31 +158,33 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (!activeSection) return []
         if (activeSection === 'situational') {
             return [
-                { id: 'travel', title: 'Travel & Journey', icon: IconClock, count: sectionWideDuas.filter(d => d.category === 'travel' && !d.tags?.includes('animals')).length },
+                { id: 'travel', title: 'Travel & Journey', icon: IconClock, count: sectionWideDuas.filter(d => d.category === 'travel').length },
                 { id: 'illness', title: 'Illness & Visiting', icon: IconInfo, count: sectionWideDuas.filter(d => d.category === 'illness').length },
                 { id: 'istikhara', title: 'Istikhara & Guidance', icon: IconStar, count: sectionWideDuas.filter(d => d.category === 'istikhara').length },
-                { id: 'protection', title: 'Shield & Refuge', icon: IconCompass, count: sectionWideDuas.filter(d => d.tags?.includes('protection') && (d.category === 'prophetic' || d.category === 'travel')).length },
+                { id: 'protection', title: 'Comprehensive Shield', icon: IconStar, count: sectionWideDuas.filter(d => d.id === 'protection-1').length },
             ]
         }
         if (activeSection === 'emotions') {
             return [
                 { id: 'anxiety', title: 'Anxiety & Relief', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('anxiety')).length },
                 { id: 'sadness', title: 'Sadness & Sorrow', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('sadness')).length },
-                { id: 'fear', title: 'Fear & Worry', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('fear') && !d.tags?.includes('trust')).length },
+                { id: 'fear', title: 'Fear & Worry', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('fear')).length },
                 { id: 'gratitude', title: 'Gratitude & Praise', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('gratitude')).length },
-                { id: 'trust', title: 'Reliance & Strength', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('trust')).length },
+                { id: 'trust', title: 'Reliance & Strength', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('trust') && !d.tags?.includes('patience') && d.id !== 'trust-3').length },
+                { id: 'patience', title: 'Patience & Perseverance', icon: IconHeart, count: sectionWideDuas.filter(d => d.tags?.includes('patience') || d.id === 'trust-3').length },
             ]
         }
         if (activeSection === 'general') {
             return [
-                { id: 'waking', title: 'Upon Waking', icon: IconCompass, count: sectionWideDuas.filter(d => d.category === 'waking').length },
-                { id: 'sleeping', title: 'Before Sleeping', icon: IconHeart, count: sectionWideDuas.filter(d => d.category === 'sleeping').length },
-                { id: 'eating', title: 'Meals & Drink', icon: IconCompass, count: sectionWideDuas.filter(d => d.category === 'eating').length },
-                { id: 'dressing', title: 'Clothes & Attire', icon: IconHeart, count: sectionWideDuas.filter(d => d.category === 'dressing').length },
-                { id: 'home', title: 'Home & Living', icon: IconCompass, count: sectionWideDuas.filter(d => d.category === 'home').length },
-                { id: 'toilet', title: 'Hygiene & Purity', icon: IconInfo, count: sectionWideDuas.filter(d => d.category === 'toilet').length },
-                { id: 'sneezing-yawning', title: 'Sneezing & Yawning', icon: IconSparkles, count: sectionWideDuas.filter(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning') || d.tags?.includes('animals')).length },
-                { id: 'prophetic', title: 'Remembrance & Light', icon: IconStar, count: sectionWideDuas.filter(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque'].includes(t))).length },
+                { id: 'waking', title: 'Starting the Day', icon: IconCompass, count: sectionWideDuas.filter(d => d.category === 'waking').length },
+                { id: 'sleeping', title: 'Night & Sleep', icon: IconMoon, count: sectionWideDuas.filter(d => d.category === 'sleeping').length },
+                { id: 'eating', title: 'Meals & Gratitude', icon: IconDua, count: sectionWideDuas.filter(d => d.category === 'eating').length },
+                { id: 'dressing', title: 'Dressing', icon: IconTag, count: sectionWideDuas.filter(d => d.category === 'dressing').length },
+                { id: 'home', title: 'Home & Living', icon: IconHome, count: sectionWideDuas.filter(d => d.category === 'home' || d.id === 'home-3').length },
+                { id: 'toilet', title: 'Restroom Etiquette', icon: IconFlower, count: sectionWideDuas.filter(d => d.category === 'toilet').length },
+                { id: 'etiquette', title: 'Sneezing & Yawning', icon: IconMessage, count: sectionWideDuas.filter(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning')).length },
+                { id: 'animal-sounds', title: 'Hearing Animal Sounds', icon: IconSparkles, count: sectionWideDuas.filter(d => d.tags?.includes('animals')).length },
+                { id: 'prophetic', title: 'Prophetic Remembrance', icon: IconStar, count: sectionWideDuas.filter(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque', 'animals', 'home'].includes(t)) && d.id !== 'light-1' && d.id !== 'home-3').length },
             ]
 
         }
@@ -205,8 +207,10 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
         // Priority 1: Sub-section filtering
         if (activeSubSection) {
-            if (activeSubSection === 'sneezing-yawning' || activeSubSection === 'etiquettes') {
-                result = result.filter(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning') || d.tags?.includes('animals'))
+            if (activeSubSection === 'sneezing-yawning') {
+                result = result.filter(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning'))
+            } else if (activeSubSection === 'animal-sounds') {
+                result = result.filter(d => d.tags?.includes('animals'))
             } else if (activeSection === 'emotions') {
                 if (activeSubSection === 'fear') {
                     result = result.filter(d => d.tags?.includes('fear') && !d.tags?.includes('trust'))
@@ -223,7 +227,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 }
             } else if (activeSection === 'general') {
                 if (activeSubSection === 'prophetic') {
-                    result = result.filter(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque'].includes(t)))
+                    result = result.filter(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque', 'animals'].includes(t)))
                 } else {
                     result = result.filter(d => d.category === activeSubSection)
                 }
@@ -259,23 +263,59 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         return result
     }, [filteredDuasBase, search])
 
-    const solahGroups = useMemo(() => {
-        if (activeSection !== 'salah') return null;
-        return [
-            {
-                title: 'Before Salah',
-                items: listDuas.filter(d => d.id.startsWith('salah-adhan-'))
-            },
-            {
-                title: 'In Solah',
-                items: listDuas.filter(d => ['salah-opening'].includes(d.id) || d.id.startsWith('salah-motion-'))
-            },
-            {
-                title: 'After Salah',
-                items: listDuas.filter(d => d.category === 'after-salah')
-            }
-        ].filter(g => g.items.length > 0);
-    }, [listDuas, activeSection])
+    const groupedSections = useMemo(() => {
+        if (activeSection === 'ramadan' && viewMode === 'list' && !activeSubSection) return null; // Ramadan uses sublist navigation mostly
+
+        if (activeSection === 'salah') {
+            return [
+                {
+                    title: 'Before Salah',
+                    items: listDuas.filter(d => d.id.startsWith('salah-adhan-'))
+                },
+                {
+                    title: 'In Solah',
+                    items: listDuas.filter(d => ['salah-opening'].includes(d.id) || d.id.startsWith('salah-motion-'))
+                },
+                {
+                    title: 'After Salah',
+                    items: listDuas.filter(d => d.category === 'after-salah')
+                }
+            ].filter(g => g.items.length > 0);
+        }
+
+        if (['general', 'emotions', 'situational'].includes(activeSection) && !activeSubSection) {
+            return SUB_SECTIONS.map(sub => {
+                let items = []
+                if (sub.id === 'sneezing-yawning') {
+                    items = listDuas.filter(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning'))
+                } else if (sub.id === 'animal-sounds') {
+                    items = listDuas.filter(d => d.tags?.includes('animals'))
+                } else if (activeSection === 'emotions') {
+                    if (sub.id === 'fear') {
+                        items = listDuas.filter(d => d.tags?.includes('fear') && !d.tags?.includes('trust'))
+                    } else {
+                        items = listDuas.filter(d => d.tags?.includes(sub.id))
+                    }
+                } else if (activeSection === 'situational') {
+                    if (sub.id === 'protection') {
+                        items = listDuas.filter(d => d.tags?.includes('protection') && (d.category === 'prophetic' || d.category === 'travel'))
+                    } else if (sub.id === 'travel') {
+                        items = listDuas.filter(d => d.category === 'travel' && !d.tags?.includes('animals'))
+                    } else {
+                        items = listDuas.filter(d => d.category === sub.id)
+                    }
+                } else if (activeSection === 'general') {
+                    if (sub.id === 'prophetic') {
+                        items = listDuas.filter(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque', 'animals'].includes(t)))
+                    } else {
+                        items = listDuas.filter(d => d.category === sub.id)
+                    }
+                }
+                return { title: sub.title, items, id: sub.id }
+            }).filter(g => g.items.length > 0)
+        }
+        return null;
+    }, [listDuas, activeSection, SUB_SECTIONS, activeSubSection, viewMode])
 
     // Final list for swiper (respects custom prayers)
     const swipeDuas = useMemo(() => {
@@ -286,14 +326,17 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 category: 'custom'
             }))
         }
-        // When a sub-section is active, limit swipe to that sub-section only
-        if (activeSubSection && ['emotions', 'situational', 'general', 'ramadan'].includes(activeSection)) {
-            return filteredDuasBase
-        }
-        // Swipe view uses the ENTIRE category pool
+        // Continuous swipe across all sub-categories in these root sections
+        // Swipe view uses the ENTIRE category pool but must be strictly limited to the active root section
         if (['emotions', 'situational', 'general', 'ramadan'].includes(activeSection)) {
             return sectionWideDuas
         }
+
+        // For Salawat and Robbana, we also use the section-wide list
+        if (['robbana', 'salawat'].includes(activeSection)) {
+            return sectionWideDuas
+        }
+
         if (activeSection && !search && activeSection !== 'custom' && activeSection !== 'custom-prayers') {
             return sectionWideDuas
         }
@@ -349,28 +392,48 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     // Handle swiper scroll to update selected index
     const handleSwipeScroll = (e) => {
-        if (skippingFirstScroll.current) {
-            skippingFirstScroll.current = false
-            return
-        }
-        if (!e.target) return
-        const width = e.target.offsetWidth
-        const scrollLeft = e.target.scrollLeft
-        // Calculate the index exactly
-        const exactIndex = scrollLeft / width
-        // Only update index when perfectly snapped
-        if (Math.abs(exactIndex - Math.round(exactIndex)) < 0.05) {
-            const index = Math.round(exactIndex)
-            if (index !== selectedIndex) {
-                setSelectedIndex(index)
-            }
-        }
+        if (skippingFirstScroll.current && e.target.scrollLeft === 0 && selectedIndex > 0) return
+        skippingFirstScroll.current = false
+        const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth)
+        if (idx !== selectedIndex) setSelectedIndex(idx)
     }
 
-    // Reset Tasbih count when swiping to a new dua
+    // Reset Tasbih count and sync activeSubSection when swiping
     useEffect(() => {
         setMiniTasbihCount(0)
-    }, [selectedIndex])
+
+        // Sync activeSubSection for context-aware "Back" navigation
+        if (viewMode === 'swipe' && ['general', 'emotions', 'situational', 'ramadan'].includes(activeSection)) {
+            const currentDua = swipeDuas[selectedIndex]
+            if (currentDua) {
+                const sub = SUB_SECTIONS.find(s => {
+                    if (s.id === 'etiquette') return currentDua.tags?.includes('sneezing') || currentDua.tags?.includes('yawning')
+                    if (s.id === 'animal-sounds') return currentDua.tags?.includes('animals')
+                    if (activeSection === 'emotions') {
+                        if (s.id === 'patience') return currentDua.tags?.includes('patience') || currentDua.id === 'trust-3'
+                        if (s.id === 'fear') return currentDua.tags?.includes('fear')
+                        return currentDua.tags?.includes(s.id)
+                    }
+                    if (activeSection === 'situational') {
+                        if (s.id === 'protection') return currentDua.id === 'protection-1'
+                        return currentDua.category === s.id
+                    }
+                    if (activeSection === 'general') {
+                        if (s.id === 'prophetic') return currentDua.category === 'prophetic' && !currentDua.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque'].includes(t))
+                        return currentDua.category === s.id
+                    }
+                    if (activeSection === 'ramadan') {
+                        if (s.id === 'ramadan-moon') return currentDua.tags?.includes('moon')
+                        if (s.id === 'ramadan-fasting') return currentDua.tags?.includes('intention') || currentDua.tags?.includes('iftar') || currentDua.tags?.includes('after-iftar')
+                        if (s.id === 'ramadan-days') return currentDua.tags?.includes('first-10-days') || currentDua.tags?.includes('middle-10-days') || currentDua.tags?.includes('last-10-days') || currentDua.tags?.includes('laylat-al-qadr')
+                        if (s.id === 'ramadan-personal') return currentDua.tags?.includes('general') || currentDua.tags?.includes('parents') || currentDua.tags?.includes('guidance') || currentDua.tags?.includes('knowledge')
+                    }
+                    return currentDua.category === s.id
+                })
+                if (sub && sub.id !== activeSubSection) setActiveSubSection(sub.id)
+            }
+        }
+    }, [selectedIndex, swipeDuas, viewMode, activeSection, SUB_SECTIONS, activeSubSection])
 
     const goBack = () => {
         if (search) {
@@ -379,12 +442,17 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         }
 
         if (viewMode === 'swipe') {
-            if (activeSection === 'robbana' || activeSection === 'salawat') {
+            if (activeSection === 'robbana' || activeSection === 'salawat' || activeSection === 'salah') {
                 setViewMode('list')
                 return
             }
+            if (['general', 'emotions', 'situational', 'ramadan'].includes(activeSection)) {
+                setViewMode('list')
+                setActiveSubSection(null) // Directly return to the full list/grouped list
+                return
+            }
             if (activeSubSection) {
-                setViewMode('sublist')
+                setViewMode('list')
                 return
             }
             if (activeSection === 'custom' || activeSection === 'custom-prayers') {
@@ -396,11 +464,29 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 return
             }
             setViewMode('landing')
+            setActiveSection(null)
+            setActiveSubSection(null)
             return
         }
 
         if (viewMode === 'list') {
-            if (initialSection) {
+            if (activeSubSection) {
+                if (['general', 'emotions', 'situational'].includes(activeSection)) {
+                    // Skip the sublist intermediate step and go back to landing
+                    setViewMode('landing')
+                    setActiveSection(null)
+                    setActiveSubSection(null)
+                } else {
+                    setActiveSubSection(null)
+                }
+                return
+            }
+            if (activeSection === 'ramadan') {
+                setViewMode('landing')
+                setActiveSection(null)
+                return
+            }
+            if (initialSection === activeSection) {
                 navigate('/dua')
                 return
             }
@@ -410,10 +496,6 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         }
 
         if (viewMode === 'sublist') {
-            if (initialSection) {
-                navigate('/dua')
-                return
-            }
             setViewMode('landing')
             setActiveSection(null)
             return
@@ -430,9 +512,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     const UNIQUE_TITLES = {
         // Waking
         'waking-1': 'Praise Upon Waking',
-        // Sleeping
+        'waking-2': 'Gratitude for Life',
         'sleeping-1': 'In Your Name I Sleep',
-        'sleeping-7': 'The Three Quls',
+        'sleeping-7': 'The Three Quls (Protection)',
         // Eating
         'eating-0': 'Bismillah Before Eating',
         'eating-1': 'Gratitude After Eating',
@@ -446,6 +528,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         // Dressing
         'dressing-0': 'Before Undressing',
         'dressing-1': 'Gratitude for Clothing',
+        'dressing-2': 'Wearing New Clothes',
         // Etiquette
         'sneezing-1': 'Upon Sneezing',
         'sneezing-2': 'Response to a Sneeze',
@@ -455,6 +538,8 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         'animal-2': 'Hearing a Rooster Crow',
         // Prophetic (General Remembrance)
         'prophetic-1': 'Firmness of Heart',
+        'prophetic-2': 'Seeking Righteousness',
+        'prophetic-3': 'Protection from Evil',
         'guidance-2': 'Seeking Guidance',
         'protection-1': 'The Comprehensive Shield',
         'parents-1': 'Mercy for Parents',
@@ -462,11 +547,16 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         // Travel
         'travel-1': 'Glory of the Journey',
         'travel-2': 'Righteousness in Travel',
-        'travel-3': 'Safety on the Road',
+        'travel-3': 'Safety and Return',
+        'travel-long': 'The Complete Travel Supplication',
+        'market-1': 'Entering the Market',
+        'ease-1': 'Supplication for Ease',
         // Illness
         'illness-1': 'Supplication for Healing',
         'illness-2': 'Visiting the Sick',
+        'illness-3': 'Comfort in Affliction',
         'distress-1': 'Gratitude in Hardship',
+        'clothes-1': 'Wearing New Clothes',
         // Istikhara
         'istikhara-1': 'The Prayer of Guidance',
         // Emotions
@@ -485,6 +575,20 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         'trust-2': 'Tawakkul (Reliance)',
         'trust-3': 'Patience & Perseverance',
         'doubt-1': 'Refuge from Doubt',
+        'anger-1': 'The Shield from Anger',
+        'loneliness-1': 'The Hope in Mercy',
+        // Morning Adhkar
+        'morning-1': 'The Dominion of Morning',
+        'morning-2': 'Supplication of the Day',
+        'morning-3': 'The Decisive Glorification',
+        'morning-4': 'The Shield of Protection',
+        'morning-5': 'The Shelter of Safety',
+        'morning-6': 'Wellness and Pardon',
+        // Evening Adhkar
+        'evening-1': 'The Dominion of Evening',
+        'evening-2': 'Supplication of the Night',
+        'evening-3': 'The Knower of Unseen',
+        'evening-4': 'The Shelter of Mercy',
         // Remembrance
         'remembrance-1': 'Glorifying Allah',
         'remembrance-2': 'Strength in Allah',
@@ -504,43 +608,80 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         'remembrance-16': 'Knowledge & Provision',
         'remembrance-17': 'Guidance & Piety',
         'remembrance-18': 'Direction of Hearts',
-        'remembrance-19': 'Protection from Loss',
-        'remembrance-20': 'Freedom from Laziness',
-        'remembrance-21': 'Complete Forgiveness',
-        'remembrance-22': 'Forgiveness & Return',
-        'remembrance-23': 'Trust in Allah',
-        'remembrance-24': 'Firmness of Heart',
-        'remembrance-25': 'Wellness & Pardon',
+        'remembrance-19': 'Protection of Blessings',
+        'remembrance-20': 'Refuge from Laziness',
+        'remembrance-21': 'Acceptance of Repentance',
+        'remembrance-22': 'Protection from Grief',
+        'remembrance-23': 'Best Disposer of Affairs',
+        'remembrance-24': 'Steadfastness in Religion',
+        'remembrance-25': 'Forgiveness & Well-being',
+        // Salawat
+        'salawat-1': 'The Ibrahimic Salawat',
+        'salawat-2': 'Salutation of Peace',
+        'salawat-3': 'Blessings and Mercy',
+        'salawat-4': 'Blessings on the Ahlo-Bait',
+        'salawat-5': 'The Unlettered Prophet',
+        'salawat-6': 'Blessings of the Universe',
+        'salawat-7': 'Salutation of Service',
+        'salawat-8': 'The Highest Station',
+        // Mosque & Wudu
+        'wudu-2': 'Supplication After Wudu',
+        'mosque-1': 'Entering the Mosque',
+        'mosque-2': 'Leaving the Mosque',
+        'dhikr-4': 'Expiation of a Gathering',
+        'dhikr-5': 'Constant Repentance',
+        // Salah
+        'salah-adhan-1': 'Response to Adhan',
+        'salah-adhan-2': 'Dua After Adhan',
+        'salah-opening': 'Opening Supplication',
+        'salah-motion-1': 'The Bowing (Rukoo)',
+        'salah-motion-2': 'Rising from Rukoo',
+        'salah-motion-3': 'The Prostration (Sujood)',
+        'salah-motion-4': 'Between Prostrations',
+        'salah-motion-5': 'The Tashahhud',
+        'salah-motion-6': 'Dua After Tashahhud',
+        'salah-motion-7': 'The Salutation (Tasleem)',
+        // After Salah
+        'salah-1': 'Forgiveness After Salah',
+        'salah-2': 'The Source of Peace',
+        'salah-3': 'Glorification (Subhanallah)',
+        'salah-4': 'Gratitude (Alhamdulillah)',
+        'salah-5': 'Magnification (Allahu Akbar)',
+        'salah-6': 'Ayatul Kursi (Post-Salah)',
+        'salah-7': 'Universal Declaration',
         // Ramadan
-        'ramadan-1': 'Sighting the Moon',
-        'ramadan-2': 'Intention (Suhoor)',
-        'ramadan-3': 'Breaking Fast (Iftar)',
-        'ramadan-4': 'After Iftar',
-        'ramadan-5': 'First 10 Days (Mercy)',
-        'ramadan-6': 'Middle 10 Days (Forgiveness)',
-        'ramadan-7': 'Last 10 Days (Safety)',
-        'ramadan-8': 'Laylatul Qadr',
-        'ramadan-9': 'World & Hereafter',
-        'ramadan-10': 'For Parents',
-        'ramadan-11': 'Guidance & Provision',
-        'ramadan-12': 'For Knowledge',
+        'ramadan-1': 'Moon Sighting Dua',
+        'ramadan-2': 'Intention for Fasting',
+        'ramadan-3': 'Dua for Breaking Fast',
+        'ramadan-4': 'Praise After Iftar',
+        'ramadan-5': 'Mercy of the First Ten',
+        'ramadan-6': 'Pardon of the Middle Ten',
+        'ramadan-7': 'Safety from the Fire',
+        'ramadan-8': 'The Night of Decree',
+        'ramadan-9': 'Comprehensive Goodness',
+        'ramadan-10': 'Prayer for Parents',
+        'ramadan-11': 'Seeking Knowledge',
+        'ramadan-12': 'Guidance & Taqwa',
     }
 
     const getTitle = (dua, i) => {
         if (!dua) return ''
 
-        // 1. Check the unique title map first
-        if (UNIQUE_TITLES[dua.id]) return UNIQUE_TITLES[dua.id]
-
-        // 2. Salawat has its own map
-        if (dua.category === 'salawat') {
-            return salawatTitles[dua.id] || (i !== undefined ? (i + 1).toString() : 'Salawat')
+        // 1. Robbana logic: Always Return "Robbana X" (No prefix numbering)
+        if (dua.category === 'robbana') {
+            const rNum = dua.id.split('-')[1] || (i !== undefined ? i + 1 : '')
+            return `Robbana ${rNum}`
         }
 
-        // 3. Robbana numbered
-        if (dua.category === 'robbana') return `Robbana ${i !== undefined ? i + 1 : ''}`
+        // 2. Salawat, Ramadan, etc: Use unique title, or snippet. (No numbering as requested)
+        if (dua.category === 'salawat' || dua.category === 'ramadan') {
+            return UNIQUE_TITLES[dua.id] || toTitleCase(dua.category)
+        }
 
-        // 4. Fallback: use transliteration snippet
+        // 3. Fallback for others to UNIQUE_TITLES
+        if (UNIQUE_TITLES[dua.id]) return UNIQUE_TITLES[dua.id]
+
+        // 4. Final Fallback: snippet
         if (dua.transliteration) {
             return dua.transliteration.split(' ').slice(0, 5).join(' ').replace(/[,.;]$/, '') + '...'
         }
@@ -551,7 +692,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     // Header logic
     const getPageTitle = () => {
         if (viewMode === 'landing') return 'Library'
-        if (viewMode === 'custom' || activeSection === 'custom' || activeSection === 'custom-prayers') return 'My Prayers'
+        if (viewMode === 'custom' || activeSection === 'custom' || activeSection === 'custom-prayers') return 'Personal Duas'
         if (activeSection === 'ramadan') {
             if (viewMode === 'sublist') return 'Ramadan'
             if (activeSubSection) {
@@ -572,14 +713,15 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (viewMode === 'swipe') {
             const dua = swipeDuas[selectedIndex]
 
-            if (activeSection === 'robbana' || activeSection === 'salawat') {
+            if (activeSection === 'salawat' || activeSection === 'robbana' || activeSection === 'ramadan') {
                 const currentDua = swipeDuas[selectedIndex]
                 if (currentDua) {
-                    const pool = swipeDuas.filter(d => d.category === currentDua.category)
-                    const pIdx = pool.findIndex(d => d.id === currentDua.id)
-                    if (activeSection === 'robbana') return `Robbana ${pIdx + 1}`
-                    return getTitle(currentDua, pIdx)
+                    return getTitle(currentDua)
                 }
+            }
+
+            if (activeSection === 'custom' || activeSection === 'custom-prayers') {
+                return dua?.transliteration || 'Personal Prayer'
             }
 
             if (dua) return getTitle(dua)
@@ -593,13 +735,21 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (!activeSection) return 'Supplications'
 
         const cat = activeSection
-        if (cat === 'robbana') return 'Robbana Duas'
+        if (cat === 'robbana') return '40 Robbana'
         if (cat === 'salawat') return 'Durood & Salawat'
         if (cat === 'emotions') return 'Spiritual State'
         if (cat === 'situational') return 'Life Event'
         if (cat === 'general') return 'Daily Duas'
 
         return toTitleCase(cat)
+    }
+
+    const getListTitle = () => {
+        if (activeSubSection) {
+            const sec = SUB_SECTIONS.find(s => s.id === activeSubSection)
+            return sec ? sec.title : toTitleCase(activeSubSection)
+        }
+        return getPageTitle()
     }
 
     const Header = () => {
@@ -623,25 +773,14 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         return (
             <div className={`sticky top-0 z-20 ${viewMode === 'landing' ? 'pb-2' : 'pb-1'}`} style={{ background: t(theme, 'surface-0') }}>
                 <PageHeader
-                    title={(() => {
-                        if (viewMode === 'swipe') {
-                            const currentDua = swipeDuas[selectedIndex]
-                            if (currentDua) {
-                                // Find index within the current pool for secondary titles
-                                const poolIdx = swipeDuas.filter(d => d.category === currentDua.category).findIndex(d => d.id === currentDua.id)
-                                return getTitle(currentDua, poolIdx)
-                            }
-                        }
-                        return title
-                    })()}
+                    title={viewMode === 'list' && activeSubSection ? getListTitle() : title}
                     onBack={goBack}
-                    padding={(viewMode === 'swipe') ? "px-6 pt-10 pb-6" : "px-6 pt-8 pb-3"}
+                    padding="px-6 pt-8 pb-3"
                     titleSize="text-xl"
                     titleWeight={300}
                     sticky={false}
                     titleSerif={false}
                 />
-
             </div>
         )
     }
@@ -661,9 +800,10 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 onClick={() => {
                                     setActiveSection(s.id)
                                     setActiveSubSection(null) // Reset sub-section when switching main sections
-                                    // Logic: Unified Daily Duas / Spiritual States flow
+                                    // Logic: Unified Daily Duas / Spiritual States flow — skipped sublist
                                     if (['general', 'emotions', 'situational', 'ramadan'].includes(s.id)) {
-                                        setViewMode('sublist')
+                                        setViewMode('list')
+                                        setActiveSubSection(null)
                                     } else if (s.id === 'custom-prayers') {
                                         setViewMode('custom')
                                     } else {
@@ -701,44 +841,67 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         )
     }
 
-    // SUBLIST: List of sub-categories
-    if (viewMode === 'sublist') {
-        return (
-            <div className="pb-32 min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                {!embedded && <Header />}
-                <main className="px-6 flex flex-col gap-2 mt-8 animate-fade-in">
-                    {SUB_SECTIONS.map((sub, idx) => {
+    // SUB-LIST / LIST: Grouped or flat list of duas (matches DailyPage structure)
+    if (viewMode === 'sublist' || viewMode === 'list') {
+        const isDark = theme === 'dark'
+        const title = viewMode === 'list' && activeSubSection ? getListTitle() : getPageTitle()
+
+        // For root sections (general, emotions, situational), render grouped sections
+        const renderGroupedList = () => (
+            <main className="px-6 flex flex-col gap-1 mt-2 animate-fade-in">
+                {(groupedSections || []).map((group, gIdx) => (
+                    <div key={gIdx} className="mb-4">
+                        <h4
+                            className="text-[11px] font-black tracking-[0.12em] uppercase px-2 pt-4 pb-2"
+                            style={{ color: t(theme, 'text-muted'), opacity: 0.5 }}
+                        >
+                            {group.title}
+                        </h4>
+                        <div className="flex flex-col gap-1.5">
+                            {group.items.map((dua) => {
+                                const absoluteIdx = swipeDuas.findIndex(d => d.id === dua.id)
+                                return (
+                                    <button
+                                        key={dua.id}
+                                        onClick={() => {
+                                            setSelectedIndex(absoluteIdx !== -1 ? absoluteIdx : 0)
+                                            skippingFirstScroll.current = true
+                                            setViewMode('swipe')
+                                        }}
+                                        className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
+                                        style={{
+                                            background: t(theme, 'surface-1'),
+                                            border: `1px solid ${t(theme, 'border')}`,
+                                            boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)'
+                                        }}
+                                    >
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>
+                                                {getTitle(dua)}
+                                            </h4>
+                                        </div>
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    </div>
+                ))}
+            </main>
+        )
+
+        // For other views (Salawat, Robbana, or specific sub-sections), render a flat list
+        const renderFlatList = () => (
+            <main className="px-6 flex flex-col gap-1.5 mt-2 animate-fade-in">
+                {listDuas.length === 0 ? (
+                    <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest uppercase">No supplications found</div>
+                ) : (
+                    listDuas.map((dua, i) => {
+                        const absoluteIdx = swipeDuas.findIndex(d => d.id === dua.id)
                         return (
                             <button
-                                key={sub.id}
+                                key={dua.id}
                                 onClick={() => {
-                                    if (sub.id === 'custom-prayers') {
-                                        setActiveSection('custom')
-                                        setViewMode('custom')
-                                        return
-                                    }
-                                    // Enter swipe view — jump to the first dua of this sub-section within the full pool
-                                    setActiveSubSection(sub.id)
-                                    // Find the index of the first dua matching this sub-section in the full swipe pool
-                                    const firstSubDua = (() => {
-                                        if (sub.id === 'sneezing-yawning') return sectionWideDuas.find(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning') || d.tags?.includes('animals'))
-                                        if (activeSection === 'emotions') {
-                                            if (sub.id === 'fear') return sectionWideDuas.find(d => d.tags?.includes('fear') && !d.tags?.includes('trust'))
-                                            return sectionWideDuas.find(d => d.tags?.includes(sub.id))
-                                        }
-                                        if (activeSection === 'situational') {
-                                            if (sub.id === 'protection') return sectionWideDuas.find(d => d.tags?.includes('protection') && (d.category === 'prophetic' || d.category === 'travel'))
-                                            if (sub.id === 'travel') return sectionWideDuas.find(d => d.category === 'travel' && !d.tags?.includes('animals'))
-                                            return sectionWideDuas.find(d => d.category === sub.id)
-                                        }
-                                        if (activeSection === 'general') {
-                                            if (sub.id === 'prophetic') return sectionWideDuas.find(d => d.category === 'prophetic' && !d.tags?.some(t => ['sneezing', 'yawning', 'wudu', 'mosque'].includes(t)))
-                                            return sectionWideDuas.find(d => d.category === sub.id)
-                                        }
-                                        return sectionWideDuas.find(d => d.category === sub.id)
-                                    })()
-                                    const jumpIdx = firstSubDua ? sectionWideDuas.indexOf(firstSubDua) : 0
-                                    setSelectedIndex(jumpIdx !== -1 ? jumpIdx : 0)
+                                    setSelectedIndex(absoluteIdx !== -1 ? absoluteIdx : 0)
                                     skippingFirstScroll.current = true
                                     setViewMode('swipe')
                                 }}
@@ -750,17 +913,23 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                 }}
                             >
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="font-semibold text-[14px] tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>{sub.title}</h4>
-                                    {sub.count !== undefined && (
-                                        <p className="text-[10px] font-bold tracking-[0.1em] opacity-40 mt-0.5" style={{ color: t(theme, 'text-muted') }}>
-                                            {sub.count} {sub.count === 1 ? 'Supplication' : 'Supplications'}
-                                        </p>
-                                    )}
+                                    <h4 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>
+                                        {getTitle(dua)}
+                                    </h4>
                                 </div>
                             </button>
                         )
-                    })}
-                </main>
+                    })
+                )}
+            </main>
+        )
+
+        return (
+            <div className="pb-32 min-h-screen" style={{ background: t(theme, 'surface-0'), paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+                {!embedded && <Header />}
+                {/* For root sections (general, emotions, situational), render grouped sections */}
+                {/* For other views (Salawat, Robbana, or specific sub-sections), render a flat list */}
+                {(['general', 'emotions', 'situational'].includes(activeSection) && !activeSubSection) ? renderGroupedList() : renderFlatList()}
             </div>
         )
     }
@@ -769,55 +938,6 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
     
 
 
-    // LIST: Flat list of items (used for Salawat, Robbana, etc)
-    if (viewMode === 'list') {
-        const title = getPageTitle()
-        return (
-            <div className="pb-32 min-h-screen" style={{ background: t(theme, 'surface-0'), paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                {!embedded && (
-                    <div className="sticky top-0 z-20 pb-4" style={{ background: t(theme, 'surface-0') }}>
-                        <PageHeader
-                            title={title}
-                            onBack={goBack}
-                            padding="px-6 pt-10 pb-4"
-                            titleSize="text-xl"
-                            titleWeight={300}
-                            titleSerif={false}
-                            sticky={false}
-                        />
-                    </div>
-                )}
-                <main className="px-6 flex flex-col gap-2 mt-2 animate-fade-in">
-                    {listDuas.map((dua, idx) => (
-                        <button
-                            key={dua.id}
-                            onClick={() => {
-                                setSelectedIndex(idx)
-                                setViewMode('swipe')
-                            }}
-                            className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
-                            style={{
-                                background: t(theme, 'surface-1'),
-                                border: `1px solid ${t(theme, 'border')}`,
-                                boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)'
-                            }}
-                        >
-                            <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-bold text-[14px] relative overflow-hidden"
-                                style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
-                                <div className="absolute inset-0 opacity-[0.08]" style={{ background: t(theme, 'text-primary') }} />
-                                {idx + 1}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <h4 className="text-[14px] font-semibold truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>
-                                    {getTitle(dua, idx)}
-                                </h4>
-                            </div>
-                        </button>
-                    ))}
-                </main>
-            </div>
-        )
-    }
 
     // SWIPE: Full screen gallery
     if (viewMode === 'swipe') {
@@ -840,7 +960,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                         >
                             <IconChevronLeft size={22} />
                         </button>
-                        <span className="text-[15px] font-normal tracking-tight" style={{ color: t(theme, 'text-primary') }}>{getPageTitle()}</span>
+                        <span className="text-[15px] font-normal tracking-tight truncate max-w-[240px]" style={{ color: t(theme, 'text-primary') }}>
+                            {getPageTitle()}
+                        </span>
                     </div>
                 </div>
 
@@ -856,16 +978,16 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                     className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
                 >
                     {swipeDuas.map((dua, i) => (
-                        <div key={`${dua?.id}-${i}`} className="w-full h-full flex-shrink-0 snap-center flex flex-col p-6 pb-28 overflow-y-auto">
+                        <div key={`${dua?.id}-${i}`} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto h-full pb-40">
                             <DuaCard
                                 dua={{
                                     ...dua,
                                     reference: toTitleCase(dua.reference) || 'Supplication'
                                 }}
-                                label={(['robbana', 'salawat'].includes(dua.category) || ['robbana', 'salawat'].includes(activeSection)) ? (i + 1).toString() : getTitle(dua, i)}
+                                label=""
                                 type="dua"
-                                hideAudio={dua.category === 'custom'}
-                                hideCounter={['robbana', 'salawat', 'salah'].includes(dua.category) || ['robbana', 'salawat', 'salah'].includes(activeSection)}
+                                hideAudio={true}
+                                hideCounter={['robbana', 'salawat', 'salah', 'general', 'emotions', 'situational'].includes(dua.category) || ['robbana', 'salawat', 'salah'].includes(activeSection)}
                                 hideTags={true}
                                 onDelete={dua.category === 'custom' ? () => initiateDelete(dua.id) : null}
                             />
@@ -946,17 +1068,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
         return (
             <div className="pb-32 min-h-screen" style={{ background: t(theme, 'surface-0'), paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                <div className="sticky top-0 z-20 pb-4" style={{ background: t(theme, 'surface-0') }}>
-                    <PageHeader
-                        title="Personal Duas"
-                        onBack={goBack}
-                        padding="px-6 pt-10 pb-4"
-                        titleSize="text-xl"
-                        titleWeight={300}
-                        titleSerif={false}
-                        sticky={false}
-                    />
-                </div>
+                {!embedded && <Header />}
 
                 <main className="px-6 animate-fade-in mt-2 container mx-auto">
                     {/* Add Prayer Action */}
@@ -994,21 +1106,26 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                             </div>
                         ) : (
                             customPrayers.map((p, i) => (
-                                <div
+                                <button
                                     key={p.id}
-                                    className="group relative flex flex-col p-8 rounded-[2rem] transition-all duration-500 border hover:shadow-xl active:scale-[0.99] overflow-hidden"
+                                    onClick={() => {
+                                        setSelectedIndex(i)
+                                        skippingFirstScroll.current = true
+                                        setViewMode('swipe')
+                                    }}
+                                    className="group relative flex flex-col p-8 rounded-[2rem] text-left transition-all duration-500 border hover:shadow-xl active:scale-[0.99] overflow-hidden"
                                     style={{
                                         background: t(theme, 'surface-1'),
                                         borderColor: t(theme, 'border'),
                                         boxShadow: isDark ? 'none' : '0 10px 30px -10px rgba(0,0,0,0.05)'
                                     }}
                                 >
-                                    <div className="flex items-start justify-between mb-2">
+                                    <div className="flex items-start justify-between mb-2 w-full">
                                         <h3
                                             className="text-[20px] font-medium tracking-tight italic"
                                             style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}
                                         >
-                                            {p.transliteration || 'Personal Dua'}
+                                            {p.transliteration || 'Personal Prayer'}
                                         </h3>
                                         <div className="flex items-center gap-3">
                                             <button
@@ -1038,7 +1155,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     >
                                         "{p.translation || 'No translation provided'}"
                                     </p>
-                                </div>
+                                </button>
                             ))
                         )}
                     </div>
