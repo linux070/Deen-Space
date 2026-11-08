@@ -5,7 +5,7 @@ import { FavoritesProvider } from './context/FavoritesContext'
 import { AudioProvider } from './context/AudioContext'
 import { useData } from './hooks/useData'
 import { useEffect } from 'react'
-import BottomNav from './components/BottomNav'
+import Navigation from './components/Navigation'
 import HomePage from './pages/HomePage'
 import DuaPage from './pages/DuaPage'
 import PraisePage from './pages/PraisePage'
@@ -14,6 +14,16 @@ import FavoritesPage from './pages/FavoritesPage'
 import SettingsPage from './pages/SettingsPage'
 import TasbihPage from './pages/TasbihPage'
 import DailyPage from './pages/DailyPage'
+import QuranPage from './pages/QuranPage'
+import SurahReaderPage from './pages/SurahReaderPage'
+
+function ScrollToTop() {
+    const { pathname } = useLocation()
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [pathname])
+    return null
+}
 
 function LibraryPageWrapper({ duas }) {
     const { section } = useParams()
@@ -38,10 +48,13 @@ function AppContent() {
 
     return (
         <>
+            <Navigation />
             <div className="max-w-5xl mx-auto min-h-screen">
                 <Routes>
                     <Route path="/" element={<HomePage duas={duas} asma={asma} />} />
                     <Route path="/dua" element={<DuaPage duas={duas} asma={asma} />} />
+                    <Route path="/quran" element={<QuranPage />} />
+                    <Route path="/quran/:surahId" element={<SurahReaderPage />} />
                     <Route path="/daily" element={<DailyPage duas={duas} />} />
                     <Route path="/daily/:category" element={<DailyPage duas={duas} />} />
                     <Route path="/tasbih" element={<TasbihPage />} />
@@ -50,11 +63,11 @@ function AppContent() {
                     <Route path="/library/:section" element={<LibraryPageWrapper duas={duas} />} />
                     <Route path="/qibla" element={<div className="flex items-center justify-center h-screen opacity-50 font-bold uppercase tracking-widest text-[0.625rem]">Qibla Coming Soon</div>} />
                     <Route path="/favorites" element={<FavoritesPage duas={duas} asma={asma} />} />
+                    <Route path="/bookmarks" element={<FavoritesPage duas={duas} asma={asma} />} />
                     <Route path="/settings" element={<SettingsPage />} />
                 </Routes>
             </div>
-            <BottomNav />
-        </>
+            </>
     )
 }
 
@@ -73,6 +86,7 @@ export default function App() {
             <FavoritesProvider>
                 <AudioProvider>
                     <BrowserRouter>
+                        <ScrollToTop />
                         <AppContent />
                         <Analytics />
                     </BrowserRouter>

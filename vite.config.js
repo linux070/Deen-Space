@@ -13,12 +13,23 @@ export default defineConfig({
         'favicon.png',
         'data/duas.json',
         'data/asma.json',
+        'data/quran/**/*',
         'fonts/**/*',
         'audio/**/*',
       ],
       workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,json,mp3}'],
         runtimeCaching: [
+          {
+            urlPattern: /\/data\/quran\/.*\.json$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'quran-offline-data',
+              expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',

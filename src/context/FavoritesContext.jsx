@@ -21,7 +21,7 @@ export function FavoritesProvider({ children }) {
             const key = item.id
             const exists = prev.find(f => f.id === key)
             if (exists) return prev.filter(f => f.id !== key)
-            return [...prev, { id: key, type: item.type || 'dua', addedAt: Date.now() }]
+            return [...prev, { ...item, type: item.type || 'dua', addedAt: Date.now() }]
         })
     }, [])
 

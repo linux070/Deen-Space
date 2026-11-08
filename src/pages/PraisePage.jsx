@@ -2,47 +2,33 @@ import { useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../context/SettingsContext'
 import { useFavorites } from '../context/FavoritesContext'
-import { IconHeartFill, IconHeart, IconSearch, IconStar, IconBook, IconChevronLeft, IconChevronRight } from '../components/Icons'
+import { IconHeartFill, IconHeart, IconSearch, IconChevronLeft, IconChevronRight, IconX } from '../components/Icons'
 import { t } from '../utils/theme'
-import DuaCard from '../components/DuaCard'
 import PageHeader from '../components/PageHeader'
 
-export default function PraisePage({ duas, asma, embedded = false }) {
+export default function PraisePage({ asma = [] }) {
     const { theme } = useSettings()
     const navigate = useNavigate()
     const { toggle, isFavorite } = useFavorites()
+    const isDark = theme === 'dark'
 
     // View state: 'list' (names) -> 'swipe' (detail view for names)
     const [viewMode, setViewMode] = useState('list')
-    const [subTab, setSubTab] = useState('names')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [search, setSearch] = useState('')
 
     const scrollRef = useRef(null)
     const skippingFirstScroll = useRef(false)
 
-    // Filtered data
-    const salawatDuas = useMemo(() => duas.filter(d => d.category === 'salawat'), [duas])
-
-
     const filteredNames = useMemo(() => {
         if (!search.trim()) return asma
         const q = search.toLowerCase()
         return asma.filter(n =>
-            n.transliteration.toLowerCase().includes(q) ||
-            n.meaning.toLowerCase().includes(q) ||
-            n.arabic_name.includes(search)
+            n.transliteration?.toLowerCase().includes(q) ||
+            n.meaning?.toLowerCase().includes(q) ||
+            n.arabic_name?.includes(search)
         )
     }, [asma, search])
-
-    const scrollToName = (idx) => {
-        if (!scrollRef.current) return
-        scrollRef.current.scrollTo({
-            left: idx * scrollRef.current.offsetWidth,
-            behavior: 'smooth'
-        })
-        setSelectedIndex(idx)
-    }
 
     const handleSwipeScroll = (e) => {
         if (skippingFirstScroll.current && e.target.scrollLeft === 0 && selectedIndex > 0) return
@@ -50,6 +36,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
         const idx = Math.round(e.target.scrollLeft / e.target.offsetWidth)
         if (idx !== selectedIndex) setSelectedIndex(idx)
     }
+
     const goBack = () => {
         if (search) {
             setSearch('')
@@ -60,94 +47,189 @@ export default function PraisePage({ duas, asma, embedded = false }) {
             return
         }
         if (viewMode === 'list') {
-            navigate('/dua')
+            navigate(-1)
             return
         }
     }
 
-    // LIST: Salawat or Names
+    // ─── 1. LIST VIEW: Asma-ul-Husna (Continuous Ledger Card) ───
     if (viewMode === 'list') {
-        const isDark = theme === 'dark'
         return (
-            <div className="pb-32 min-h-screen animate-fade-in" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-                {/* INLINE HEADER to prevent focus loss on re-render */}
-                <div className="sticky top-0 z-20 pb-6" style={{ background: t(theme, 'surface-0') }}>
+            <div className="pb-36 min-h-screen animate-fade-in" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 0.5rem)' }}>
+                {/* Sticky Header with Title & Back */}
+                <div className="sticky top-0 z-20 pb-3" style={{ background: t(theme, 'surface-0') }}>
                     <PageHeader
                         title="Asma-ul-Husna"
+                        subtitle="The 99 Beautiful Names of Allah"
                         onBack={goBack}
-                        padding="px-6 pt-8"
-                        titleSize="text-xl"
-                        titleWeight={300}
+                        padding="px-4 sm:px-6 pt-6 sm:pt-8 pb-3"
+                        titleSize="text-xl sm:text-2xl"
+                        titleWeight={400}
                         sticky={false}
                         titleSerif={false}
                     />
 
+                    {/* Integrated Search Bar */}
+                    <div className="px-4 sm:px-6 max-w-3xl mx-auto w-full mt-1">
+                        <div
+                            className="relative flex items-center rounded-2xl px-4 py-3 transition-all border shadow-xs focus-within:border-amber-500/80 focus-within:ring-2 focus-within:ring-amber-500/15"
+                            style={{
+                                background: t(theme, 'surface-1'),
+                                borderColor: t(theme, 'border'),
+                            }}
+                        >
+                            <IconSearch size={17} className="opacity-60 mr-3 flex-shrink-0" style={{ color: t(theme, 'accent') }} />
+                            <input
+                                type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Search by name, meaning, or Arabic..."
+                                className="w-full bg-transparent outline-none text-xs sm:text-sm placeholder:opacity-40 font-medium"
+                                style={{ color: t(theme, 'text-primary') }}
+                            />
+                            {search && (
+                                <button
+                                    type="button"
+                                    onClick={() => setSearch('')}
+                                    aria-label="Clear search"
+                                    className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90 hover:opacity-100 opacity-60 flex-shrink-0 ml-2 shadow-xs cursor-pointer"
+                                    style={{
+                                        background: t(theme, 'surface-2'),
+                                        color: t(theme, 'text-muted'),
+                                    }}
+                                >
+                                    <IconX size={13} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
-                <main className="px-6 flex flex-col gap-1.5 -mt-2">
-                    <div className="flex flex-col items-center py-4 opacity-80 animate-fade-in">
+                <main className="px-4 sm:px-6 flex flex-col max-w-3xl mx-auto w-full mt-2">
+                    {/* Bismillah Sacred Inscription */}
+                    <div className="flex flex-col items-center py-4 opacity-80 animate-fade-in text-center select-none">
                         <p
-                            className="text-[1.3rem] md:text-3xl text-center mb-1 whitespace-nowrap overflow-hidden text-ellipsis"
-                            style={{ fontFamily: 'var(--script-font)', color: t(theme, 'text-primary'), direction: 'rtl' }}
+                            className="text-xl sm:text-2xl md:text-3xl text-center mb-1 leading-relaxed"
+                            style={{ fontFamily: 'var(--font-serif-arabic)', color: t(theme, 'text-primary'), direction: 'rtl' }}
                         >
-                            بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ
+                            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                         </p>
-                        <p className="text-[10px] font-bold tracking-[0.2em] opacity-40 mt-1 text-center">
+                        <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 mt-1">
                             In the Name of Allah, the Most Beneficent, the Most Merciful
                         </p>
                     </div>
 
+                    {/* Ledger List */}
                     {filteredNames.length === 0 ? (
-                        <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest">No names found</div>
+                        <div
+                            className="rounded-2xl p-12 text-center border my-4"
+                            style={{ background: t(theme, 'surface-1'), borderColor: t(theme, 'border') }}
+                        >
+                            <p className="text-xs opacity-50 font-medium tracking-wide" style={{ color: t(theme, 'text-muted') }}>
+                                No divine names matching "{search}"
+                            </p>
+                        </div>
                     ) : (
-                        filteredNames.map((name, i) => (
-                            <button
-                                key={name.id}
-                                onClick={() => { setSelectedIndex(i); skippingFirstScroll.current = true; setViewMode('swipe'); }}
-                                className="group flex gap-3.5 items-center p-3 rounded-2xl text-left transition-all active:scale-[0.98] hover:shadow-lg"
-                                style={{
-                                    background: t(theme, 'surface-1'),
-                                    border: `1px solid ${t(theme, 'border')}`,
-                                    boxShadow: isDark ? 'none' : '0 2px 8px rgba(0,0,0,0.01)'
-                                }}
-                            >
-                                <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl font-semibold text-xs relative overflow-hidden"
-                                    style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
-                                    <div className="absolute inset-0 opacity-10" style={{ background: t(theme, 'text-primary') }} />
-                                    {name.id}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between gap-4">
-                                        <h4 className="text-[14px] font-medium text-primary truncate tracking-tight" style={{ color: t(theme, 'text-primary') }}>{name.transliteration}</h4>
-                                        <span className="text-[20px] pb-1" style={{ fontFamily: 'var(--script-font)', direction: 'rtl', color: t(theme, 'text-primary') }}>{name.arabic_name}</span>
-                                    </div>
-                                    <p className="text-[11px] font-bold tracking-[0.02em] opacity-40 -mt-1" style={{ color: t(theme, 'text-muted') }}>
-                                        {name.meaning}
-                                    </p>
-                                </div>
-                            </button>
-                        ))
+                        <div
+                            className="rounded-2xl overflow-hidden mb-8 transition-all duration-200"
+                            style={{
+                                background: t(theme, 'surface-1'),
+                                border: `1px solid ${t(theme, 'border')}`,
+                                boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
+                            }}
+                        >
+                            {filteredNames.map((name, i) => {
+                                const isLast = i === filteredNames.length - 1
+                                return (
+                                    <button
+                                        key={name.id}
+                                        type="button"
+                                        onClick={() => {
+                                            setSelectedIndex(i)
+                                            skippingFirstScroll.current = true
+                                            setViewMode('swipe')
+                                        }}
+                                        className="group w-full flex items-center justify-between gap-3 sm:gap-4 px-4 sm:px-5 py-3.5 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                        style={{
+                                            borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
+                                        }}
+                                    >
+                                        {/* Left: Number Squircle Badge */}
+                                        <div
+                                            className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-mono font-semibold transition-transform group-hover:scale-105 shadow-xs"
+                                            style={{
+                                                background: t(theme, 'surface-2'),
+                                                color: t(theme, 'accent'),
+                                                border: `1px solid ${t(theme, 'border')}`,
+                                            }}
+                                        >
+                                            {name.id}
+                                        </div>
+
+                                        {/* Middle: Transliteration & English Meaning */}
+                                        <div className="flex-1 min-w-0 pr-2">
+                                            <h4
+                                                className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                style={{ color: t(theme, 'text-primary') }}
+                                            >
+                                                {name.transliteration}
+                                            </h4>
+                                            <p
+                                                className="text-[11px] sm:text-xs opacity-55 truncate mt-0.5 leading-normal"
+                                                style={{ color: t(theme, 'text-muted') }}
+                                            >
+                                                {name.meaning}
+                                            </p>
+                                        </div>
+
+                                        {/* Right: Sacred Arabic Name Calligraphy */}
+                                        <div className="flex items-center gap-3 flex-shrink-0">
+                                            <span
+                                                className="text-lg sm:text-xl font-normal select-text pt-0.5"
+                                                style={{
+                                                    fontFamily: 'var(--font-serif-arabic)',
+                                                    color: t(theme, 'text-primary'),
+                                                    direction: 'rtl',
+                                                }}
+                                            >
+                                                {name.arabic_name}
+                                            </span>
+                                            <IconChevronRight
+                                                size={14}
+                                                className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all hidden sm:block"
+                                                style={{ color: t(theme, 'text-primary') }}
+                                            />
+                                        </div>
+                                    </button>
+                                )
+                            })}
+                        </div>
                     )}
                 </main>
             </div>
         )
     }
 
-    // SWIPE: Detailed 99 Names
+    // ─── 2. SWIPE VIEW: Detailed Full-Screen Cards ───
     if (viewMode === 'swipe') {
+        const currentName = filteredNames[selectedIndex]
+        const favKey = `asma-${currentName?.id}`
+        const isFav = isFavorite(favKey)
+
         return (
             <div className="fixed inset-0 z-[100] flex flex-col animate-modal-slide-up" style={{ background: t(theme, 'surface-0') }}>
-                {/* Header Sub-Nav */}
+                {/* Header Navigation */}
                 <div
                     className="flex items-center justify-between px-6"
                     style={{
                         background: t(theme, 'surface-0'),
                         paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)',
-                        paddingBottom: '1.5rem'
+                        paddingBottom: '1.5rem',
                     }}
                 >
                     <div className="flex items-center gap-3">
                         <button
+                            type="button"
                             onClick={() => setViewMode('list')}
                             className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90"
                             style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
@@ -155,48 +237,89 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                             <IconChevronLeft size={22} />
                         </button>
                         <span className="text-[15px] font-normal tracking-tight" style={{ color: t(theme, 'text-primary') }}>
-                            {filteredNames[selectedIndex]?.transliteration} {selectedIndex + 1} / {filteredNames.length}
+                            {currentName?.transliteration} · {selectedIndex + 1} of {filteredNames.length}
                         </span>
                     </div>
 
                     <button
-                        onClick={() => toggle({ id: `asma-${filteredNames[selectedIndex]?.id}`, type: 'asma' })}
+                        type="button"
+                        onClick={() => toggle({ id: favKey, type: 'asma' })}
                         className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90"
                         style={{ background: t(theme, 'surface-2'), color: t(theme, 'accent') }}
                     >
-                        {isFavorite(`asma-${filteredNames[selectedIndex]?.id}`) ? <IconHeartFill size={18} className="text-red-500" /> : <IconHeart size={18} />}
+                        {isFav ? <IconHeartFill size={18} className="text-red-500" /> : <IconHeart size={18} />}
                     </button>
                 </div>
 
-                {/* Content */}
+                {/* Horizontal Swipe Carousel */}
                 <div
                     ref={(el) => {
-                        scrollRef.current = el;
+                        scrollRef.current = el
                         if (el && viewMode === 'swipe' && el.scrollLeft === 0 && selectedIndex > 0) {
-                            el.scrollLeft = selectedIndex * el.offsetWidth;
+                            el.scrollLeft = selectedIndex * el.offsetWidth
                         }
                     }}
                     onScroll={handleSwipeScroll}
                     className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
                 >
-                    {filteredNames.map((name, i) => {
-                        const fav = isFavorite(`asma-${name.id}`)
+                    {filteredNames.map((name) => {
                         return (
-                            <div key={name.id} className="w-full flex-shrink-0 snap-center flex flex-col p-8 overflow-y-auto">
-                                <div className="flex-1 flex flex-col items-center justify-center text-center">
-                                    <div className="relative group mb-12">
-                                        <div className="w-52 h-52 rounded-[3.5rem] flex items-center justify-center text-6xl shadow-lg transition-transform" style={{ background: t(theme, 'surface-1'), border: `1px solid ${t(theme, 'border')}`, color: t(theme, 'accent'), fontFamily: 'var(--script-font)', direction: 'rtl' }}>
+                            <div key={name.id} className="w-full flex-shrink-0 snap-center flex flex-col p-6 sm:p-8 overflow-y-auto">
+                                <div className="flex-1 flex flex-col items-center justify-center text-center max-w-md mx-auto w-full">
+                                    {/* Number Pill */}
+                                    <span
+                                        className="text-xs font-mono font-bold px-2.5 py-1 rounded-full mb-6 border"
+                                        style={{
+                                            background: t(theme, 'surface-1'),
+                                            borderColor: t(theme, 'border'),
+                                            color: t(theme, 'accent'),
+                                        }}
+                                    >
+                                        Name {name.id} of 99
+                                    </span>
+
+                                    {/* Sacred Arabic Calligraphy Display Box */}
+                                    <div className="relative group mb-8">
+                                        <div
+                                            className="w-48 h-48 sm:w-56 sm:h-56 rounded-[3rem] flex items-center justify-center text-5xl sm:text-6xl shadow-md transition-transform"
+                                            style={{
+                                                background: t(theme, 'surface-1'),
+                                                border: `1px solid ${t(theme, 'border')}`,
+                                                color: t(theme, 'accent'),
+                                                fontFamily: 'var(--font-serif-arabic)',
+                                                direction: 'rtl',
+                                            }}
+                                        >
                                             {name.arabic_name}
                                         </div>
                                     </div>
 
-                                    <h2 className="text-4xl font-black mb-2 tracking-tight" style={{ color: t(theme, 'text-primary') }}>{name.transliteration}</h2>
-                                    <p className="text-lg opacity-60 italic mb-10" style={{ color: t(theme, 'text-secondary'), fontFamily: 'var(--font-serif-body)' }}>{name.meaning}</p>
+                                    {/* Transliteration & Meaning */}
+                                    <h2 className="text-3xl sm:text-4xl font-bold mb-2 tracking-tight" style={{ color: t(theme, 'text-primary') }}>
+                                        {name.transliteration}
+                                    </h2>
+                                    <p
+                                        className="text-base sm:text-lg opacity-65 italic mb-8"
+                                        style={{ color: t(theme, 'text-secondary'), fontFamily: 'var(--font-serif-body)' }}
+                                    >
+                                        {name.meaning}
+                                    </p>
 
+                                    {/* Spiritual Benefit / Context */}
                                     {name.benefit && (
-                                        <div className="p-8 rounded-[2.5rem]" style={{ background: t(theme, 'surface-1'), border: `1px solid ${t(theme, 'border')}` }}>
-                                            <p className="text-[10px] font-black tracking-widest mb-3 opacity-30">Benefit</p>
-                                            <p className="text-sm leading-relaxed" style={{ color: t(theme, 'text-primary') }}>{name.benefit}</p>
+                                        <div
+                                            className="p-6 sm:p-7 rounded-[2rem] border text-left w-full"
+                                            style={{
+                                                background: t(theme, 'surface-1'),
+                                                borderColor: t(theme, 'border'),
+                                            }}
+                                        >
+                                            <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2 opacity-40" style={{ color: t(theme, 'text-muted') }}>
+                                                Contemplation & Benefit
+                                            </p>
+                                            <p className="text-xs sm:text-sm leading-relaxed" style={{ color: t(theme, 'text-primary') }}>
+                                                {name.benefit}
+                                            </p>
                                         </div>
                                     )}
                                 </div>
@@ -204,7 +327,7 @@ export default function PraisePage({ duas, asma, embedded = false }) {
                         )
                     })}
                 </div>
-            </div >
+            </div>
         )
     }
 

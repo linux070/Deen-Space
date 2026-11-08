@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
 import DuaCard from '../components/DuaCard'
-import { IconChevronLeft, IconPrayerMat, IconSunrise, IconSunset, IconBeads } from '../components/Icons'
+import { IconChevronLeft, IconChevronRight, IconPrayerMat, IconSunrise, IconSunset, IconBeads } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 import MiniTasbih from '../components/MiniTasbih'
 import { toTitleCase } from '../utils/text'
@@ -227,35 +227,87 @@ export default function DailyPage({ duas }) {
     const renderContent = () => {
         if (viewMode === 'landing') {
             return (
-                <main className="px-6 flex flex-col gap-2 mt-8 animate-fade-in">
-                    {CATEGORIES.map((cat, idx) => (
-                        <button
-                            key={cat.key}
-                            onClick={() => {
-                                setActiveCategory(cat.key)
-                                setViewMode('sublist')
-                            }}
-                            className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
+                <main className="px-4 sm:px-6 flex flex-col pb-16 mt-4 animate-fade-in max-w-3xl mx-auto w-full">
+                    {/* Continuous list format without individual button cards */}
+                    <div
+                        className="rounded-2xl border overflow-hidden transition-all duration-200"
+                        style={{
+                            background: t(theme, 'surface-1'),
+                            borderColor: t(theme, 'border'),
+                            boxShadow: theme === 'dark' ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
+                        }}
+                    >
+                        {CATEGORIES.map((cat, idx) => {
+                            const isLast = idx === CATEGORIES.length - 1
+                            const Icon = cat.icon
+                            return (
+                                <button
+                                    key={cat.key}
+                                    type="button"
+                                    onClick={() => {
+                                        setActiveCategory(cat.key)
+                                        setViewMode('sublist')
+                                    }}
+                                    className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                    style={{
+                                        borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
+                                    }}
+                                >
+                                    <div className="flex items-center gap-3.5 min-w-0 flex-1 pr-3">
+                                        <div
+                                            className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-300 relative overflow-hidden"
+                                            style={{
+                                                background: t(theme, 'surface-2'),
+                                                color: t(theme, 'text-primary'),
+                                            }}
+                                        >
+                                            <div className="absolute inset-0 opacity-[0.08]" style={{ background: t(theme, 'text-primary') }} />
+                                            <Icon size={20} className="relative z-10 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h3
+                                                className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                style={{ color: t(theme, 'text-primary') }}
+                                            >
+                                                {cat.label}
+                                            </h3>
+                                            <p
+                                                className="text-[11px] font-medium opacity-50 tracking-tight truncate mt-0.5"
+                                                style={{ color: t(theme, 'text-muted') }}
+                                            >
+                                                {cat.subtitle}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <IconChevronRight
+                                        size={16}
+                                        className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all flex-shrink-0"
+                                        style={{ color: t(theme, 'text-primary') }}
+                                    />
+                                </button>
+                            )
+                        })}
+                    </div>
+
+                    <div
+                        className="mt-10 mb-8 p-8 sm:p-10 rounded-2xl text-center relative overflow-hidden animate-fade-in border"
+                        style={{
+                            background: t(theme, 'surface-1'),
+                            borderColor: t(theme, 'border'),
+                        }}
+                    >
+                        <p
+                            className="text-lg sm:text-xl opacity-90 leading-relaxed italic max-w-sm mx-auto"
                             style={{
-                                background: t(theme, 'surface-1'),
-                                border: `1px solid ${t(theme, 'border')}`,
-                                boxShadow: theme === 'dark' ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
-                                animationDelay: `${idx * 150}ms`
+                                color: t(theme, 'text-primary'),
+                                fontFamily: 'var(--font-serif-body)',
                             }}
                         >
-                            <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-500 relative overflow-hidden" style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
-                                <div className="absolute inset-0 opacity-[0.08]" style={{ background: t(theme, 'text-primary') }} />
-                                <cat.icon size={20} className="relative z-10" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <h3 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>{cat.label}</h3>
-                                <p className="text-[10px] font-bold tracking-[0.05em] opacity-40 mt-0.5" style={{ color: t(theme, 'text-muted') }}>{cat.subtitle}</p>
-                            </div>
-                        </button>
-                    ))}
-                    <div className="mt-12 mb-8 p-10 rounded-[3rem] text-center relative overflow-hidden animate-fade-in" style={{ background: t(theme, 'surface-1'), border: `1px solid ${t(theme, 'border')}`, animationDelay: '600ms' }}>
-                        <p className="text-xl md:text-2xl opacity-90 leading-relaxed italic max-w-sm mx-auto" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>"Verily, in the remembrance of Allah do hearts find rest."</p>
-                        <p className="text-[10px] mt-6 opacity-40 font-bold tracking-[0.1em] transition-all">Surah Ar-Ra'd 13:28</p>
+                            &ldquo;Verily, in the remembrance of Allah do hearts find rest.&rdquo;
+                        </p>
+                        <p className="text-[11px] mt-4 opacity-40 font-bold tracking-[0.15em] uppercase">
+                            Surah Ar-Ra&apos;d 13:28
+                        </p>
                     </div>
                 </main>
             )
@@ -263,54 +315,166 @@ export default function DailyPage({ duas }) {
 
         if (viewMode === 'sublist') {
             return activeCategory === 'solah' ? (
-                <main className="px-6 flex flex-col gap-1 mt-2 animate-fade-in">
+                <main className="px-4 sm:px-6 flex flex-col pb-16 mt-2 animate-fade-in max-w-3xl mx-auto w-full">
                     {SOLAH_SECTIONS.map((section) => {
                         const sectionDuas = section.ids.map(id => categoryDuas.find(d => d.id === id)).filter(Boolean)
                         if (sectionDuas.length === 0) return null
                         return (
-                            <div key={section.key} className="mb-4">
-                                <h4 className="text-[11px] font-black tracking-[0.12em] uppercase px-2 pt-4 pb-2" style={{ color: t(theme, 'text-muted'), opacity: 0.5 }}>{section.label}</h4>
-                                <div className="flex flex-col gap-1.5">
-                                    {sectionDuas.map((dua) => (
-                                        <button
-                                            key={dua.id}
-                                            onClick={() => {
-                                                const idx = categoryDuas.findIndex(d => d.id === dua.id)
-                                                setSelectedIndex(idx !== -1 ? idx : 0)
-                                                skippingFirstScroll.current = true
-                                                setViewMode('swipe')
-                                            }}
-                                            className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
-                                            style={{ background: t(theme, 'surface-1'), border: `1px solid ${t(theme, 'border')}`, boxShadow: theme === 'dark' ? 'none' : '0 2px 10px rgba(0,0,0,0.015)' }}
-                                        >
-                                            <div className="flex-1 min-w-0"><h4 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>{getDuaTitle(dua)}</h4></div>
-                                        </button>
-                                    ))}
+                            <div key={section.key} className="mb-6">
+                                <h4
+                                    className="text-[11px] font-bold tracking-[0.2em] uppercase px-2 mb-2 select-none opacity-45"
+                                    style={{ color: t(theme, 'text-muted') }}
+                                >
+                                    {section.label}
+                                </h4>
+                                <div
+                                    className="rounded-2xl border overflow-hidden transition-all duration-200"
+                                    style={{
+                                        background: t(theme, 'surface-1'),
+                                        borderColor: t(theme, 'border'),
+                                        boxShadow: theme === 'dark' ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
+                                    }}
+                                >
+                                    {sectionDuas.map((dua, dIdx) => {
+                                        const idx = categoryDuas.findIndex(d => d.id === dua.id)
+                                        const isLast = dIdx === sectionDuas.length - 1
+                                        const previewText = dua.transliteration || (dua.translation && dua.translation.en) || (typeof dua.translation === 'string' ? dua.translation : '')
+
+                                        return (
+                                            <button
+                                                key={dua.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedIndex(idx !== -1 ? idx : 0)
+                                                    skippingFirstScroll.current = true
+                                                    setViewMode('swipe')
+                                                }}
+                                                className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                                style={{
+                                                    borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
+                                                }}
+                                            >
+                                                <div className="flex-1 min-w-0 pr-3">
+                                                    <h4
+                                                        className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                        style={{ color: t(theme, 'text-primary') }}
+                                                    >
+                                                        {getDuaTitle(dua)}
+                                                    </h4>
+                                                    {previewText && (
+                                                        <p
+                                                            className="text-[12px] opacity-60 truncate leading-tight mt-1 italic font-serif"
+                                                            style={{
+                                                                color: t(theme, 'text-muted'),
+                                                                fontFamily: 'var(--font-serif-body)',
+                                                            }}
+                                                        >
+                                                            {previewText}
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex items-center gap-2 flex-shrink-0">
+                                                    {dua.repeat > 1 && (
+                                                        <span
+                                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md leading-none"
+                                                            style={{
+                                                                background: t(theme, 'accent-soft'),
+                                                                color: t(theme, 'accent'),
+                                                            }}
+                                                        >
+                                                            {dua.repeat}×
+                                                        </span>
+                                                    )}
+                                                    <IconChevronRight
+                                                        size={15}
+                                                        className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
+                                                        style={{ color: t(theme, 'text-primary') }}
+                                                    />
+                                                </div>
+                                            </button>
+                                        )
+                                    })}
                                 </div>
                             </div>
                         )
                     })}
                 </main>
             ) : (
-                <main className="px-6 flex flex-col gap-1.5 mt-2 animate-fade-in">
+                <main className="px-4 sm:px-6 flex flex-col pb-16 mt-2 animate-fade-in max-w-3xl mx-auto w-full">
                     {categoryDuas.length === 0 ? (
-                        <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest uppercase">No duas found</div>
+                        <div className="text-center py-20 opacity-30 text-[11px] font-bold tracking-widest uppercase">
+                            No duas found
+                        </div>
                     ) : (
-                        categoryDuas.map((dua) => (
-                            <button
-                                key={dua.id}
-                                onClick={() => {
-                                    const idx = categoryDuas.findIndex(d => d.id === dua.id)
-                                    setSelectedIndex(idx !== -1 ? idx : 0)
-                                    skippingFirstScroll.current = true
-                                    setViewMode('swipe')
-                                }}
-                                className="group flex items-center gap-4 p-4 rounded-[1.5rem] text-left transition-all active:scale-[0.98] hover:shadow-md"
-                                style={{ background: t(theme, 'surface-1'), border: `1px solid ${t(theme, 'border')}`, boxShadow: theme === 'dark' ? 'none' : '0 2px 10px rgba(0,0,0,0.015)' }}
-                            >
-                                <div className="flex-1 min-w-0"><h4 className="text-[14px] font-semibold tracking-tight truncate" style={{ color: t(theme, 'text-primary') }}>{getDuaTitle(dua)}</h4></div>
-                            </button>
-                        ))
+                        <div
+                            className="rounded-2xl border overflow-hidden transition-all duration-200"
+                            style={{
+                                background: t(theme, 'surface-1'),
+                                borderColor: t(theme, 'border'),
+                                boxShadow: theme === 'dark' ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
+                            }}
+                        >
+                            {categoryDuas.map((dua, dIdx) => {
+                                const isLast = dIdx === categoryDuas.length - 1
+                                const previewText = dua.transliteration || (dua.translation && dua.translation.en) || (typeof dua.translation === 'string' ? dua.translation : '')
+
+                                return (
+                                    <button
+                                        key={dua.id}
+                                        type="button"
+                                        onClick={() => {
+                                            setSelectedIndex(dIdx)
+                                            skippingFirstScroll.current = true
+                                            setViewMode('swipe')
+                                        }}
+                                        className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                        style={{
+                                            borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
+                                        }}
+                                    >
+                                        <div className="flex-1 min-w-0 pr-3">
+                                            <h4
+                                                className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                style={{ color: t(theme, 'text-primary') }}
+                                            >
+                                                {getDuaTitle(dua)}
+                                            </h4>
+                                            {previewText && (
+                                                <p
+                                                    className="text-[12px] opacity-60 truncate leading-tight mt-1 italic font-serif"
+                                                    style={{
+                                                        color: t(theme, 'text-muted'),
+                                                        fontFamily: 'var(--font-serif-body)',
+                                                    }}
+                                                >
+                                                    {previewText}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center gap-2 flex-shrink-0">
+                                            {dua.repeat > 1 && (
+                                                <span
+                                                    className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md leading-none"
+                                                    style={{
+                                                        background: t(theme, 'accent-soft'),
+                                                        color: t(theme, 'accent'),
+                                                    }}
+                                                >
+                                                    {dua.repeat}×
+                                                </span>
+                                            )}
+                                            <IconChevronRight
+                                                size={15}
+                                                className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
+                                                style={{ color: t(theme, 'text-primary') }}
+                                            />
+                                        </div>
+                                    </button>
+                                )
+                            })}
+                        </div>
                     )}
                 </main>
             )
@@ -325,7 +489,9 @@ export default function DailyPage({ duas }) {
                             <button onClick={goBack} className="w-9 h-9 flex items-center justify-center rounded-2xl transition-all active:scale-90" style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}>
                                 <IconChevronLeft size={22} />
                             </button>
-                            <span className="text-[15px] font-normal tracking-tight truncate max-w-[240px]" style={{ color: t(theme, 'text-primary') }}>{getDuaTitle(currentDua)}</span>
+                            <span className="text-[15px] font-normal tracking-tight truncate max-w-[240px]" style={{ color: t(theme, 'text-primary') }}>
+                                {getDuaTitle(currentDua)}
+                            </span>
                         </div>
                     </div>
                     <div
@@ -340,12 +506,23 @@ export default function DailyPage({ duas }) {
                     >
                         {categoryDuas.map((dua) => (
                             <div key={dua.id} className="w-full flex-shrink-0 snap-center flex flex-col p-6 overflow-y-auto h-full pb-28">
-                                <DuaCard dua={dua} type="dua" hideAudio={true} hideCounter={dua.category === 'salah'} hideRepeat={dua.category === 'salah'} hideTags={true} />
+                                <DuaCard
+                                    dua={dua}
+                                    type="dua"
+                                    hideAudio={true}
+                                    hideCounter={dua.category === 'salah'}
+                                    hideRepeat={dua.category === 'salah'}
+                                    hideTags={true}
+                                />
                             </div>
                         ))}
                     </div>
                     {categoryDuas[selectedIndex]?.repeat > 1 && categoryDuas[selectedIndex]?.category !== 'salah' && (
-                        <MiniTasbih target={categoryDuas[selectedIndex].repeat} count={miniTasbihCount} onCountChange={setMiniTasbihCount} />
+                        <MiniTasbih
+                            target={categoryDuas[selectedIndex].repeat}
+                            count={miniTasbihCount}
+                            onCountChange={setMiniTasbihCount}
+                        />
                     )}
                 </div>
             )

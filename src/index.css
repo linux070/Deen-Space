@@ -1,10 +1,13 @@
 @import "tailwindcss";
 
 /* ───────────────────────────────────────────────
-   DESIGN TOKENS
+   DESIGN TOKENS (Tailwind v4 & Standard CSS)
+   3 Authentic Themes:
+   1. Dark: Charcoal Obsidian & Artisan Gold
+   2. Cream: Warm Antique Parchment & Amber Gold
+   3. Light: Pure Crisp Modern White & Slate Gold
    ─────────────────────────────────────────────── */
-@theme {
-  /* Dark mode — deep charcoal with gold accents */
+:root, .dark, html.dark, [data-theme="dark"] {
   --color-surface-0: #0c0f14;
   --color-surface-1: #161a22;
   --color-surface-2: #1e242d;
@@ -12,50 +15,93 @@
   --color-border: #2a333f;
   --color-text-primary: #f0f0f0;
   --color-text-secondary: #b0b8c4;
-  --color-text-muted: #6b7280;
+  --color-text-muted: #8892a0;
   --color-accent: #c9a84c;
-  --color-accent-soft: #c9a84c1a;
-  --color-accent-glow: #c9a84c33;
+  --color-accent-soft: rgba(201, 168, 76, 0.12);
+  --color-accent-glow: rgba(201, 168, 76, 0.28);
   --color-green: #38c97a;
   --color-red: #e05656;
-
-  /* Light mode — slightly yellow/beige premium base */
-  --color-l-surface-0: #fbf8ef;
-  --color-l-surface-1: #f3efdf;
-  --color-l-surface-2: #ece6d0;
-  --color-l-surface-3: #e2dbc1;
-  --color-l-border: #dcd4b8;
-  --color-l-text-primary: #2d2616;
-  --color-l-text-secondary: #5a5035;
-  --color-l-text-muted: #8e8260;
-  --color-l-accent: #8a6d1b;
-  --color-l-accent-soft: #8a6d1b1a;
-  --color-l-accent-glow: #8a6d1b20;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-serif-heading: 'DM Serif Display', Georgia, 'Times New Roman', serif;
   --font-serif-body: 'Lora', Georgia, 'Times New Roman', serif;
-  --font-arabic: 'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --font-arabic-uthmani: 'Amiri Quran', 'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
   --font-arabic-indopak: 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --font-arabic-scheherazade: 'Scheherazade New', 'Amiri', 'Traditional Arabic', serif;
+  --font-arabic-nastaliq: 'Noto Nastaliq Urdu', 'Urdu Typesetting', 'Noto Naskh Arabic', serif;
+  --font-arabic: var(--font-arabic-uthmani);
+
+  --arabic-size: 1.75rem;
+  --arabic-line-height: 2.2;
+  --script-font: var(--font-arabic);
+}
+
+/* Cream Theme — Warm Antique Parchment */
+.cream, html.cream, [data-theme="cream"] {
+  --color-surface-0: #fbf8ef;
+  --color-surface-1: #f3efdf;
+  --color-surface-2: #ece6d0;
+  --color-surface-3: #e2dbc1;
+  --color-border: #dcd4b8;
+  --color-text-primary: #2d2616;
+  --color-text-secondary: #5a5035;
+  --color-text-muted: #8e8260;
+  --color-accent: #8a6d1b;
+  --color-accent-soft: rgba(138, 109, 27, 0.12);
+  --color-accent-glow: rgba(138, 109, 27, 0.22);
+}
+
+/* Light Theme — Pure Crisp Modern White */
+.light, html.light, [data-theme="light"] {
+  --color-surface-0: #ffffff;
+  --color-surface-1: #f8fafc;
+  --color-surface-2: #f1f5f9;
+  --color-surface-3: #e2e8f0;
+  --color-border: #e2e8f0;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+  --color-accent: #926c15;
+  --color-accent-soft: rgba(146, 108, 21, 0.10);
+  --color-accent-glow: rgba(146, 108, 21, 0.20);
+}
+
+@theme {
+  --color-surface-0: var(--color-surface-0);
+  --color-surface-1: var(--color-surface-1);
+  --color-surface-2: var(--color-surface-2);
+  --color-surface-3: var(--color-surface-3);
+  --color-border: var(--color-border);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-accent-glow: var(--color-accent-glow);
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif-heading: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-serif-body: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-arabic: var(--script-font, 'Amiri Quran', 'Amiri', serif);
+  --font-arabic-uthmani: 'Amiri Quran', 'Amiri', serif;
+  --font-arabic-indopak: 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --font-arabic-scheherazade: 'Scheherazade New', 'Amiri', serif;
+  --font-arabic-nastaliq: 'Noto Nastaliq Urdu', serif;
 }
 
 /* ───────────────────────────────────────────────
    BASE
    ─────────────────────────────────────────────── */
-:root {
-  --arabic-size: 1.75rem;
-  --arabic-line-height: 2.8;
-  --script-font: var(--font-arabic);
-}
-
 html {
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
+  background-color: var(--color-surface-0);
+  color: var(--color-text-primary);
 }
 
 body {
   font-family: var(--font-sans);
-  background: var(--color-surface-0);
+  background-color: var(--color-surface-0);
   color: var(--color-text-primary);
   min-height: 100dvh;
   overflow-x: hidden;
@@ -65,7 +111,8 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -77,20 +124,18 @@ body {
   border-radius: 999px;
 }
 
-/* ───────────────────────────────────────────────
-   LIGHT MODE
-   ─────────────────────────────────────────────── */
-.light body,
-body.light {
-  background: var(--color-l-surface-0);
-  color: var(--color-l-text-primary);
+.cream ::-webkit-scrollbar-thumb {
+  background: #dcd4b8;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
 }
 
 /* ───────────────────────────────────────────────
    REDUCED MOTION
    ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -101,49 +146,69 @@ body.light {
 }
 
 /* ───────────────────────────────────────────────
-   UTILITIES & ANIMATIONS
+   SMOOTH THEME TRANSITIONS & VIEW TRANSITIONS
+   Hardware-accelerated cross-fades without glitching
    ─────────────────────────────────────────────── */
-.text-capitalize {
-  text-transform: capitalize;
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.22s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
+html,
+body,
+#root,
+header,
+nav,
+main,
+section,
+article,
+aside,
+footer {
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ───────────────────────────────────────────────
+   CUSTOM ANIMATIONS
+   ─────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; scale: 0.96; }
+  to { opacity: 1; scale: 1; }
 }
 
 .animate-fade-in {
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.animate-scale-up {
+  animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes modalSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ───────────────────────────────────────────────
+   SCROLLBAR UTILITIES
+   ─────────────────────────────────────────────── */
+.no-scrollbar, .scrollbar-none {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
-
-.animate-modal-slide-up {
-  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.no-scrollbar::-webkit-scrollbar, .scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }

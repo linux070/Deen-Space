@@ -1,27 +1,30 @@
 import { useState, useEffect, useCallback } from 'react'
-import { t } from '../utils/theme'
 import { useSettings } from '../context/SettingsContext'
+import { t } from '../utils/theme'
 
-export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
+export default function MiniTasbih({ count, target = 33, onCountChange, isVisible = true }) {
     const { theme } = useSettings()
-    const [isVisible, setIsVisible] = useState(false)
-
-    // Show with a slight delay for entry animation
-    useEffect(() => {
-        const timer = setTimeout(() => setIsVisible(true), 300)
-        return () => clearTimeout(timer)
-    }, [])
 
     const handleTap = useCallback((e) => {
         e.stopPropagation()
-        if (count < target || target === 0) {
-            if (navigator.vibrate) navigator.vibrate(15) // Match main Tasbih haptic feedback
-            onCountChange(count + 1)
-            
-            // Sync with global total dhikr count just like the main Tasbih page
+        const next = count + 1
+        onCountChange?.(next)
+
+        // Haptic Feedback
+        if (target > 0 && next % target === 0) {
+            if (navigator.vibrate) navigator.vibrate([40, 60, 40, 60, 80])
             try {
-                const currentTotal = parseInt(localStorage.getItem('dhikr-total') || '0')
-                localStorage.setItem('dhikr-total', String(currentTotal + 1))
+                const ctx = new (window.AudioContext || window.webkitAudioContext)()
+                const osc = ctx.createOscillator()
+                const gain = ctx.createGain()
+                osc.type = 'sine'
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime) // D5
+                gain.gain.setValueAtTime(0.08, ctx.currentTime)
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
+                osc.connect(gain)
+                gain.connect(ctx.destination)
+                osc.start()
+                osc.stop(ctx.currentTime + 0.3)
             } catch (err) {}
         } else {
             if (navigator.vibrate) navigator.vibrate([20, 30, 20])
@@ -29,11 +32,9 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
     }, [count, target, onCountChange])
 
     const progress = target > 0 ? Math.min((count / target) * 100, 100) : 0
-    const isLight = theme === 'light'
     const isDark = theme === 'dark'
-
-    const ringColor = isLight ? '#FACC15' : t(theme, 'accent')
-    const trackColor = isLight ? '#F8FAFC' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)')
+    const ringColor = t(theme, 'accent')
+    const trackColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'
 
     return (
         <div
@@ -45,12 +46,12 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
                 className="relative w-20 h-20 rounded-[2.5rem] flex items-center justify-center transition-all active:scale-[0.85] hover:scale-105 shadow-2xl group overflow-visible select-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0"
                 style={{
                     WebkitTapHighlightColor: 'transparent',
-                    background: isDark ? 'rgba(30, 36, 45, 0.85)' : 'rgba(236, 230, 208, 0.95)',
+                    background: t(theme, 'surface-1'),
                     backdropFilter: 'blur(20px)',
                     border: `1.5px solid ${t(theme, 'border')}`,
                     boxShadow: isDark
                         ? '0 25px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05)'
-                        : '0 20px 45px rgba(138, 109, 27, 0.12), inset 0 1px 1px rgba(255,255,255,1)'
+                        : '0 20px 45px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,1)'
                 }}
             >
                 {/* Progress Ring */}
@@ -72,7 +73,7 @@ export default function MiniTasbih({ target = 33, count = 0, onCountChange }) {
                         strokeDashoffset={100 - progress}
                         className="transition-all duration-500 cubic-bezier(0.19, 1, 0.22, 1)"
                         style={{ 
-                            filter: `drop-shadow(0 0 8px ${isLight ? '#EAB30855' : t(theme, 'accent')}55)`,
+                            filter: `drop-shadow(0 0 8px ${t(theme, 'accent-glow')})`,
                             opacity: count === 0 ? 0.05 : 1
                         }}
                     />
