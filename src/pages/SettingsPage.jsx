@@ -369,28 +369,19 @@ export default function SettingsPage() {
                 <section>
                     <SectionHeader title="Reading & Script" theme={theme} />
                     <SectionCard theme={theme}>
-                        <div
-                            className="px-5 py-3.5 border-b flex items-center justify-between"
-                            style={{ borderColor: t(theme, 'border') }}
-                        >
-                            <div>
-                                <h3 className="text-xs sm:text-sm font-semibold tracking-tight" style={{ color: t(theme, 'text-primary') }}>
-                                    Arabic Script Style
-                                </h3>
-                                <p className="text-[11px] opacity-65 mt-0.5" style={{ color: t(theme, 'text-muted') }}>
-                                    Choose the calligraphy style that is easiest for you to read
-                                </p>
-                            </div>
-                        </div>
-
-                        <ModernScriptSelector
-                            currentScript={script}
-                            onSelect={(id) => update('script', id)}
+                        <SettingRow
+                            label="Arabic Script Style"
+                            description="Select the calligraphy font style for Quranic text"
                             theme={theme}
-                        />
+                        >
+                            <ModernScriptDropdown
+                                script={script}
+                                onSelect={(id) => update('script', id)}
+                                theme={theme}
+                            />
+                        </SettingRow>
 
-                        <div className="border-t" style={{ borderColor: t(theme, 'border') }}>
-                            <SettingRow label="Arabic Text Size" description="Scale verse and prayer text across the app" theme={theme} noBorder>
+                        <SettingRow label="Arabic Text Size" description="Scale verse and prayer text across the app" theme={theme} noBorder>
                                 <div className="flex items-center gap-3">
                                     <button
                                         type="button"
@@ -443,7 +434,6 @@ export default function SettingsPage() {
                                     </button>
                                 </div>
                             </SettingRow>
-                        </div>
                     </SectionCard>
                 </section>
 
