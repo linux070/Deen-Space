@@ -288,7 +288,7 @@ export default function HomePage({ duas = [], asma = [] }) {
 
     return (
         <div
-            className="pb-36 px-4 sm:px-6 md:px-8 flex flex-col gap-6 max-w-5xl mx-auto"
+            className="pb-36 md:pb-20 px-4 sm:px-6 md:px-8 flex flex-col gap-6 max-w-5xl lg:max-w-7xl mx-auto"
             style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}
         >
             {/* ── 1. Editorial Greeting Header ── */}
@@ -313,9 +313,11 @@ export default function HomePage({ duas = [], asma = [] }) {
                 </p>
             </header>
 
-            {/* ── 2. "Continue Reciting" Banner ── */}
-            {lastRead && (
-                <section className="animate-fade-in" style={{ animationDelay: '40ms' }}>
+            {/* ── Responsive Dashboard Layout (Single-col mobile PWA, 12-col desktop web) ── */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+                {/* ── 2. "Continue Reciting" Banner ── */}
+                {lastRead && (
+                    <section className="animate-fade-in lg:col-span-7 xl:col-span-8 lg:col-start-1 lg:row-start-1" style={{ animationDelay: '40ms' }}>
                     <div
                         onClick={() => navigate(`/quran/${lastRead.surahNumber}?ayah=${currentAyah}`)}
                         className="group relative cursor-pointer rounded-3xl p-5 sm:p-6 border transition-all duration-300 shadow-sm hover:border-amber-500/60"
@@ -408,7 +410,7 @@ export default function HomePage({ duas = [], asma = [] }) {
             )}
 
             {/* ── 3. Islamic Calendar Editorial Card ── */}
-            <section className="animate-fade-in" style={{ animationDelay: '80ms' }}>
+            <section className="animate-fade-in lg:col-span-5 xl:col-span-4 lg:col-start-8 xl:col-start-9 lg:row-start-1" style={{ animationDelay: '80ms' }}>
                 <div
                     className="rounded-3xl p-6 sm:p-7 border relative transition-all duration-300 shadow-sm"
                     style={{
@@ -516,7 +518,7 @@ export default function HomePage({ duas = [], asma = [] }) {
             </section>
 
             {/* ── 4. Quick Access Sanctuary Card (Explore) ── */}
-            <section className="animate-fade-in" style={{ animationDelay: '120ms' }}>
+            <section className="animate-fade-in lg:col-span-5 xl:col-span-4 lg:col-start-8 xl:col-start-9 lg:row-start-2" style={{ animationDelay: '120ms' }}>
                 <div
                     className="rounded-3xl p-5 sm:p-7 border relative transition-all duration-300 shadow-sm"
                     style={{
@@ -574,7 +576,10 @@ export default function HomePage({ duas = [], asma = [] }) {
             </section>
 
             {/* ── 5. Illuminated Verse of the Day (Bespoke Sacred Leaf) ── */}
-            <section className="animate-fade-in" style={{ animationDelay: '160ms' }}>
+            <section
+                className={`animate-fade-in lg:col-span-7 xl:col-span-8 lg:col-start-1 ${lastRead ? 'lg:row-start-2' : 'lg:row-start-1'}`}
+                style={{ animationDelay: '160ms' }}
+            >
                 <div
                     className="rounded-[2rem] border overflow-hidden relative transition-all duration-300"
                     style={{
@@ -773,6 +778,7 @@ export default function HomePage({ duas = [], asma = [] }) {
                     </div>
                 </div>
             </section>
+            </div>
         </div>
     )
 }

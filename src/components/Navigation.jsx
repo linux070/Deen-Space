@@ -6,16 +6,29 @@ import {
     IconHugeTasbih,
     IconHugeSettings,
     IconQuran,
+    IconBookmark,
+    IconSun,
+    IconMoon,
+    IconScroll,
 } from './Icons'
 import { useSettings } from '../context/SettingsContext'
 import { t, navGradient } from '../utils/theme'
 
 export default function Navigation() {
-    const { theme, lastDuaPath } = useSettings()
+    const { theme, lastDuaPath, toggleTheme } = useSettings()
     const { pathname } = useLocation()
 
-    // 5 primary tabs with modern Hugeicons stroke icons: Home -> Dua -> Qur'an -> Tasbih -> Settings
+    // Desktop nav items: Home -> Qur'an -> Dua & Dhikr -> Tasbih -> Bookmarks
     const navItems = [
+        { to: '/', icon: IconHugeHome, label: 'Home' },
+        { to: '/quran', icon: IconHugeQuran, label: "Qur'an", subpaths: ['/quran'] },
+        { to: lastDuaPath || '/dua', icon: IconHugeDua, label: 'Dua & Dhikr', subpaths: ['/library', '/praise', '/daily', '/dua'] },
+        { to: '/tasbih', icon: IconHugeTasbih, label: 'Tasbih' },
+        { to: '/favorites', icon: IconBookmark, label: 'Bookmarks', subpaths: ['/favorites', '/bookmarks'] },
+    ]
+
+    // Mobile dock nav items (5 primary tabs)
+    const mobileNavItems = [
         { to: '/', icon: IconHugeHome, label: 'Home' },
         { to: lastDuaPath || '/dua', icon: IconHugeDua, label: 'Dua', subpaths: ['/library', '/praise', '/daily', '/dua'] },
         { to: '/quran', icon: IconHugeQuran, label: "Qur'an", subpaths: ['/quran'] },
@@ -23,10 +36,13 @@ export default function Navigation() {
         { to: '/settings', icon: IconHugeSettings, label: 'Settings', subpaths: ['/settings', '/favorites', '/bookmarks'] },
     ]
 
+    const ThemeIcon = theme === 'dark' ? IconMoon : theme === 'cream' ? IconScroll : IconSun
+    const themeLabel = theme === 'dark' ? 'Dark' : theme === 'cream' ? 'Sepia' : 'Light'
+
     return (
         <>
             {/* ───────────────────────────────────────────────────────────
-                1. MODERN DESKTOP HEADER (Clean Minimalist Branding)
+                1. MODERN DESKTOP NAVBAR (Quran.com Style Header)
                ─────────────────────────────────────────────────────────── */}
             <header
                 className="hidden md:block sticky top-0 z-40 w-full transition-all duration-300 border-b backdrop-blur-xl"
@@ -35,11 +51,11 @@ export default function Navigation() {
                     borderColor: t(theme, 'border'),
                 }}
             >
-                <div className="max-w-5xl mx-auto px-6 h-16 flex items-center">
+                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
                     {/* Brand Emblem & Title */}
                     <Link
                         to="/"
-                        className="flex items-center gap-3 group transition-transform active:scale-95"
+                        className="flex items-center gap-3 group transition-transform active:scale-95 flex-shrink-0"
                     >
                         <div
                             className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-sm"
@@ -61,15 +77,82 @@ export default function Navigation() {
                             Deen Space
                         </span>
                     </Link>
+
+                    {/* Desktop Horizontal Navigation Links */}
+                    <nav className="flex items-center gap-1.5 flex-1 justify-center max-w-2xl">
+                        {navItems.map(({ to, icon: Icon, label, subpaths }) => {
+                            const isActive = pathname === to || (to !== '/' && subpaths?.some(p => pathname.startsWith(p)))
+
+                            return (
+                                <NavLink
+                                    key={to}
+                                    to={to}
+                                    end={to === '/'}
+                                    className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 outline-none ${
+                                        isActive
+                                            ? 'shadow-xs font-bold'
+                                            : 'opacity-65 hover:opacity-100 hover:bg-black/[0.03] dark:hover:bg-white/[0.03]'
+                                    }`}
+                                    style={{
+                                        background: isActive ? t(theme, 'surface-2') : 'transparent',
+                                        color: isActive ? t(theme, 'accent') : t(theme, 'text-primary'),
+                                        border: isActive ? `1px solid ${t(theme, 'border')}` : '1px solid transparent',
+                                    }}
+                                >
+                                    <Icon size={16} />
+                                    <span>{label}</span>
+                                </NavLink>
+                            )
+                        })}
+                    </nav>
+
+                    {/* Desktop Right Actions: Theme Toggle + Settings */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                        {/* Quick Theme Toggle Pill */}
+                        <button
+                            type="button"
+                            onClick={toggleTheme}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 active:scale-95 cursor-pointer hover:border-amber-500/50"
+                            style={{
+                                background: t(theme, 'surface-1'),
+                                borderColor: t(theme, 'border'),
+                                color: t(theme, 'text-primary'),
+                            }}
+                            title={`Switch theme (currently ${themeLabel})`}
+                            aria-label={`Switch theme (currently ${themeLabel})`}
+                        >
+                            <ThemeIcon size={14} style={{ color: t(theme, 'accent') }} />
+                            <span>{themeLabel}</span>
+                        </button>
+
+                        {/* Settings Link */}
+                        <Link
+                            to="/settings"
+                            className={`p-2 rounded-xl border transition-all duration-200 active:scale-95 cursor-pointer ${
+                                pathname.startsWith('/settings')
+                                    ? 'shadow-xs'
+                                    : 'opacity-70 hover:opacity-100 hover:border-amber-500/50'
+                            }`}
+                            style={{
+                                background: pathname.startsWith('/settings') ? t(theme, 'surface-2') : t(theme, 'surface-1'),
+                                borderColor: t(theme, 'border'),
+                                color: pathname.startsWith('/settings') ? t(theme, 'accent') : t(theme, 'text-primary'),
+                            }}
+                            title="Settings"
+                            aria-label="Settings"
+                        >
+                            <IconHugeSettings size={18} />
+                        </Link>
+                    </div>
                 </div>
             </header>
 
             {/* ───────────────────────────────────────────────────────────
-                2. MODERN PWA DOCK NAVBAR (Fixed at bottom on desktop & mobile)
+                2. MODERN PWA DOCK NAVBAR (Phone Screens Only: md:hidden)
                ─────────────────────────────────────────────────────────── */}
             <nav
                 id="bottom-nav"
-                className="fixed bottom-0 left-0 right-0 z-50 transition-all duration-300"
+                className="md:hidden fixed bottom-0 left-0 right-0 z-50 transition-all duration-300"
                 style={{
                     background: navGradient(theme),
                     borderTop: `1px solid ${t(theme, 'border')}`,
@@ -80,7 +163,7 @@ export default function Navigation() {
                 }}
             >
                 <div className="flex items-center justify-around max-w-md mx-auto px-3">
-                    {navItems.map(({ to, icon: Icon, label, subpaths }) => {
+                    {mobileNavItems.map(({ to, icon: Icon, label, subpaths }) => {
                         const isActive = pathname === to || (to !== '/' && subpaths?.some(p => pathname.startsWith(p)))
 
                         return (

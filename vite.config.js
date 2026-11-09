@@ -2,15 +2,48 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import fs from 'node:fs'
+import path from 'node:path'
+
+const buildTime = Date.now()
+
+function versionBeaconPlugin() {
+  return {
+    name: 'version-beacon',
+    buildStart() {
+      const publicDir = path.resolve('public')
+      if (!fs.existsSync(publicDir)) {
+        fs.mkdirSync(publicDir, { recursive: true })
+      }
+      fs.writeFileSync(
+        path.join(publicDir, 'version.json'),
+        JSON.stringify({ version: '1.3.0', builtAt: buildTime }, null, 2),
+      )
+    },
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'version.json',
+        source: JSON.stringify({ version: '1.3.0', builtAt: buildTime }, null, 2),
+      })
+    },
+  }
+}
 
 export default defineConfig({
+  define: {
+    __APP_BUILD_TIME__: JSON.stringify(buildTime),
+    __APP_VERSION__: JSON.stringify('1.3.0'),
+  },
   plugins: [
+    versionBeaconPlugin(),
     react(),
     tailwindcss(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: [
         'favicon.png',
+        'version.json',
         'data/duas.json',
         'data/asma.json',
         'data/quran/**/*',
@@ -19,6 +52,7 @@ export default defineConfig({
       ],
       workbox: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+        navigateFallbackDenylist: [/^\/version\.json/],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,json,mp3}'],
         runtimeCaching: [
           {

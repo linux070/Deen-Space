@@ -14,7 +14,6 @@ import {
 } from '../components/Icons'
 import { t } from '../utils/theme'
 import PageHeader from '../components/PageHeader'
-import BuiltByBadge from '../components/BuiltByBadge'
 
 /**
  * Modern High-End PWA Theme Preview Selector
@@ -58,7 +57,7 @@ function ModernThemeSelector({ currentTheme, onSelect, theme }) {
                 bg: '#ffffff',
                 surface: '#f8fafc',
                 border: '#e2e8f0',
-                accent: '#926c15',
+                accent: '#92400e',
                 line: '#cbd5e1',
             }
         }
@@ -114,11 +113,11 @@ function ModernThemeSelector({ currentTheme, onSelect, theme }) {
 
                             {/* Label & Icon with Active Indicator */}
                             <div className="flex items-center gap-1.5 py-0.5">
-                                <Icon size={14} style={{ color: isActive ? t(theme, 'accent') : t(theme, 'text-muted') }} />
+                                <Icon size={14} style={{ color: isActive ? t(theme, 'accent') : t(theme, 'text-secondary') }} />
                                 <span
                                     className="text-xs font-bold tracking-tight"
                                     style={{
-                                        color: isActive ? t(theme, 'text-primary') : t(theme, 'text-muted'),
+                                        color: isActive ? t(theme, 'text-primary') : t(theme, 'text-secondary'),
                                     }}
                                 >
                                     {label}
@@ -300,8 +299,8 @@ function SettingRow({ label, description, children, theme, noBorder = false, onC
                 </p>
                 {description && (
                     <p
-                        className="text-[11px] font-medium mt-0.5 opacity-60 leading-tight"
-                        style={{ color: t(theme, 'text-muted') }}
+                        className="text-[12px] font-normal mt-0.5 leading-tight"
+                        style={{ color: t(theme, 'text-secondary') }}
                     >
                         {description}
                     </p>
@@ -317,8 +316,8 @@ function SettingRow({ label, description, children, theme, noBorder = false, onC
 function SectionHeader({ title, theme }) {
     return (
         <h2
-            className="px-6 text-[11px] font-bold uppercase tracking-[0.2em] mb-2 opacity-40 select-none"
-            style={{ color: t(theme, 'text-muted') }}
+            className="px-6 text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5 select-none"
+            style={{ color: t(theme, 'text-secondary') }}
         >
             {title}
         </h2>
@@ -349,6 +348,16 @@ export default function SettingsPage() {
     const [checkingUpdate, setCheckingUpdate] = useState(false)
     const [updateStatus, setUpdateStatus] = useState(null)
 
+    const applyUpdate = async () => {
+        if ('caches' in window) {
+            try {
+                const keys = await caches.keys()
+                await Promise.all(keys.map(k => caches.delete(k)))
+            } catch {}
+        }
+        window.location.replace(window.location.pathname + '?reload=' + Date.now())
+    }
+
     const checkForUpdate = async () => {
         if (!navigator.onLine) {
             setUpdateStatus('offline')
@@ -357,22 +366,37 @@ export default function SettingsPage() {
         setCheckingUpdate(true)
         setUpdateStatus(null)
         try {
+            const now = Date.now()
+            const res = await fetch(`/version.json?t=${now}`, {
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                },
+            })
+            if (res.ok) {
+                const meta = await res.json()
+                const serverTime = Number(meta?.builtAt || 0)
+                const localTime = typeof __APP_BUILD_TIME__ !== 'undefined' ? Number(__APP_BUILD_TIME__) : 0
+                if (serverTime > localTime) {
+                    setUpdateStatus('available')
+                    setCheckingUpdate(false)
+                    return
+                }
+            }
+
             if ('serviceWorker' in navigator) {
                 const reg = await navigator.serviceWorker.getRegistration()
                 if (reg) {
                     await reg.update()
-                    setTimeout(() => {
+                    if (reg.waiting) {
+                        setUpdateStatus('available')
                         setCheckingUpdate(false)
-                        if (reg.waiting) {
-                            setUpdateStatus('available')
-                        } else {
-                            setUpdateStatus('latest')
-                            setTimeout(() => setUpdateStatus(null), 3500)
-                        }
-                    }, 1000)
-                    return
+                        return
+                    }
                 }
             }
+
             setCheckingUpdate(false)
             setUpdateStatus('latest')
             setTimeout(() => setUpdateStatus(null), 3500)
@@ -383,7 +407,7 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="pb-36 max-w-xl md:max-w-3xl mx-auto min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+        <div className="pb-36 md:pb-20 max-w-xl md:max-w-3xl mx-auto min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
             <PageHeader
                 title="Settings"
                 showBack={false}
@@ -437,8 +461,8 @@ export default function SettingsPage() {
                                 </button>
                                 <div className="flex flex-col items-center gap-1">
                                     <span
-                                        className="text-[11px] font-bold tabular-nums tracking-tight opacity-75"
-                                        style={{ color: t(theme, 'text-primary') }}
+                                        className="text-[12px] font-semibold tabular-nums tracking-tight"
+                                        style={{ color: t(theme, 'text-secondary') }}
                                     >
                                         {arabicSize.toFixed(2)} rem
                                     </span>
@@ -505,7 +529,7 @@ export default function SettingsPage() {
                                 <span>View all</span>
                                 <IconChevronRight
                                     size={13}
-                                    className="opacity-40 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100"
+                                    className="opacity-75 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100"
                                 />
                             </div>
                         </SettingRow>
@@ -556,7 +580,7 @@ export default function SettingsPage() {
                             )}
                             {showTranslation && (
                                 <p
-                                    className="text-[13px] font-medium leading-relaxed opacity-85"
+                                    className="text-[13px] font-medium leading-relaxed"
                                     style={{
                                         color: t(theme, 'text-secondary'),
                                         fontFamily: 'var(--font-sans)',
@@ -575,11 +599,11 @@ export default function SettingsPage() {
                     <SectionCard theme={theme}>
                         <SettingRow label="App Version" description="Installed and ready for offline use" theme={theme}>
                             <span
-                                className="text-[11px] font-bold tracking-wide opacity-50 px-2.5 py-1 rounded-md"
+                                className="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border leading-none"
                                 style={{
                                     background: t(theme, 'surface-2'),
-                                    color: t(theme, 'text-primary'),
-                                    fontFamily: 'var(--font-mono)',
+                                    borderColor: t(theme, 'border'),
+                                    color: t(theme, 'text-secondary'),
                                 }}
                             >
                                 v1.3.0
@@ -594,21 +618,30 @@ export default function SettingsPage() {
                                     : updateStatus === 'offline'
                                     ? 'Connect to the internet to check'
                                     : updateStatus === 'available'
-                                    ? 'New version ready — see prompt'
+                                    ? 'New version ready — tap to update'
                                     : 'Check for new features & content'
                             }
                             theme={theme}
-                            noBorder
                         >
                             <button
                                 type="button"
-                                onClick={checkForUpdate}
+                                onClick={updateStatus === 'available' ? applyUpdate : checkForUpdate}
                                 disabled={checkingUpdate}
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 cursor-pointer disabled:opacity-50"
                                 style={{
-                                    background: updateStatus === 'latest' ? t(theme, 'accent-soft') : t(theme, 'surface-2'),
-                                    borderColor: t(theme, 'border'),
-                                    color: updateStatus === 'latest' ? t(theme, 'accent') : t(theme, 'text-primary'),
+                                    background: updateStatus === 'available'
+                                        ? t(theme, 'accent')
+                                        : updateStatus === 'latest'
+                                        ? t(theme, 'accent-soft')
+                                        : t(theme, 'surface-2'),
+                                    borderColor: updateStatus === 'available'
+                                        ? t(theme, 'accent')
+                                        : t(theme, 'border'),
+                                    color: updateStatus === 'available'
+                                        ? (isDark ? '#0c0f14' : '#ffffff')
+                                        : updateStatus === 'latest'
+                                        ? t(theme, 'accent')
+                                        : t(theme, 'text-primary'),
                                 }}
                             >
                                 {checkingUpdate ? (
@@ -616,6 +649,8 @@ export default function SettingsPage() {
                                         <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
                                         <span>Checking...</span>
                                     </>
+                                ) : updateStatus === 'available' ? (
+                                    <span>Update Now</span>
                                 ) : updateStatus === 'latest' ? (
                                     <span>Latest Version</span>
                                 ) : (
@@ -623,22 +658,33 @@ export default function SettingsPage() {
                                 )}
                             </button>
                         </SettingRow>
+
+                        <SettingRow
+                            label="Launch Animation"
+                            description="Experience the animated webapp opening sequence"
+                            theme={theme}
+                            noBorder
+                        >
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    try {
+                                        sessionStorage.removeItem('deen_intro_seen')
+                                    } catch {}
+                                    navigate('/?intro=1')
+                                }}
+                                className="px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 cursor-pointer hover:border-amber-500/50 shadow-xs"
+                                style={{
+                                    background: t(theme, 'surface-2'),
+                                    borderColor: t(theme, 'border'),
+                                    color: t(theme, 'text-primary'),
+                                }}
+                            >
+                                Play Intro
+                            </button>
+                        </SettingRow>
                     </SectionCard>
                 </section>
-
-                {/* ── Footer ── */}
-                <div className="px-6 pt-8 pb-12 flex flex-col items-center gap-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
-                    <p
-                        className="text-[11px] font-medium uppercase tracking-[0.2em] opacity-40"
-                        style={{ color: t(theme, 'text-muted') }}
-                    >
-                        Built for Offline Reflection
-                    </p>
-
-                    <div className="mt-2">
-                        <BuiltByBadge theme={theme} />
-                    </div>
-                </div>
             </main>
         </div>
     )

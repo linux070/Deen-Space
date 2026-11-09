@@ -4,7 +4,7 @@ import { SettingsProvider, useSettings } from './context/SettingsContext'
 import { FavoritesProvider } from './context/FavoritesContext'
 import { AudioProvider } from './context/AudioContext'
 import { useData } from './hooks/useData'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Navigation from './components/Navigation'
 import HomePage from './pages/HomePage'
 import DuaPage from './pages/DuaPage'
@@ -17,6 +17,7 @@ import DailyPage from './pages/DailyPage'
 import QuranPage from './pages/QuranPage'
 import SurahReaderPage from './pages/SurahReaderPage'
 import UpdatePrompt from './components/UpdatePrompt'
+import IntroSplash from './components/IntroSplash'
 
 function ScrollToTop() {
     const { pathname } = useLocation()
@@ -33,8 +34,18 @@ function LibraryPageWrapper({ duas }) {
 
 function AppContent() {
     const { duas, asma, loading } = useData()
-    const { pathname } = useLocation()
+    const { pathname, search } = useLocation()
     const { setLastDuaPath } = useSettings()
+
+    const [showIntro, setShowIntro] = useState(() => {
+        try {
+            const isLanding = window.location.pathname === '/'
+            const forceIntro = window.location.search.includes('intro')
+            return isLanding && (forceIntro || !sessionStorage.getItem('deen_intro_seen'))
+        } catch {
+            return false
+        }
+    })
 
     useEffect(() => {
         const duaSubpaths = ['/dua', '/library', '/praise', '/daily']
@@ -43,15 +54,30 @@ function AppContent() {
         }
     }, [pathname, setLastDuaPath])
 
-    if (loading) {
+    if (loading && !showIntro) {
         return <LoadingScreen />
     }
 
     return (
         <>
+            {showIntro && (
+                <IntroSplash
+                    onComplete={() => {
+                        setShowIntro(false)
+                        try {
+                            sessionStorage.setItem('deen_intro_seen', 'true')
+                            if (window.location.search.includes('intro')) {
+                                window.history.replaceState({}, '', '/')
+                            }
+                        } catch {
+                            // ignore storage errors
+                        }
+                    }}
+                />
+            )}
             <Navigation />
             <UpdatePrompt />
-            <div className="max-w-5xl mx-auto min-h-screen">
+            <div className="max-w-5xl lg:max-w-7xl mx-auto min-h-screen">
                 <Routes>
                     <Route path="/" element={<HomePage duas={duas} asma={asma} />} />
                     <Route path="/dua" element={<DuaPage duas={duas} asma={asma} />} />

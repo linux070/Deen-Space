@@ -70,7 +70,7 @@ export default function QuranPage() {
 
     return (
         <div
-            className="pb-36 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto flex flex-col gap-5"
+            className="pb-36 px-4 sm:px-6 md:px-8 max-w-5xl lg:max-w-7xl mx-auto flex flex-col gap-5"
             style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}
         >
             {/* ── 1. Modern Native Masthead ── */}

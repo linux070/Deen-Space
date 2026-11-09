@@ -105,7 +105,7 @@ export default function DuaPage() {
 
     return (
         <div
-            className="pb-36 flex flex-col gap-5 max-w-xl md:max-w-2xl mx-auto px-4 sm:px-6"
+            className="pb-36 md:pb-20 flex flex-col gap-5 max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto px-4 sm:px-6"
             style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}
         >
             {/* ── Modern App Masthead ── */}
@@ -116,10 +116,10 @@ export default function DuaPage() {
                 sticky={false}
             />
 
-            {/* ── Curated Grouped Inset Sections ── */}
-            <main className="flex flex-col gap-6 animate-fade-in mt-1">
+            {/* ── Curated Grouped Inset Sections (Single-col mobile, 2-col desktop) ── */}
+            <main className="flex flex-col lg:grid lg:grid-cols-2 gap-6 animate-fade-in mt-1 items-start">
                 {GROUPS.map((group, gIdx) => (
-                    <section key={gIdx}>
+                    <section key={gIdx} className={gIdx === 2 ? 'lg:col-span-2' : ''}>
                         {/* Section Header */}
                         <h2
                             className="text-[11px] font-bold uppercase tracking-[0.16em] px-2 mb-2.5 select-none"

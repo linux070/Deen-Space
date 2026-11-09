@@ -75,7 +75,7 @@ export default function FavoritesPage({ duas = [], asma = [] }) {
     const activeTextCol = isDark ? '#0c0f14' : '#ffffff'
 
     return (
-        <div className="pb-36 max-w-4xl mx-auto min-h-screen px-4 sm:px-6" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}>
+        <div className="pb-36 md:pb-20 max-w-4xl lg:max-w-5xl mx-auto min-h-screen px-4 sm:px-6" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}>
             <PageHeader
                 title="Bookmarks"
                 showBack={true}

@@ -9,7 +9,7 @@ export default function TasbihPage() {
     const navigate = useNavigate()
 
     return (
-        <div className="pb-32 max-w-xl md:max-w-4xl mx-auto min-h-screen flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+        <div className="pb-32 md:pb-16 max-w-xl md:max-w-4xl mx-auto min-h-screen flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
             <PageHeader
                 title="Digital Tasbih"
                 showBack={false}
