@@ -622,6 +622,7 @@ export default function SettingsPage() {
                                     : 'Check for new features & content'
                             }
                             theme={theme}
+                            noBorder
                         >
                             <button
                                 type="button"
@@ -656,31 +657,6 @@ export default function SettingsPage() {
                                 ) : (
                                     <span>Check Now</span>
                                 )}
-                            </button>
-                        </SettingRow>
-
-                        <SettingRow
-                            label="Launch Animation"
-                            description="Experience the animated webapp opening sequence"
-                            theme={theme}
-                            noBorder
-                        >
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    try {
-                                        sessionStorage.removeItem('deen_intro_seen')
-                                    } catch {}
-                                    navigate('/?intro=1')
-                                }}
-                                className="px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 cursor-pointer hover:border-amber-500/50 shadow-xs"
-                                style={{
-                                    background: t(theme, 'surface-2'),
-                                    borderColor: t(theme, 'border'),
-                                    color: t(theme, 'text-primary'),
-                                }}
-                            >
-                                Play Intro
                             </button>
                         </SettingRow>
                     </SectionCard>
