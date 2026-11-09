@@ -60,13 +60,9 @@ export default function PraisePage({ asma = [] }) {
                 <div className="sticky top-0 z-20 pb-3" style={{ background: t(theme, 'surface-0') }}>
                     <PageHeader
                         title="Asma-ul-Husna"
-                        subtitle="The 99 Beautiful Names of Allah"
                         onBack={goBack}
-                        padding="px-4 sm:px-6 pt-6 sm:pt-8 pb-3"
-                        titleSize="text-xl sm:text-2xl"
-                        titleWeight={400}
+                        padding="px-4 sm:px-6 pt-6 pb-3"
                         sticky={false}
-                        titleSerif={false}
                     />
 
                     {/* Integrated Search Bar */}
@@ -84,7 +80,7 @@ export default function PraisePage({ asma = [] }) {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search by name, meaning, or Arabic..."
-                                className="w-full bg-transparent outline-none text-xs sm:text-sm placeholder:opacity-40 font-medium"
+                                className="w-full bg-transparent outline-none text-xs sm:text-sm placeholder:opacity-75 font-medium"
                                 style={{ color: t(theme, 'text-primary') }}
                             />
                             {search && (
@@ -125,7 +121,7 @@ export default function PraisePage({ asma = [] }) {
                             className="rounded-2xl p-12 text-center border my-4"
                             style={{ background: t(theme, 'surface-1'), borderColor: t(theme, 'border') }}
                         >
-                            <p className="text-xs opacity-50 font-medium tracking-wide" style={{ color: t(theme, 'text-muted') }}>
+                            <p className="text-xs font-medium tracking-wide" style={{ color: t(theme, 'text-secondary') }}>
                                 No divine names matching "{search}"
                             </p>
                         </div>
@@ -175,8 +171,8 @@ export default function PraisePage({ asma = [] }) {
                                                 {name.transliteration}
                                             </h4>
                                             <p
-                                                className="text-[11px] sm:text-xs opacity-55 truncate mt-0.5 leading-normal"
-                                                style={{ color: t(theme, 'text-muted') }}
+                                                className="text-[12px] truncate mt-0.5 leading-normal font-normal"
+                                                style={{ color: t(theme, 'text-secondary') }}
                                             >
                                                 {name.meaning}
                                             </p>

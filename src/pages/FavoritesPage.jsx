@@ -78,13 +78,9 @@ export default function FavoritesPage({ duas = [], asma = [] }) {
         <div className="pb-36 max-w-4xl mx-auto min-h-screen px-4 sm:px-6" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}>
             <PageHeader
                 title="Bookmarks"
-                subtitle="Saved verses, supplications & divine names"
                 showBack={true}
                 onBack={() => { if (window.history.length > 1) navigate(-1); else navigate('/settings'); }}
-                titleSerif={false}
-                titleWeight={400}
-                padding="px-2 pt-6 pb-4"
-                subtitleCase="title"
+                padding="px-2 pt-6 pb-3"
             />
 
             {/* Filter Segment Tabs */}

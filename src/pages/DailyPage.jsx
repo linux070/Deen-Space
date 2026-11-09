@@ -186,12 +186,9 @@ export default function DailyPage({ duas }) {
             return
         }
         if (viewMode === 'sublist') {
-            if (category) {
-                navigate('/dua')
-                return
-            }
             setViewMode('landing')
             setActiveCategory(null)
+            navigate('/daily', { replace: true })
             return
         }
         if (viewMode === 'landing') {
@@ -202,11 +199,14 @@ export default function DailyPage({ duas }) {
 
     const Header = () => {
         let title = 'Daily Guidance'
+        let subtitle = 'Morning & evening adhkar, solah & remembrance'
         if (viewMode === 'sublist') {
             const cat = CATEGORIES.find(c => c.key === activeCategory)
             title = cat?.label || toTitleCase(activeCategory)
+            subtitle = cat?.subtitle || 'Daily Supplications'
         } else if (viewMode === 'swipe') {
             title = getDuaTitle(categoryDuas[selectedIndex])
+            subtitle = toTitleCase(activeCategory)
         }
 
         return (
@@ -214,11 +214,8 @@ export default function DailyPage({ duas }) {
                 <PageHeader
                     title={title}
                     onBack={goBack}
-                    padding="px-6 pt-8 pb-3"
-                    titleSize="text-xl"
-                    titleWeight={300}
+                    padding="px-4 sm:px-6 pt-6 pb-3"
                     sticky={false}
-                    titleSerif={false}
                 />
             </div>
         )
@@ -272,18 +269,13 @@ export default function DailyPage({ duas }) {
                                                 {cat.label}
                                             </h3>
                                             <p
-                                                className="text-[11px] font-medium opacity-50 tracking-tight truncate mt-0.5"
-                                                style={{ color: t(theme, 'text-muted') }}
+                                                className="text-[12px] font-normal tracking-tight truncate mt-0.5"
+                                                style={{ color: t(theme, 'text-secondary') }}
                                             >
                                                 {cat.subtitle}
                                             </p>
                                         </div>
                                     </div>
-                                    <IconChevronRight
-                                        size={16}
-                                        className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all flex-shrink-0"
-                                        style={{ color: t(theme, 'text-primary') }}
-                                    />
                                 </button>
                             )
                         })}
@@ -305,7 +297,7 @@ export default function DailyPage({ duas }) {
                         >
                             &ldquo;Verily, in the remembrance of Allah do hearts find rest.&rdquo;
                         </p>
-                        <p className="text-[11px] mt-4 opacity-40 font-bold tracking-[0.15em] uppercase">
+                        <p className="text-[11px] mt-4 font-bold tracking-[0.15em] uppercase" style={{ color: t(theme, 'text-secondary') }}>
                             Surah Ar-Ra&apos;d 13:28
                         </p>
                     </div>
@@ -322,8 +314,8 @@ export default function DailyPage({ duas }) {
                         return (
                             <div key={section.key} className="mb-6">
                                 <h4
-                                    className="text-[11px] font-bold tracking-[0.2em] uppercase px-2 mb-2 select-none opacity-45"
-                                    style={{ color: t(theme, 'text-muted') }}
+                                    className="text-[11px] font-bold tracking-[0.16em] uppercase px-2 mb-2 select-none"
+                                    style={{ color: t(theme, 'text-secondary') }}
                                 >
                                     {section.label}
                                 </h4>
@@ -363,9 +355,9 @@ export default function DailyPage({ duas }) {
                                                     </h4>
                                                     {previewText && (
                                                         <p
-                                                            className="text-[12px] opacity-60 truncate leading-tight mt-1 italic font-serif"
+                                                            className="text-[12px] truncate leading-tight mt-1 italic font-serif"
                                                             style={{
-                                                                color: t(theme, 'text-muted'),
+                                                                color: t(theme, 'text-secondary'),
                                                                 fontFamily: 'var(--font-serif-body)',
                                                             }}
                                                         >
@@ -374,24 +366,20 @@ export default function DailyPage({ duas }) {
                                                     )}
                                                 </div>
 
-                                                <div className="flex items-center gap-2 flex-shrink-0">
-                                                    {dua.repeat > 1 && (
+                                                {dua.repeat > 1 && (
+                                                    <div className="flex items-center flex-shrink-0">
                                                         <span
-                                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md leading-none"
+                                                            className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
                                                             style={{
-                                                                background: t(theme, 'accent-soft'),
+                                                                background: t(theme, 'surface-2'),
                                                                 color: t(theme, 'accent'),
+                                                                border: `1px solid ${t(theme, 'border')}`,
                                                             }}
                                                         >
                                                             {dua.repeat}×
                                                         </span>
-                                                    )}
-                                                    <IconChevronRight
-                                                        size={15}
-                                                        className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
-                                                        style={{ color: t(theme, 'text-primary') }}
-                                                    />
-                                                </div>
+                                                    </div>
+                                                )}
                                             </button>
                                         )
                                     })}
@@ -442,9 +430,9 @@ export default function DailyPage({ duas }) {
                                             </h4>
                                             {previewText && (
                                                 <p
-                                                    className="text-[12px] opacity-60 truncate leading-tight mt-1 italic font-serif"
+                                                    className="text-[12px] truncate leading-tight mt-1 italic font-serif"
                                                     style={{
-                                                        color: t(theme, 'text-muted'),
+                                                        color: t(theme, 'text-secondary'),
                                                         fontFamily: 'var(--font-serif-body)',
                                                     }}
                                                 >
@@ -453,24 +441,20 @@ export default function DailyPage({ duas }) {
                                             )}
                                         </div>
 
-                                        <div className="flex items-center gap-2 flex-shrink-0">
-                                            {dua.repeat > 1 && (
+                                        {dua.repeat > 1 && (
+                                            <div className="flex items-center flex-shrink-0">
                                                 <span
-                                                    className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md leading-none"
+                                                    className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
                                                     style={{
-                                                        background: t(theme, 'accent-soft'),
+                                                        background: t(theme, 'surface-2'),
                                                         color: t(theme, 'accent'),
+                                                        border: `1px solid ${t(theme, 'border')}`,
                                                     }}
                                                 >
                                                     {dua.repeat}×
                                                 </span>
-                                            )}
-                                            <IconChevronRight
-                                                size={15}
-                                                className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
-                                                style={{ color: t(theme, 'text-primary') }}
-                                            />
-                                        </div>
+                                            </div>
+                                        )}
                                     </button>
                                 )
                             })}

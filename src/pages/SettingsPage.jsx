@@ -40,7 +40,7 @@ function ModernThemeSelector({ currentTheme, onSelect, theme }) {
         },
         {
             id: 'cream',
-            label: 'Cream',
+            label: 'Sepia',
             icon: IconScroll,
             preview: {
                 bg: '#fbf8ef',
@@ -140,7 +140,6 @@ function ModernScriptDropdown({ script, onSelect, theme }) {
     const [isOpen, setIsOpen] = useState(false)
     const dropdownRef = useRef(null)
     const isDark = theme === 'dark'
-
     const currentScriptObj = AVAILABLE_SCRIPTS.find(s => s.id === script) || AVAILABLE_SCRIPTS[0]
 
     useEffect(() => {
@@ -149,14 +148,23 @@ function ModernScriptDropdown({ script, onSelect, theme }) {
                 setIsOpen(false)
             }
         }
+        function handleKeyDown(event) {
+            if (event.key === 'Escape') {
+                setIsOpen(false)
+            }
+        }
         if (isOpen) {
             document.addEventListener('pointerdown', handleClickOutside)
-            return () => document.removeEventListener('pointerdown', handleClickOutside)
+            document.addEventListener('keydown', handleKeyDown)
+            return () => {
+                document.removeEventListener('pointerdown', handleClickOutside)
+                document.removeEventListener('keydown', handleKeyDown)
+            }
         }
     }, [isOpen])
 
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative inline-block text-left" ref={dropdownRef}>
             {/* Pill Trigger */}
             <button
                 type="button"
@@ -167,8 +175,8 @@ function ModernScriptDropdown({ script, onSelect, theme }) {
                     borderColor: isOpen ? t(theme, 'accent') : t(theme, 'border'),
                     color: t(theme, 'text-primary'),
                 }}
-                aria-expanded={isOpen}
                 aria-haspopup="listbox"
+                aria-expanded={isOpen}
             >
                 <span>{currentScriptObj.name}</span>
                 <svg
@@ -180,23 +188,23 @@ function ModernScriptDropdown({ script, onSelect, theme }) {
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transition-transform duration-200 opacity-50 ${isOpen ? 'rotate-180' : ''}`}
+                    className={`transition-transform duration-200 opacity-60 ${isOpen ? 'rotate-180' : ''}`}
                     style={{ color: t(theme, 'text-primary') }}
                 >
                     <polyline points="6 9 12 15 18 9" />
                 </svg>
             </button>
 
-            {/* Dropdown Menu */}
+            {/* Custom Dropdown Menu with High-Grade Design */}
             {isOpen && (
                 <div
                     role="listbox"
-                    className="absolute right-0 top-full mt-2 w-48 rounded-2xl border p-1.5 shadow-xl z-50 animate-fade-in flex flex-col gap-1 backdrop-blur-xl"
+                    className="absolute right-0 top-full mt-1.5 w-48 rounded-2xl border p-1.5 shadow-2xl z-50 animate-fade-in flex flex-col gap-1 backdrop-blur-xl"
                     style={{
                         background: t(theme, 'surface-1'),
                         borderColor: t(theme, 'border'),
                         boxShadow: isDark
-                            ? '0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4)'
+                            ? '0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.5)'
                             : '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
                     }}
                 >
@@ -212,7 +220,7 @@ function ModernScriptDropdown({ script, onSelect, theme }) {
                                     onSelect(item.id)
                                     setIsOpen(false)
                                 }}
-                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-all active:scale-[0.98] cursor-pointer"
+                                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-colors duration-150 cursor-pointer"
                                 style={{
                                     background: isSelected ? t(theme, 'accent-soft') : 'transparent',
                                     color: isSelected ? t(theme, 'accent') : t(theme, 'text-primary'),
@@ -275,11 +283,10 @@ function SettingRow({ label, description, children, theme, noBorder = false, onC
         <Component
             type={onClick ? 'button' : undefined}
             onClick={onClick}
-            className={`w-full flex items-center justify-between gap-4 px-5 py-4 transition-colors text-left ${
-                onClick
-                    ? 'group cursor-pointer hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:scale-[0.995]'
-                    : 'hover:bg-black/[0.015] dark:hover:bg-white/[0.015]'
-            }`}
+            className={`w-full flex items-center justify-between gap-4 px-5 py-4 transition-colors text-left first:rounded-t-2xl last:rounded-b-2xl ${onClick
+                ? 'group cursor-pointer hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:scale-[0.995]'
+                : 'hover:bg-black/[0.015] dark:hover:bg-white/[0.015]'
+                }`}
             style={{
                 borderBottom: noBorder ? 'none' : `1px solid ${t(theme, 'border')}`,
             }}
@@ -318,10 +325,10 @@ function SectionHeader({ title, theme }) {
     )
 }
 
-function SectionCard({ children, theme }) {
+function SectionCard({ children, theme, className = '' }) {
     return (
         <div
-            className="mx-4 sm:mx-6 rounded-2xl overflow-hidden transition-all duration-200"
+            className={`mx-4 sm:mx-6 rounded-2xl relative transition-all duration-200 ${className}`}
             style={{
                 background: t(theme, 'surface-1'),
                 border: `1px solid ${t(theme, 'border')}`,
@@ -339,17 +346,48 @@ export default function SettingsPage() {
     const settings = useSettings()
     const { theme, script, arabicSize, showTranslation, showTransliteration, update } = settings
     const isDark = theme === 'dark'
+    const [checkingUpdate, setCheckingUpdate] = useState(false)
+    const [updateStatus, setUpdateStatus] = useState(null)
+
+    const checkForUpdate = async () => {
+        if (!navigator.onLine) {
+            setUpdateStatus('offline')
+            return
+        }
+        setCheckingUpdate(true)
+        setUpdateStatus(null)
+        try {
+            if ('serviceWorker' in navigator) {
+                const reg = await navigator.serviceWorker.getRegistration()
+                if (reg) {
+                    await reg.update()
+                    setTimeout(() => {
+                        setCheckingUpdate(false)
+                        if (reg.waiting) {
+                            setUpdateStatus('available')
+                        } else {
+                            setUpdateStatus('latest')
+                            setTimeout(() => setUpdateStatus(null), 3500)
+                        }
+                    }, 1000)
+                    return
+                }
+            }
+            setCheckingUpdate(false)
+            setUpdateStatus('latest')
+            setTimeout(() => setUpdateStatus(null), 3500)
+        } catch {
+            setCheckingUpdate(false)
+            setUpdateStatus('error')
+        }
+    }
 
     return (
         <div className="pb-36 max-w-xl md:max-w-3xl mx-auto min-h-screen" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
             <PageHeader
                 title="Settings"
-                subtitle="Preferences & display"
                 showBack={false}
-                titleSerif={false}
-                titleWeight={400}
-                padding="px-6 pt-10 pb-6"
-                subtitleCase="title"
+                padding="px-6 pt-8 pb-4"
             />
 
             <main className="flex flex-col gap-7">
@@ -370,8 +408,8 @@ export default function SettingsPage() {
                     <SectionHeader title="Reading & Script" theme={theme} />
                     <SectionCard theme={theme}>
                         <SettingRow
-                            label="Arabic Script Style"
-                            description="Select the calligraphy font style for Quranic text"
+                            label="Arabic Script"
+                            description="Choose your preferred Quranic calligraphy style"
                             theme={theme}
                         >
                             <ModernScriptDropdown
@@ -381,59 +419,59 @@ export default function SettingsPage() {
                             />
                         </SettingRow>
 
-                        <SettingRow label="Arabic Text Size" description="Scale verse and prayer text across the app" theme={theme} noBorder>
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => update('arabicSize', Math.max(1.25, arabicSize - 0.25))}
-                                        className="w-8 h-8 flex items-center justify-center rounded-lg active:scale-90 transition-transform cursor-pointer"
-                                        style={{
-                                            background: t(theme, 'surface-2'),
-                                            color: t(theme, 'text-primary'),
-                                            border: `1px solid ${t(theme, 'border')}`,
-                                        }}
-                                        aria-label="Make Arabic text smaller"
-                                        title="Make Arabic text smaller"
+                        <SettingRow label="Text Size" description="Adjust text size across the app" theme={theme} noBorder>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => update('arabicSize', Math.max(1.25, arabicSize - 0.25))}
+                                    className="w-8 h-8 flex items-center justify-center rounded-lg active:scale-90 transition-transform cursor-pointer"
+                                    style={{
+                                        background: t(theme, 'surface-2'),
+                                        color: t(theme, 'text-primary'),
+                                        border: `1px solid ${t(theme, 'border')}`,
+                                    }}
+                                    aria-label="Make text smaller"
+                                    title="Make text smaller"
+                                >
+                                    <IconMinus size={14} />
+                                </button>
+                                <div className="flex flex-col items-center gap-1">
+                                    <span
+                                        className="text-[11px] font-bold tabular-nums tracking-tight opacity-75"
+                                        style={{ color: t(theme, 'text-primary') }}
                                     >
-                                        <IconMinus size={14} />
-                                    </button>
-                                    <div className="flex flex-col items-center gap-1">
-                                        <span
-                                            className="text-[11px] font-bold tabular-nums tracking-tight opacity-75"
-                                            style={{ color: t(theme, 'text-primary') }}
-                                        >
-                                            {arabicSize.toFixed(2)} rem
-                                        </span>
+                                        {arabicSize.toFixed(2)} rem
+                                    </span>
+                                    <div
+                                        className="w-16 h-1 rounded-full overflow-hidden"
+                                        style={{ background: t(theme, 'surface-3') }}
+                                    >
                                         <div
-                                            className="w-16 h-1 rounded-full overflow-hidden"
-                                            style={{ background: t(theme, 'surface-3') }}
-                                        >
-                                            <div
-                                                className="h-full rounded-full"
-                                                style={{
-                                                    width: `${((arabicSize - 1.25) / 1.75) * 100}%`,
-                                                    background: t(theme, 'accent'),
-                                                    transition: 'width 0.3s ease',
-                                                }}
-                                            />
-                                        </div>
+                                            className="h-full rounded-full"
+                                            style={{
+                                                width: `${((arabicSize - 1.25) / 1.75) * 100}%`,
+                                                background: t(theme, 'accent'),
+                                                transition: 'width 0.3s ease',
+                                            }}
+                                        />
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => update('arabicSize', Math.min(3, arabicSize + 0.25))}
-                                        className="w-8 h-8 flex items-center justify-center rounded-lg active:scale-90 transition-transform cursor-pointer"
-                                        style={{
-                                            background: t(theme, 'surface-2'),
-                                            color: t(theme, 'text-primary'),
-                                            border: `1px solid ${t(theme, 'border')}`,
-                                        }}
-                                        aria-label="Make Arabic text larger"
-                                        title="Make Arabic text larger"
-                                    >
-                                        <IconPlus size={14} />
-                                    </button>
                                 </div>
-                            </SettingRow>
+                                <button
+                                    type="button"
+                                    onClick={() => update('arabicSize', Math.min(3, arabicSize + 0.25))}
+                                    className="w-8 h-8 flex items-center justify-center rounded-lg active:scale-90 transition-transform cursor-pointer"
+                                    style={{
+                                        background: t(theme, 'surface-2'),
+                                        color: t(theme, 'text-primary'),
+                                        border: `1px solid ${t(theme, 'border')}`,
+                                    }}
+                                    aria-label="Make text larger"
+                                    title="Make text larger"
+                                >
+                                    <IconPlus size={14} />
+                                </button>
+                            </div>
+                        </SettingRow>
                     </SectionCard>
                 </section>
 
@@ -445,12 +483,12 @@ export default function SettingsPage() {
                             <Toggle checked={showTranslation} onChange={v => update('showTranslation', v)} theme={theme} />
                         </SettingRow>
 
-                        <SettingRow label="Pronunciation Guide" description="Show phonetic English spelling to help recitation" theme={theme}>
+                        <SettingRow label="Pronunciation" description="Show phonetic English spelling to help recitation" theme={theme}>
                             <Toggle checked={showTransliteration} onChange={v => update('showTransliteration', v)} theme={theme} />
                         </SettingRow>
 
                         <SettingRow
-                            label="Saved Bookmarks"
+                            label="Bookmarks"
                             description={favorites.length > 0 ? `${favorites.length} saved verse${favorites.length > 1 ? 's' : ''} & dua${favorites.length > 1 ? 's' : ''}` : 'No saved bookmarks yet'}
                             theme={theme}
                             onClick={() => navigate('/favorites')}
@@ -535,9 +573,9 @@ export default function SettingsPage() {
                 <section>
                     <SectionHeader title="App Info" theme={theme} />
                     <SectionCard theme={theme}>
-                        <SettingRow label="App Version" description="Installed and ready for offline use" theme={theme} noBorder>
+                        <SettingRow label="App Version" description="Installed and ready for offline use" theme={theme}>
                             <span
-                                className="text-[11px] font-bold tracking-wide opacity-45 px-2 py-0.5 rounded-md"
+                                className="text-[11px] font-bold tracking-wide opacity-50 px-2.5 py-1 rounded-md"
                                 style={{
                                     background: t(theme, 'surface-2'),
                                     color: t(theme, 'text-primary'),
@@ -546,6 +584,44 @@ export default function SettingsPage() {
                             >
                                 v1.3.0
                             </span>
+                        </SettingRow>
+
+                        <SettingRow
+                            label="Check for Updates"
+                            description={
+                                updateStatus === 'latest'
+                                    ? 'You have the latest version'
+                                    : updateStatus === 'offline'
+                                    ? 'Connect to the internet to check'
+                                    : updateStatus === 'available'
+                                    ? 'New version ready — see prompt'
+                                    : 'Check for new features & content'
+                            }
+                            theme={theme}
+                            noBorder
+                        >
+                            <button
+                                type="button"
+                                onClick={checkForUpdate}
+                                disabled={checkingUpdate}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+                                style={{
+                                    background: updateStatus === 'latest' ? t(theme, 'accent-soft') : t(theme, 'surface-2'),
+                                    borderColor: t(theme, 'border'),
+                                    color: updateStatus === 'latest' ? t(theme, 'accent') : t(theme, 'text-primary'),
+                                }}
+                            >
+                                {checkingUpdate ? (
+                                    <>
+                                        <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                        <span>Checking...</span>
+                                    </>
+                                ) : updateStatus === 'latest' ? (
+                                    <span>Latest Version</span>
+                                ) : (
+                                    <span>Check Now</span>
+                                )}
+                            </button>
                         </SettingRow>
                     </SectionCard>
                 </section>

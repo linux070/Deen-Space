@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useSurah, useQuranList, useLastRead, useReaderSettings } from '../hooks/useQuran'
-import { useSettings, AVAILABLE_SCRIPTS } from '../context/SettingsContext'
+import { useSettings } from '../context/SettingsContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { t } from '../utils/theme'
 import {
@@ -324,29 +324,12 @@ export default function SurahReaderPage() {
             {/* ── Main Content Area ── */}
             <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-5">
                 {/* ── Surah Masthead (Dignified Quranic Presentation) ── */}
-                <section className="text-center pt-3 pb-6 sm:pt-5 sm:pb-8 mb-6 sm:mb-8 flex flex-col items-center">
-                    {/* Subtle Metadata Tag */}
-                    <div
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-medium tracking-wide uppercase opacity-75 mb-3"
-                        style={{
-                            background: t(theme, 'surface-2'),
-                            color: t(theme, 'text-muted'),
-                            border: `1px solid ${t(theme, 'border')}`,
-                            fontFamily: 'var(--font-sans)',
-                        }}
-                    >
-                        <span>Surah {surah.number}</span>
-                        <span className="opacity-40">·</span>
-                        <span>{surah.revelationType === 'Meccan' ? 'Meccan' : 'Medinan'}</span>
-                        <span className="opacity-40">·</span>
-                        <span>{surah.numberOfAyahs} Verses</span>
-                    </div>
-
+                <section className="text-center pt-2 pb-6 sm:pt-4 sm:pb-8 mb-4 sm:mb-6 flex flex-col items-center">
                     {/* Majestic Arabic Name */}
                     <h1
                         className="text-3xl sm:text-4xl md:text-5xl font-arabic tracking-normal mb-1.5"
                         style={{
-                            color: t(theme, 'accent'),
+                            color: t(theme, 'text-primary'),
                             fontFamily: 'var(--script-font)',
                             direction: 'rtl',
                             lineHeight: 1.4,
@@ -378,32 +361,45 @@ export default function SurahReaderPage() {
                         {surah.englishNameTranslation}
                     </p>
 
-                    {/* Decorative Hairline with Quranic Ornament */}
-                    <div className="w-full max-w-xs flex items-center justify-center gap-3 my-5 opacity-40">
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-current to-transparent" style={{ color: t(theme, 'border') }} />
-                        <span className="text-xs font-serif select-none" style={{ color: t(theme, 'accent') }}>۞</span>
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-current to-transparent" style={{ color: t(theme, 'border') }} />
-                    </div>
-
-                    {/* Majestic Centered Bismillah */}
+                    {/* Majestic Centered Bismillah Presentation (Quran.com Inspired, Responsive & Unified Color) */}
                     {showBismillahBanner && (
                         <div
-                            className="text-2xl sm:text-3xl md:text-[2rem] font-arabic select-none tracking-normal py-1"
+                            className="w-full max-w-lg mx-auto my-5 sm:my-7 px-4 flex flex-col items-center justify-center select-none animate-fade-in"
                             style={{
                                 color: t(theme, 'text-primary'),
-                                fontFamily: 'var(--script-font)',
-                                direction: 'rtl',
-                                lineHeight: 1.8,
                             }}
                         >
-                            {BISMILLAH_TEXT}
+                            <div className="w-full flex items-center justify-center gap-2 sm:gap-3.5">
+                                {/* Left Delicate Arabesque Hairline */}
+                                <div className="h-px flex-1 max-w-[50px] sm:max-w-[80px] bg-gradient-to-r from-transparent via-current to-current opacity-30" />
+                                <span className="text-[10px] sm:text-xs opacity-40 font-serif">۞</span>
+
+                                {/* Sacred Calligraphy Text */}
+                                <p
+                                    className="text-xl sm:text-2xl md:text-3xl font-arabic tracking-normal text-center whitespace-nowrap px-2"
+                                    style={{
+                                        fontFamily: 'var(--script-font)',
+                                        direction: 'rtl',
+                                        lineHeight: 1.8,
+                                    }}
+                                >
+                                    {BISMILLAH_TEXT}
+                                </p>
+
+                                <span className="text-[10px] sm:text-xs opacity-40 font-serif">۞</span>
+                                {/* Right Delicate Arabesque Hairline */}
+                                <div className="h-px flex-1 max-w-[50px] sm:max-w-[80px] bg-gradient-to-l from-transparent via-current to-current opacity-30" />
+                            </div>
                         </div>
                     )}
                 </section>
 
-                {/* ── View Mode: Translation (Verse-by-Verse) ── */}
+                {/* ── View Mode: Translation (Simple Divided List — Quran.com Style) ── */}
                 {settings.viewMode === 'translation' && (
-                    <div className="flex flex-col gap-3 sm:gap-3.5">
+                    <div
+                        className="flex flex-col divide-y transition-colors"
+                        style={{ borderColor: t(theme, 'border') }}
+                    >
                         {surah.ayahs.map(ayah => {
                             const ayahKey = `ayah-${surah.number}-${ayah.numberInSurah}`
                             const isFav = isFavorite(ayahKey)
@@ -416,50 +412,37 @@ export default function SurahReaderPage() {
                                     id={`ayah-${ayah.numberInSurah}`}
                                     data-ayah={ayah.numberInSurah}
                                     onMouseEnter={() => updateReadingAyah(ayah.numberInSurah)}
-                                    className="scroll-mt-24 rounded-2xl sm:rounded-3xl p-4 sm:p-6 border transition-all duration-200"
+                                    className="scroll-mt-24 py-6 sm:py-8 transition-colors flex flex-col gap-3"
                                     style={{
-                                        background: t(theme, 'surface-1'),
-                                        borderColor: t(theme, 'border'),
                                         contentVisibility: 'auto',
                                         containIntrinsicSize: '160px',
                                     }}
                                 >
-                                    {/* Top Metadata & Action Bar (Copy and Like beside each other) */}
-                                    <div className="flex items-center justify-between pb-2.5 mb-3 border-b" style={{ borderColor: t(theme, 'border') }}>
-                                        {/* Ayah Reference Badge */}
-                                        <div className="flex items-center gap-2">
+                                    {/* Top Bar: Verse Key & Actions (Unboxed, clean editorial layout) */}
+                                    <div className="flex items-center justify-between">
+                                        {/* Verse Key (e.g. 1:1, 1:33) - Clean, unboxed text */}
+                                        <div className="flex items-center select-none">
                                             <span
-                                                className="px-2.5 py-1 rounded-xl text-xs font-mono font-bold"
-                                                style={{
-                                                    background: t(theme, 'surface-2'),
-                                                    color: t(theme, 'accent'),
-                                                    border: `1px solid ${t(theme, 'border')}`,
-                                                }}
+                                                className="font-mono text-xs sm:text-[13px] font-semibold tracking-wider"
+                                                style={{ color: t(theme, 'text-secondary') }}
                                             >
                                                 {surah.number}:{ayah.numberInSurah}
                                             </span>
-                                            {ayah.juz && (
-                                                <span className="text-[11px] opacity-40 font-medium hidden sm:inline" style={{ color: t(theme, 'text-muted') }}>
-                                                    Juz {ayah.juz} • Page {ayah.page}
-                                                </span>
-                                            )}
                                         </div>
 
-                                        {/* Action Buttons: Copy and Like right beside each other */}
-                                        <div className="flex items-center gap-1.5">
+                                        {/* Action Icons: Copy and Bookmark (unboxed, clean icons) */}
+                                        <div className="flex items-center gap-1">
                                             {/* Copy */}
                                             <button
                                                 onClick={() => handleCopy(ayah)}
-                                                className="p-2 rounded-xl transition-all active:scale-90 flex items-center justify-center hover:opacity-100"
+                                                className="p-1.5 rounded-lg opacity-75 hover:opacity-100 transition-all active:scale-90 flex items-center justify-center cursor-pointer"
                                                 style={{
-                                                    background: t(theme, 'surface-2'),
                                                     color: isCopied ? t(theme, 'accent') : t(theme, 'text-secondary'),
-                                                    border: `1px solid ${t(theme, 'border')}`,
                                                 }}
                                                 title="Copy Ayah text, transliteration, and translation"
                                                 aria-label="Copy Ayah"
                                             >
-                                                {isCopied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                                                {isCopied ? <IconCheck size={18} /> : <IconCopy size={18} />}
                                             </button>
 
                                             {/* Bookmark / Favorite */}
@@ -474,23 +457,21 @@ export default function SurahReaderPage() {
                                                     translation: ayah.translation,
                                                     transliteration: ayah.transliteration,
                                                 })}
-                                                className="p-2 rounded-xl transition-all active:scale-90 flex items-center justify-center hover:opacity-100"
+                                                className="p-1.5 rounded-lg opacity-75 hover:opacity-100 transition-all active:scale-90 flex items-center justify-center cursor-pointer"
                                                 style={{
-                                                    background: isFav ? t(theme, 'accent-soft') : t(theme, 'surface-2'),
                                                     color: isFav ? t(theme, 'accent') : t(theme, 'text-secondary'),
-                                                    border: `1px solid ${isFav ? t(theme, 'accent') : t(theme, 'border')}`,
                                                 }}
                                                 title={isFav ? 'Remove Bookmark' : 'Bookmark Ayah'}
                                                 aria-label="Bookmark Ayah"
                                             >
-                                                {isFav ? <IconBookmarkFill size={16} /> : <IconBookmark size={16} />}
+                                                {isFav ? <IconBookmarkFill size={18} /> : <IconBookmark size={18} />}
                                             </button>
                                         </div>
                                     </div>
 
-                                    {/* Arabic Verse Text */}
+                                    {/* Arabic Verse Text with Ayah End Rub el Hizb Badge */}
                                     <div
-                                        className="text-right leading-[2.0] sm:leading-[2.1] mb-1 select-text tracking-normal"
+                                        className="text-right leading-[2.2] sm:leading-[2.4] my-2 select-text tracking-normal"
                                         style={{
                                             color: t(theme, 'text-primary'),
                                             fontFamily: 'var(--script-font)',
@@ -499,29 +480,18 @@ export default function SurahReaderPage() {
                                         }}
                                     >
                                         {cleanText}
-                                        <span
-                                            className="inline-flex items-center justify-center mx-1.5 text-xs font-sans font-bold px-2 py-0.5 rounded-full select-none"
-                                            style={{
-                                                color: t(theme, 'accent'),
-                                                border: `1px solid ${t(theme, 'border')}`,
-                                                fontSize: '11px',
-                                                verticalAlign: 'middle',
-                                                direction: 'ltr',
-                                            }}
-                                        >
-                                            {ayah.numberInSurah}
-                                        </span>
+                                        <RubElHizbBadge
+                                            number={ayah.numberInSurah}
+                                            size={28}
+                                            theme={theme}
+                                            className="inline-flex align-middle mx-2"
+                                            style={{ verticalAlign: 'middle', direction: 'ltr' }}
+                                        />
                                     </div>
 
-                                    {/* Transliteration & Translation Container (Fitted & Responsive) */}
+                                    {/* Transliteration & Translation (Unboxed, clean editorial typography) */}
                                     {(ayah.transliteration || ayah.translation) && (
-                                        <div
-                                            className="mt-2.5 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 flex flex-col gap-2 transition-all text-left"
-                                            style={{
-                                                background: t(theme, 'surface-2'),
-                                                border: `1px solid ${t(theme, 'border')}`,
-                                            }}
-                                        >
+                                        <div className="flex flex-col gap-1.5 text-left pt-1">
                                             {/* Phonetic Transliteration */}
                                             {ayah.transliteration && (
                                                 <p
@@ -535,11 +505,7 @@ export default function SurahReaderPage() {
                                                 </p>
                                             )}
 
-                                            {ayah.transliteration && ayah.translation && (
-                                                <div className="h-px w-full" style={{ background: t(theme, 'border'), opacity: 0.35 }} />
-                                            )}
-
-                                            {/* English Translation */}
+                                            {/* English Translation (Saheeh International) */}
                                             {ayah.translation && (
                                                 <p
                                                     className="text-[15px] sm:text-[16.5px] leading-relaxed font-normal select-text opacity-95"
@@ -614,7 +580,12 @@ export default function SurahReaderPage() {
                     >
                         <div className="flex items-center justify-between pb-2 mb-2 border-b" style={{ borderColor: t(theme, 'border') }}>
                             <div className="flex items-center gap-2">
-                                <span className="text-xs font-bold font-mono" style={{ color: t(theme, 'accent') }}>
+                                <RubElHizbBadge
+                                    number={selectedAyah.numberInSurah}
+                                    size={24}
+                                    theme={theme}
+                                />
+                                <span className="text-xs font-semibold" style={{ color: t(theme, 'accent'), fontFamily: 'var(--font-serif-body)' }}>
                                     Ayah {selectedAyah.numberInSurah}
                                 </span>
                             </div>
@@ -720,7 +691,7 @@ export default function SurahReaderPage() {
                                 <span
                                     className="text-2xl sm:text-3xl font-arabic"
                                     style={{
-                                        color: t(theme, 'accent'),
+                                        color: t(theme, 'text-primary'),
                                         fontFamily: 'var(--script-font)',
                                         direction: 'rtl',
                                     }}
@@ -925,24 +896,16 @@ function SurahSelectorModal({ isOpen, onClose, surahs, currentId, onSelect }) {
                     className="px-5 py-4 sm:px-6 sm:py-4.5 border-b flex items-center justify-between flex-shrink-0"
                     style={{ borderColor: t(theme, 'border'), background: t(theme, 'surface-1') }}
                 >
-                    <div className="flex items-baseline gap-2.5">
-                        <h2
-                            id="surah-modal-title"
-                            className="text-lg sm:text-xl font-normal tracking-tight"
-                            style={{
-                                color: t(theme, 'text-primary'),
-                                fontFamily: 'var(--font-serif-body)',
-                            }}
-                        >
-                            Jump to Surah
-                        </h2>
-                        <span
-                            className="text-xs opacity-40 font-mono"
-                            style={{ color: t(theme, 'text-muted') }}
-                        >
-                            114
-                        </span>
-                    </div>
+                    <h2
+                        id="surah-modal-title"
+                        className="text-lg sm:text-xl font-normal tracking-tight"
+                        style={{
+                            color: t(theme, 'text-primary'),
+                            fontFamily: 'var(--font-serif-body)',
+                        }}
+                    >
+                        Jump to Surah
+                    </h2>
 
                     <button
                         onClick={onClose}
@@ -1042,46 +1005,43 @@ function SurahSelectorModal({ isOpen, onClose, surahs, currentId, onSelect }) {
                                                 isSelected={isSelected}
                                             />
                                             <div className="min-w-0 flex-1">
-                                                <div className="flex items-center gap-2">
-                                                    <h4
-                                                        className="text-xs sm:text-sm font-medium truncate leading-tight group-hover:text-amber-500 transition-colors"
-                                                        style={{
-                                                            color: isSelected ? t(theme, 'accent') : t(theme, 'text-primary'),
-                                                            fontFamily: 'var(--font-serif-body)',
-                                                        }}
-                                                    >
-                                                        {s.englishName}
-                                                    </h4>
-                                                    {isSelected && (
-                                                        <span
-                                                            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                                                            style={{ background: t(theme, 'accent') }}
-                                                            title="Current reading"
-                                                        />
-                                                    )}
-                                                </div>
+                                                <h4
+                                                    className="text-xs sm:text-sm font-medium truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                    style={{
+                                                        color: isSelected ? t(theme, 'accent') : t(theme, 'text-primary'),
+                                                        fontFamily: 'var(--font-serif-body)',
+                                                    }}
+                                                >
+                                                    {s.englishName}
+                                                </h4>
                                                 <div
                                                     className="flex items-center gap-1.5 mt-0.5 text-[11px] opacity-55 font-normal leading-tight"
                                                     style={{ color: t(theme, 'text-muted'), fontFamily: 'var(--font-sans)' }}
                                                 >
                                                     <span className="truncate">{s.englishNameTranslation}</span>
-                                                    <span>·</span>
-                                                    <span className="whitespace-nowrap">{s.numberOfAyahs} verses</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* Right: Authentic Arabic calligraphy */}
-                                        <span
-                                            className="text-base sm:text-lg font-arabic transition-transform duration-200 group-hover:scale-105 flex-shrink-0 pl-2"
-                                            style={{
-                                                fontFamily: 'var(--script-font)',
-                                                color: isSelected ? t(theme, 'accent') : t(theme, 'text-primary'),
-                                                direction: 'rtl',
-                                            }}
-                                        >
-                                            {s.name}
-                                        </span>
+                                        {/* Right: Authentic Arabic calligraphy + Verses count underneath */}
+                                        <div className="flex flex-col items-end flex-shrink-0 pl-2 text-right">
+                                            <span
+                                                className="text-base sm:text-lg font-arabic leading-tight transition-transform duration-200 group-hover:scale-105"
+                                                style={{
+                                                    fontFamily: 'var(--script-font)',
+                                                    color: isSelected ? t(theme, 'accent') : t(theme, 'text-primary'),
+                                                    direction: 'rtl',
+                                                }}
+                                            >
+                                                {s.name}
+                                            </span>
+                                            <span
+                                                className="text-[12px] opacity-70 font-medium tracking-wide leading-normal mt-2 whitespace-nowrap"
+                                                style={{ color: t(theme, 'text-muted'), fontFamily: 'var(--font-sans)' }}
+                                            >
+                                                {s.numberOfAyahs} Ayahs
+                                            </span>
+                                        </div>
                                     </button>
                                 )
                             })}

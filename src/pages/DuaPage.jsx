@@ -3,16 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
 import {
-    IconSun,
-    IconHeart,
-    IconCompass,
+    IconHands,
     IconBook,
     IconStar,
     IconNinetyNine,
     IconFlower,
     IconCrescent,
     IconUser,
-    IconChevronRight,
 } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 
@@ -31,34 +28,18 @@ export default function DuaPage() {
         }
     }, [])
 
-    // ── 3 Curated Groups linking directly to corresponding main duas (No intermediate Image 2 sub-duas screen) ──
+    // ── Curated Groups linking directly to corresponding main dua experiences ──
     const GROUPS = [
         {
-            title: 'Prophetic & Daily Supplications:',
+            title: 'Prophetic & Daily Supplications',
             items: [
                 {
-                    id: 'daily-duas',
-                    title: 'Daily Duas',
-                    subtitle: 'Prophetic traditions for morning, meals, home & living',
-                    badge: 'Daily',
-                    icon: IconSun,
+                    id: 'duas',
+                    title: 'Dua',
+                    subtitle: 'Spiritual State, Daily Duas and Life Events',
+                    badge: 'Supplications',
+                    icon: IconHands,
                     action: () => navigate('/library/general'),
-                },
-                {
-                    id: 'emotions',
-                    title: 'Spiritual State',
-                    subtitle: 'Supplications for anxiety, sorrow, gratitude & patience',
-                    badge: 'Emotions',
-                    icon: IconHeart,
-                    action: () => navigate('/library/emotions'),
-                },
-                {
-                    id: 'situational',
-                    title: 'Life Events',
-                    subtitle: 'Supplications for travel, illness, protection & milestones',
-                    badge: 'Situations',
-                    icon: IconCompass,
-                    action: () => navigate('/library/situational'),
                 },
                 {
                     id: 'daily',
@@ -66,10 +47,7 @@ export default function DuaPage() {
                     subtitle: 'Morning & evening adhkar, solah & remembrance',
                     badge: 'Adhkar',
                     icon: IconBook,
-                    action: () => {
-                        const saved = localStorage.getItem('last-daily-category')
-                        navigate(saved ? `/daily/${saved}` : '/daily')
-                    },
+                    action: () => navigate('/daily'),
                 },
                 {
                     id: 'robbana',
@@ -82,7 +60,7 @@ export default function DuaPage() {
             ],
         },
         {
-            title: 'Devotion :',
+            title: 'Devotion',
             items: [
                 {
                     id: 'names',
@@ -111,7 +89,7 @@ export default function DuaPage() {
             ],
         },
         {
-            title: 'Personal :',
+            title: 'Personal',
             items: [
                 {
                     id: 'personal',
@@ -130,36 +108,22 @@ export default function DuaPage() {
             className="pb-36 flex flex-col gap-5 max-w-xl md:max-w-2xl mx-auto px-4 sm:px-6"
             style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}
         >
-            {/* ── Editorial Header ── */}
-            <header className="flex flex-col gap-1 animate-fade-in pt-1">
-                <h1
-                    style={{
-                        color: t(theme, 'text-primary'),
-                        fontFamily: 'var(--font-serif-heading)',
-                        fontSize: 'clamp(1.85rem, 5.5vw, 2.75rem)',
-                        fontWeight: 400,
-                        lineHeight: 1.15,
-                        letterSpacing: '-0.025em',
-                    }}
-                >
-                    Dhikr & Dua
-                </h1>
-                <p
-                    className="text-xs sm:text-sm opacity-60 font-medium"
-                    style={{ color: t(theme, 'text-muted') }}
-                >
-                    Collections of Supplication
-                </p>
-            </header>
+            {/* ── Modern App Masthead ── */}
+            <PageHeader
+                title="Dhikr & Dua"
+                showBack={false}
+                padding="px-0 pt-2 pb-1"
+                sticky={false}
+            />
 
-            {/* ── Curated Grouped Inset Sections (No Hero Card) ── */}
+            {/* ── Curated Grouped Inset Sections ── */}
             <main className="flex flex-col gap-6 animate-fade-in mt-1">
                 {GROUPS.map((group, gIdx) => (
                     <section key={gIdx}>
                         {/* Section Header */}
                         <h2
-                            className="text-[12px] font-bold uppercase tracking-[0.18em] px-2 mb-2.5 select-none opacity-50"
-                            style={{ color: t(theme, 'text-muted') }}
+                            className="text-[11px] font-bold uppercase tracking-[0.16em] px-2 mb-2.5 select-none"
+                            style={{ color: t(theme, 'text-secondary') }}
                         >
                             {group.title}
                         </h2>
@@ -210,18 +174,18 @@ export default function DuaPage() {
                                                     </h3>
                                                 </div>
                                                 <p
-                                                    className="text-[12px] opacity-60 truncate leading-tight mt-0.5"
-                                                    style={{ color: t(theme, 'text-muted') }}
+                                                    className="text-[12px] font-normal truncate leading-tight mt-0.5"
+                                                    style={{ color: t(theme, 'text-secondary') }}
                                                 >
                                                     {cat.subtitle}
                                                 </p>
                                             </div>
                                         </div>
 
-                                        {/* Right: Badge Pill + Trailing Chevron */}
+                                        {/* Right: Badge Pill */}
                                         <div className="flex items-center gap-2.5 flex-shrink-0">
                                             <span
-                                                className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
+                                                className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md leading-none transition-colors"
                                                 style={{
                                                     background: t(theme, 'surface-2'),
                                                     color: t(theme, 'accent'),
@@ -230,12 +194,6 @@ export default function DuaPage() {
                                             >
                                                 {cat.badge}
                                             </span>
-
-                                            <IconChevronRight
-                                                size={15}
-                                                className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
-                                                style={{ color: t(theme, 'text-primary') }}
-                                            />
                                         </div>
                                     </button>
                                 )

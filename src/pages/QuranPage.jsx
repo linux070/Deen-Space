@@ -73,26 +73,16 @@ export default function QuranPage() {
             className="pb-36 px-4 sm:px-6 md:px-8 max-w-5xl mx-auto flex flex-col gap-5"
             style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}
         >
-            {/* ── 1. Editorial Masthead ── */}
-            <header className="flex flex-col gap-1 animate-fade-in pt-1">
+            {/* ── 1. Modern Native Masthead ── */}
+            <header className="animate-fade-in pt-2 pb-1">
                 <h1
+                    className="text-2xl sm:text-[28px] font-bold tracking-tight leading-tight"
                     style={{
                         color: t(theme, 'text-primary'),
-                        fontFamily: 'var(--font-serif-heading)',
-                        fontSize: 'clamp(1.85rem, 5.5vw, 2.75rem)',
-                        fontWeight: 400,
-                        lineHeight: 1.15,
-                        letterSpacing: '-0.025em',
                     }}
                 >
                     The Holy Qur'an
                 </h1>
-                <p
-                    className="text-xs sm:text-sm opacity-60 font-medium"
-                    style={{ color: t(theme, 'text-muted') }}
-                >
-                    114 Surahs · 6,236 Verses
-                </p>
             </header>
 
             {/* ── 2. "Continue Reciting" Banner (Homepage Unified Design) ── */}
@@ -134,9 +124,9 @@ export default function QuranPage() {
                                         {surahEnglishName}
                                     </h3>
                                     <p
-                                        className="text-xs opacity-65 truncate mt-0.5 font-normal"
+                                        className="text-xs truncate mt-0.5 font-normal"
                                         style={{
-                                            color: t(theme, 'text-muted'),
+                                            color: t(theme, 'text-secondary'),
                                             fontFamily: 'var(--font-sans)',
                                         }}
                                     >
@@ -176,9 +166,9 @@ export default function QuranPage() {
 
                         {/* Bottom Info Row */}
                         <div
-                            className="flex items-center justify-between text-xs mt-3 opacity-65 font-normal"
+                            className="flex items-center justify-between text-xs mt-3 font-normal"
                             style={{
-                                color: t(theme, 'text-muted'),
+                                color: t(theme, 'text-secondary'),
                                 fontFamily: 'var(--font-sans)',
                             }}
                         >
@@ -233,7 +223,7 @@ export default function QuranPage() {
                                         style={{
                                             fontFamily: 'var(--script-font)',
                                             fontSize: 'calc(var(--arabic-size) * 0.72)',
-                                            color: t(theme, 'accent'),
+                                            color: t(theme, 'text-primary'),
                                             direction: 'rtl',
                                         }}
                                     >
@@ -500,20 +490,18 @@ function SurahGridCard({ surah, theme, isDark, onClick }) {
                     >
                         {surah.englishNameTranslation}
                     </p>
-                    <div className="flex items-center gap-1.5 mt-1 text-[11px] opacity-50 font-normal leading-tight" style={{ color: t(theme, 'text-muted'), fontFamily: 'var(--font-sans)' }}>
+                    <div className="flex items-center gap-1.5 mt-1 text-[11px] font-normal leading-tight" style={{ color: t(theme, 'text-secondary'), fontFamily: 'var(--font-sans)' }}>
                         <span>{surah.revelationType === 'Meccan' ? 'Meccan' : 'Medinan'}</span>
-                        <span>·</span>
-                        <span>{surah.numberOfAyahs} Verses</span>
                     </div>
                 </div>
             </div>
 
-            {/* Right: Authentic Arabic Calligraphy */}
-            <div className="flex flex-col items-end flex-shrink-0 pl-2">
+            {/* Right: Arabic Calligraphy + Verses Count underneath (room to breathe) */}
+            <div className="flex flex-col items-end flex-shrink-0 pl-2 text-right">
                 <span
-                    className="font-arabic leading-none transition-transform duration-300 group-hover:scale-105"
+                    className="font-arabic leading-tight transition-transform duration-300 group-hover:scale-105"
                     style={{
-                        color: t(theme, 'accent'),
+                        color: t(theme, 'text-primary'),
                         fontFamily: 'var(--script-font)',
                         fontSize: 'calc(var(--arabic-size) * 0.92)',
                         direction: 'rtl',
@@ -521,13 +509,22 @@ function SurahGridCard({ surah, theme, isDark, onClick }) {
                 >
                     {surah.name}
                 </span>
+                <span
+                    className="text-[12px] opacity-70 font-medium tracking-wide leading-normal mt-2 whitespace-nowrap"
+                    style={{
+                        color: t(theme, 'text-muted'),
+                        fontFamily: 'var(--font-sans)',
+                    }}
+                >
+                    {surah.numberOfAyahs} Ayahs
+                </span>
             </div>
         </button>
     )
 }
 
 /**
- * Continuous Ledger Row — clean, divided, optically aligned
+ * Continuous Ledger Row — clean, divided, optically aligned (Quran.com layout)
  */
 function SurahLedgerRow({ surah, theme, isDark, isLast, onClick }) {
     return (
@@ -564,33 +561,31 @@ function SurahLedgerRow({ surah, theme, isDark, isLast, onClick }) {
                         }}
                     >
                         <span className="truncate">{surah.englishNameTranslation}</span>
-                        <span>·</span>
-                        <span className="whitespace-nowrap">{surah.numberOfAyahs} verses</span>
                     </div>
                 </div>
             </div>
 
-            {/* Right: Revelation Type + Arabic Calligraphy */}
-            <div className="flex items-center gap-3 flex-shrink-0 pl-2">
+            {/* Right: Arabic Calligraphy + Verses Count underneath (room to breathe) */}
+            <div className="flex flex-col items-end flex-shrink-0 pl-3 text-right">
                 <span
-                    className="text-[10px] uppercase tracking-wider opacity-35 hidden sm:inline whitespace-nowrap"
+                    className="text-base sm:text-lg font-arabic leading-tight transition-transform duration-200 group-hover:scale-105"
                     style={{
-                        color: t(theme, 'text-muted'),
-                        fontFamily: 'var(--font-sans)',
-                    }}
-                >
-                    {surah.revelationType}
-                </span>
-                <span
-                    className="text-base sm:text-lg font-arabic transition-transform duration-200 group-hover:scale-105"
-                    style={{
-                        color: t(theme, 'accent'),
+                        color: t(theme, 'text-primary'),
                         fontFamily: 'var(--script-font)',
                         direction: 'rtl',
                     }}
                 >
                     {surah.name}
                 </span>
+                <div
+                    className="flex items-center gap-1.5 mt-2 text-[12px] opacity-70 font-medium tracking-wide leading-normal"
+                    style={{ color: t(theme, 'text-muted'), fontFamily: 'var(--font-sans)' }}
+                >
+                    <span className="text-[10px] uppercase tracking-wider opacity-60 hidden sm:inline">
+                        {surah.revelationType} ·
+                    </span>
+                    <span className="whitespace-nowrap">{surah.numberOfAyahs} Ayahs</span>
+                </div>
             </div>
         </button>
     )

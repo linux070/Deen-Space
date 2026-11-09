@@ -303,9 +303,9 @@ export default function HomePage({ duas = [], asma = [] }) {
                     Assalamu Alaikum
                 </h1>
                 <p
-                    className="text-xs sm:text-sm font-normal mt-1 opacity-65"
+                    className="text-xs sm:text-sm font-normal mt-1"
                     style={{
-                        color: t(theme, 'text-muted'),
+                        color: t(theme, 'text-secondary'),
                         fontFamily: 'var(--font-sans)',
                     }}
                 >
@@ -352,9 +352,9 @@ export default function HomePage({ duas = [], asma = [] }) {
                                         {surahEnglishName}
                                     </h3>
                                     <p
-                                        className="text-xs opacity-65 truncate mt-0.5 font-normal"
+                                        className="text-xs truncate mt-0.5 font-normal"
                                         style={{
-                                            color: t(theme, 'text-muted'),
+                                            color: t(theme, 'text-secondary'),
                                             fontFamily: 'var(--font-sans)',
                                         }}
                                     >
@@ -394,9 +394,9 @@ export default function HomePage({ duas = [], asma = [] }) {
 
                         {/* Bottom Info Row */}
                         <div
-                            className="flex items-center justify-between text-xs mt-3 opacity-65 font-normal"
+                            className="flex items-center justify-between text-xs mt-3 font-normal"
                             style={{
-                                color: t(theme, 'text-muted'),
+                                color: t(theme, 'text-secondary'),
                                 fontFamily: 'var(--font-sans)',
                             }}
                         >
@@ -419,9 +419,9 @@ export default function HomePage({ duas = [], asma = [] }) {
                     <div className="flex flex-col">
                         {/* Section Tagline */}
                         <span
-                            className="text-[11px] sm:text-xs font-medium uppercase tracking-[0.2em] mb-2.5 opacity-60"
+                            className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.16em] mb-2.5"
                             style={{
-                                color: t(theme, 'text-muted'),
+                                color: t(theme, 'text-secondary'),
                                 fontFamily: 'var(--font-sans)',
                             }}
                         >
@@ -454,9 +454,9 @@ export default function HomePage({ duas = [], asma = [] }) {
 
                         {/* Gregorian Date */}
                         <p
-                            className="text-xs sm:text-sm font-normal mt-2 opacity-65"
+                            className="text-xs sm:text-sm font-normal mt-2"
                             style={{
-                                color: t(theme, 'text-muted'),
+                                color: t(theme, 'text-secondary'),
                                 fontFamily: 'var(--font-sans)',
                             }}
                         >
@@ -527,9 +527,9 @@ export default function HomePage({ duas = [], asma = [] }) {
                     {/* Header inside the container: Explore */}
                     <div className="mb-4 sm:mb-5 pb-3 border-b" style={{ borderColor: t(theme, 'border') }}>
                         <span
-                            className="text-[11px] sm:text-xs font-medium uppercase tracking-[0.2em] opacity-60"
+                            className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.16em]"
                             style={{
-                                color: t(theme, 'text-muted'),
+                                color: t(theme, 'text-secondary'),
                                 fontFamily: 'var(--font-sans)',
                             }}
                         >
@@ -618,9 +618,9 @@ export default function HomePage({ duas = [], asma = [] }) {
                                         Verse of the Day
                                     </span>
                                     <span
-                                        className="text-[11px] opacity-60 font-normal leading-tight mt-0.5"
+                                        className="text-[11px] font-normal leading-tight mt-0.5"
                                         style={{
-                                            color: t(theme, 'text-muted'),
+                                            color: t(theme, 'text-secondary'),
                                             fontFamily: 'var(--font-sans)',
                                         }}
                                     >

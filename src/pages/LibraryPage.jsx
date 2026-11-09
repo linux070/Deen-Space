@@ -4,7 +4,6 @@ import { useSettings } from '../context/SettingsContext'
 import { t } from '../utils/theme'
 import {
     IconChevronLeft,
-    IconChevronRight,
     IconCompass,
     IconHeart,
     IconDua,
@@ -21,14 +20,15 @@ import {
     IconFlower,
     IconHome,
     IconTag,
-    IconMessage
+    IconMessage,
+    RubElHizbBadge,
+    IconUser,
+    IconX,
 } from '../components/Icons'
 import DuaCard from '../components/DuaCard'
 import PageHeader from '../components/PageHeader'
 import MiniTasbih from '../components/MiniTasbih'
 import { toTitleCase } from '../utils/text'
-
-
 
 export default function LibraryPage({ duas, embedded = false, initialSection = null }) {
     const { theme } = useSettings()
@@ -53,6 +53,23 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         const idx = parseInt(searchParams.get('idx'))
         return isNaN(idx) ? 0 : idx
     })
+
+    // Route parameter sync: when switching routes (e.g. /library/robbana -> /library/salawat -> /library/general)
+    useEffect(() => {
+        if (initialSection) {
+            const validSections = ['general', 'emotions', 'situational', 'ramadan', 'robbana', 'salawat', 'salah', 'custom-prayers']
+            if (validSections.includes(initialSection)) {
+                setActiveSection(initialSection)
+                if (initialSection === 'custom-prayers') {
+                    setViewMode('custom')
+                } else if (viewMode === 'custom') {
+                    setViewMode('list')
+                }
+                setActiveSubSection(null)
+                setSelectedIndex(0)
+            }
+        }
+    }, [initialSection])
 
     // Reset view if critical state is missing - default to 'general' list
     useEffect(() => {
@@ -227,7 +244,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
         // Priority 1: Sub-section filtering
         if (activeSubSection) {
-            if (activeSubSection === 'sneezing-yawning') {
+            if (activeSubSection === 'sneezing-yawning' || activeSubSection === 'etiquette') {
                 result = result.filter(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning'))
             } else if (activeSubSection === 'animal-sounds') {
                 result = result.filter(d => d.tags?.includes('animals'))
@@ -306,7 +323,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (['general', 'emotions', 'situational'].includes(activeSection) && !activeSubSection) {
             return SUB_SECTIONS.map(sub => {
                 let items = []
-                if (sub.id === 'sneezing-yawning') {
+                if (sub.id === 'sneezing-yawning' || sub.id === 'etiquette') {
                     items = listDuas.filter(d => d.tags?.includes('sneezing') || d.tags?.includes('yawning'))
                 } else if (sub.id === 'animal-sounds') {
                     items = listDuas.filter(d => d.tags?.includes('animals'))
@@ -427,7 +444,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
             const currentDua = swipeDuas[selectedIndex]
             if (currentDua) {
                 const sub = SUB_SECTIONS.find(s => {
-                    if (s.id === 'etiquette') return currentDua.tags?.includes('sneezing') || currentDua.tags?.includes('yawning')
+                    if (s.id === 'etiquette' || s.id === 'sneezing-yawning') return currentDua.tags?.includes('sneezing') || currentDua.tags?.includes('yawning')
                     if (s.id === 'animal-sounds') return currentDua.tags?.includes('animals')
                     if (activeSection === 'emotions') {
                         if (s.id === 'patience') return currentDua.tags?.includes('patience') || currentDua.id === 'trust-3'
@@ -694,13 +711,11 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
         if (!activeSection) return 'Daily Duas'
 
         const cat = activeSection
-        if (cat === 'robbana') return '40 Robbana'
-        if (cat === 'salawat') return 'Durood & Salawat'
-        if (cat === 'emotions') return 'Spiritual State'
-        if (cat === 'situational') return 'Life Events'
-        if (cat === 'general') return 'Daily Duas'
+        if (activeSection === 'robbana') return '40 Robbana'
+        if (activeSection === 'salawat') return 'Durood & Salawat'
+        if (['general', 'emotions', 'situational'].includes(activeSection)) return 'Dua'
 
-        return toTitleCase(cat)
+        return toTitleCase(activeSection) || 'Dua'
     }
 
     const getListTitle = () => {
@@ -713,22 +728,28 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
     const Header = () => {
         const title = getPageTitle()
-        let subtitle = 'Prophetic Traditions'
+        let subtitle = 'Prophetic Traditions & Supplications'
+        const isCustom = activeSection === 'custom' || activeSection === 'custom-prayers' || viewMode === 'custom'
 
         if (activeSubSection) {
-            subtitle = toTitleCase(activeSubSection)
+            const sec = SUB_SECTIONS.find(s => s.id === activeSubSection)
+            subtitle = sec ? `${toTitleCase(activeSection)} • ${sec.title}` : toTitleCase(activeSubSection)
         } else if (activeSection === 'robbana') {
-            subtitle = 'Prophetic Quranic Prayers'
+            subtitle = '40 Quranic Prayers of the Prophets'
+        } else if (activeSection === 'salawat') {
+            subtitle = 'Blessings Upon Prophet Muhammad ﷺ'
         } else if (activeSection === 'emotions') {
-            subtitle = 'Emotional & Spiritual Well-being'
+            subtitle = 'Spiritual State & Emotional Well-being'
         } else if (activeSection === 'situational') {
-            subtitle = 'Situational Supplications & Protection'
+            subtitle = 'Life Events & Situational Supplications'
+        } else if (activeSection === 'general') {
+            subtitle = 'Daily Duas & Prophetic Traditions'
         } else if (activeSection === 'ramadan') {
-            subtitle = 'Spiritual Season'
+            subtitle = 'Spiritual Season & Fasting Supplications'
         } else if (activeSection === 'salah') {
             subtitle = 'Supplications in Prayer'
-        } else if (activeSection === 'custom' || activeSection === 'custom-prayers') {
-            subtitle = 'Personal Supplications'
+        } else if (isCustom) {
+            subtitle = 'Private offline supplications & reflections'
         }
 
         return (
@@ -736,11 +757,28 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                 <PageHeader
                     title={viewMode === 'list' && activeSubSection ? getListTitle() : title}
                     onBack={goBack}
-                    padding="px-6 pt-8 pb-3"
-                    titleSize="text-xl"
-                    titleWeight={300}
+                    padding="px-4 sm:px-6 pt-6 pb-3"
                     sticky={false}
-                    titleSerif={false}
+                    rightElement={
+                        isCustom && customPrayers.length > 0 ? (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setEditingPrayerId(null)
+                                    setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
+                                    setShowAddModal(true)
+                                }}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all active:scale-95 shadow-xs cursor-pointer"
+                                style={{
+                                    background: t(theme, 'accent'),
+                                    color: isDark ? '#0c0f14' : '#ffffff',
+                                }}
+                            >
+                                <span className="text-sm font-light leading-none">+</span>
+                                <span>New</span>
+                            </button>
+                        ) : null
+                    }
                 />
             </div>
         )
@@ -777,7 +815,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                         className="flex-1 min-w-[105px] py-2 px-3 text-center rounded-xl text-[12px] font-semibold tracking-tight transition-all cursor-pointer whitespace-nowrap"
                                         style={{
                                             background: isCurrent ? t(theme, 'surface-0') : 'transparent',
-                                            color: isCurrent ? t(theme, 'text-primary') : t(theme, 'text-muted'),
+                                            color: isCurrent ? t(theme, 'text-primary') : t(theme, 'text-secondary'),
                                             boxShadow: isCurrent ? (isDark ? '0 1px 3px rgba(0,0,0,0.4)' : '0 1px 4px rgba(0,0,0,0.06)') : 'none',
                                             border: isCurrent ? `1px solid ${t(theme, 'border')}` : '1px solid transparent'
                                         }}
@@ -792,8 +830,8 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                         (groupedSections || []).map((group, gIdx) => (
                             <div key={gIdx} className="mb-6">
                                 <h4
-                                    className="text-[11px] font-bold tracking-[0.2em] uppercase px-2 mb-2 select-none opacity-45"
-                                    style={{ color: t(theme, 'text-muted') }}
+                                    className="text-[11px] font-bold tracking-[0.16em] uppercase px-2 mb-2 select-none"
+                                    style={{ color: t(theme, 'text-secondary') }}
                                 >
                                     {group.title}
                                 </h4>
@@ -833,9 +871,9 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                                     </h4>
                                                     {previewText && (
                                                         <p
-                                                            className="text-[12px] opacity-60 truncate leading-tight mt-1 italic font-serif"
+                                                            className="text-[12px] truncate leading-tight mt-1 italic font-serif"
                                                             style={{
-                                                                color: t(theme, 'text-muted'),
+                                                                color: t(theme, 'text-secondary'),
                                                                 fontFamily: 'var(--font-serif-body)',
                                                             }}
                                                         >
@@ -844,24 +882,20 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                                     )}
                                                 </div>
 
-                                                <div className="flex items-center gap-2 flex-shrink-0">
-                                                    {dua.repeat > 1 && (
+                                                {dua.repeat > 1 && (
+                                                    <div className="flex items-center flex-shrink-0">
                                                         <span
-                                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md leading-none"
+                                                            className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
                                                             style={{
-                                                                background: t(theme, 'accent-soft'),
+                                                                background: t(theme, 'surface-2'),
                                                                 color: t(theme, 'accent'),
+                                                                border: `1px solid ${t(theme, 'border')}`,
                                                             }}
                                                         >
                                                             {dua.repeat}×
                                                         </span>
-                                                    )}
-                                                    <IconChevronRight
-                                                        size={15}
-                                                        className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
-                                                        style={{ color: t(theme, 'text-primary') }}
-                                                    />
-                                                </div>
+                                                    </div>
+                                                )}
                                             </button>
                                         )
                                     })}
@@ -870,7 +904,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                         ))
                     ) : (
                         listDuas.length === 0 ? (
-                            <div className="text-center py-20 opacity-30 text-[11px] font-black tracking-widest uppercase">
+                            <div className="text-center py-20 text-xs font-semibold tracking-wider uppercase" style={{ color: t(theme, 'text-secondary') }}>
                                 No supplications found
                             </div>
                         ) : (
@@ -886,6 +920,7 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                     const absoluteIdx = swipeDuas.findIndex(d => d.id === dua.id)
                                     const isLast = dIdx === listDuas.length - 1
                                     const previewText = dua.transliteration || (dua.translation && dua.translation.en) || (typeof dua.translation === 'string' ? dua.translation : '')
+                                    const isRobbana = activeSection === 'robbana'
 
                                     return (
                                         <button
@@ -896,23 +931,31 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                                 skippingFirstScroll.current = true
                                                 setViewMode('swipe')
                                             }}
-                                            className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                            className="group w-full flex items-center justify-between gap-3 px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
                                             style={{
                                                 borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
                                             }}
                                         >
+                                            {isRobbana && (
+                                                <RubElHizbBadge
+                                                    number={dIdx + 1}
+                                                    size={34}
+                                                    theme={theme}
+                                                />
+                                            )}
+
                                             <div className="flex-1 min-w-0 pr-3">
                                                 <h4
                                                     className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
                                                     style={{ color: t(theme, 'text-primary') }}
                                                 >
-                                                    {getTitle(dua)}
+                                                    {getTitle(dua, dIdx)}
                                                 </h4>
                                                 {previewText && (
                                                     <p
-                                                        className="text-[12px] opacity-60 truncate leading-tight mt-1 italic font-serif"
+                                                        className="text-[12px] truncate leading-tight mt-1 italic font-serif"
                                                         style={{
-                                                            color: t(theme, 'text-muted'),
+                                                            color: t(theme, 'text-secondary'),
                                                             fontFamily: 'var(--font-serif-body)',
                                                         }}
                                                     >
@@ -921,24 +964,20 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center gap-2 flex-shrink-0">
-                                                {dua.repeat > 1 && (
+                                            {dua.repeat > 1 && (
+                                                <div className="flex items-center flex-shrink-0">
                                                     <span
-                                                        className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md leading-none"
+                                                        className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
                                                         style={{
-                                                            background: t(theme, 'accent-soft'),
+                                                            background: t(theme, 'surface-2'),
                                                             color: t(theme, 'accent'),
+                                                            border: `1px solid ${t(theme, 'border')}`,
                                                         }}
                                                     >
                                                         {dua.repeat}×
                                                     </span>
-                                                )}
-                                                <IconChevronRight
-                                                    size={15}
-                                                    className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
-                                                    style={{ color: t(theme, 'text-primary') }}
-                                                />
-                                            </div>
+                                                </div>
+                                            )}
                                         </button>
                                     )
                                 })}
@@ -995,110 +1034,181 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
         if (viewMode === 'custom') {
             return (
-                <main className="px-4 sm:px-6 animate-fade-in mt-2 max-w-3xl mx-auto w-full pb-16">
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setEditingPrayerId(null)
-                            setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
-                            setShowAddModal(true)
-                        }}
-                        className="w-full h-12 flex items-center justify-center gap-2 rounded-2xl border transition-all hover:opacity-90 active:scale-[0.99] mb-8 cursor-pointer"
-                        style={{
-                            background: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff',
-                            borderColor: t(theme, 'border'),
-                            color: t(theme, 'text-primary'),
-                        }}
-                    >
-                        <span className="text-[13px] font-semibold tracking-wide">+ Add Personal Prayer</span>
-                    </button>
-
-                    <div className="mb-3 px-2">
-                        <h2
-                            className="text-[11px] font-bold tracking-[0.2em] uppercase select-none opacity-45"
-                            style={{ color: t(theme, 'text-muted') }}
-                        >
-                            Saved Supplications
-                        </h2>
-                    </div>
-
+                <main className="px-4 sm:px-6 animate-fade-in mt-3 max-w-3xl mx-auto w-full pb-20">
                     {customPrayers.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-16 px-6 text-center animate-fade-in relative mt-2">
-                            <p className="text-[14px] font-normal max-w-[280px] leading-relaxed opacity-60" style={{ color: t(theme, 'text-muted') }}>
-                                Keep your spiritual journey close by adding your first personal dua.
+                        /* ── Modern Minimalist Empty State ── */
+                        <div className="flex flex-col items-center justify-center py-20 px-6 text-center animate-fade-in max-w-sm mx-auto">
+                            {/* Graceful Emblem */}
+                            <div
+                                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 hover:scale-105 shadow-xs"
+                                style={{
+                                    background: t(theme, 'accent-soft'),
+                                    color: t(theme, 'accent'),
+                                    border: `1px solid ${t(theme, 'border')}`,
+                                }}
+                            >
+                                <IconUser size={28} />
+                            </div>
+
+                            {/* Poetic & Dignified Typography */}
+                            <h3
+                                className="text-xl sm:text-2xl font-normal tracking-tight mb-2.5"
+                                style={{
+                                    color: t(theme, 'text-primary'),
+                                    fontFamily: 'var(--font-serif-heading)',
+                                }}
+                            >
+                                Your Private Space
+                            </h3>
+                            <p
+                                className="text-[13px] leading-relaxed mb-8 max-w-[280px]"
+                                style={{ color: t(theme, 'text-secondary') }}
+                            >
+                                Record heartfelt du'as, intimate personal supplications, and spiritual notes. Stored completely offline on your device.
                             </p>
+
+                            {/* Elevated Call-to-Action */}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setEditingPrayerId(null)
+                                    setNewPrayer({ arabic: '', transliteration: '', translation: '', reference: '' })
+                                    setShowAddModal(true)
+                                }}
+                                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[13px] font-semibold tracking-wide transition-all duration-200 active:scale-95 shadow-sm cursor-pointer group"
+                                style={{
+                                    background: t(theme, 'accent'),
+                                    color: isDark ? '#0c0f14' : '#ffffff',
+                                }}
+                            >
+                                <span className="text-base font-light leading-none group-hover:rotate-90 transition-transform duration-300">+</span>
+                                <span>Add Your First Prayer</span>
+                            </button>
                         </div>
                     ) : (
-                        <div
-                            className="rounded-2xl border overflow-hidden transition-all duration-200"
-                            style={{
-                                background: t(theme, 'surface-1'),
-                                borderColor: t(theme, 'border'),
-                                boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
-                            }}
-                        >
-                            {customPrayers.map((p, i) => {
-                                const isLast = i === customPrayers.length - 1
-                                return (
-                                    <div
-                                        key={p.id}
-                                        onClick={() => {
-                                            setSelectedIndex(i)
-                                            skippingFirstScroll.current = true
-                                            setViewMode('swipe')
-                                        }}
-                                        className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
-                                        style={{
-                                            borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
-                                        }}
-                                    >
-                                        <div className="flex-1 min-w-0 pr-3">
-                                            <h4
-                                                className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
-                                                style={{ color: t(theme, 'text-primary') }}
-                                            >
-                                                {p.transliteration || 'Personal Prayer'}
-                                            </h4>
-                                            {p.translation && (
-                                                <p
-                                                    className="text-[12px] opacity-60 truncate leading-tight mt-1 italic font-serif"
-                                                    style={{
-                                                        color: t(theme, 'text-muted'),
-                                                        fontFamily: 'var(--font-serif-body)',
-                                                    }}
-                                                >
-                                                    {p.translation}
-                                                </p>
-                                            )}
-                                        </div>
+                        /* ── Populated State: Sleek Continuous Ledger ── */
+                        <div className="flex flex-col gap-3 animate-fade-in">
+                            {/* Section Header with dynamic count */}
+                            <div className="flex items-center justify-between px-2 mb-1">
+                                <h2
+                                    className="text-[11px] font-bold tracking-[0.16em] uppercase select-none"
+                                    style={{ color: t(theme, 'text-secondary') }}
+                                >
+                                    Saved Supplications
+                                </h2>
+                                <span
+                                    className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
+                                    style={{
+                                        background: t(theme, 'surface-2'),
+                                        color: t(theme, 'text-secondary'),
+                                        border: `1px solid ${t(theme, 'border')}`,
+                                    }}
+                                >
+                                    {customPrayers.length} {customPrayers.length === 1 ? 'Prayer' : 'Prayers'}
+                                </span>
+                            </div>
 
-                                        <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
-                                            <button
-                                                type="button"
-                                                onClick={(e) => startEditManual(p, e)}
-                                                className="p-2 transition-all hover:scale-110 opacity-50 hover:opacity-100 rounded-lg cursor-pointer"
-                                                style={{ color: t(theme, 'text-primary') }}
-                                                title="Edit"
-                                            >
-                                                <IconPencil size={16} />
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={(e) => initiateDelete(p.id, e)}
-                                                className="p-2 transition-all hover:scale-110 opacity-50 hover:opacity-100 rounded-lg cursor-pointer text-red-500"
-                                                title="Delete"
-                                            >
-                                                <IconTrash size={16} />
-                                            </button>
-                                            <IconChevronRight
-                                                size={15}
-                                                className="opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all ml-1"
-                                                style={{ color: t(theme, 'text-primary') }}
-                                            />
+                            {/* Inset Ledger Container */}
+                            <div
+                                className="rounded-2xl border overflow-hidden transition-all duration-200"
+                                style={{
+                                    background: t(theme, 'surface-1'),
+                                    borderColor: t(theme, 'border'),
+                                    boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
+                                }}
+                            >
+                                {customPrayers.map((p, i) => {
+                                    const isLast = i === customPrayers.length - 1
+                                    const previewText = p.translation || p.reference || ''
+                                    return (
+                                        <div
+                                            key={p.id}
+                                            onClick={() => {
+                                                setSelectedIndex(i)
+                                                skippingFirstScroll.current = true
+                                                setViewMode('swipe')
+                                            }}
+                                            className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                            style={{
+                                                borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
+                                            }}
+                                        >
+                                            <div className="flex-1 min-w-0 pr-3">
+                                                <div className="flex items-center gap-2">
+                                                    <h4
+                                                        className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                        style={{ color: t(theme, 'text-primary') }}
+                                                    >
+                                                        {p.transliteration || 'Personal Prayer'}
+                                                    </h4>
+                                                    {p.reference && (
+                                                        <span
+                                                            className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md flex-shrink-0"
+                                                            style={{
+                                                                background: t(theme, 'surface-2'),
+                                                                color: t(theme, 'text-secondary'),
+                                                                border: `1px solid ${t(theme, 'border')}`,
+                                                            }}
+                                                        >
+                                                            {p.reference}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {p.arabic && (
+                                                    <p
+                                                        className="text-sm truncate leading-normal mt-1"
+                                                        style={{
+                                                            fontFamily: 'var(--font-serif-arabic)',
+                                                            color: t(theme, 'accent'),
+                                                            direction: 'rtl',
+                                                            textAlign: 'left',
+                                                        }}
+                                                    >
+                                                        {p.arabic}
+                                                    </p>
+                                                )}
+
+                                                {previewText && (
+                                                    <p
+                                                        className="text-[12px] truncate leading-tight mt-1 italic font-serif"
+                                                        style={{
+                                                            color: t(theme, 'text-secondary'),
+                                                            fontFamily: 'var(--font-serif-body)',
+                                                        }}
+                                                    >
+                                                        {previewText}
+                                                    </p>
+                                                )}
+                                            </div>
+
+                                            {/* Edit & Delete Actions */}
+                                            <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => startEditManual(p, e)}
+                                                    className="w-8 h-8 flex items-center justify-center rounded-lg transition-all opacity-75 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/5 active:scale-90 cursor-pointer"
+                                                    style={{ color: t(theme, 'text-secondary') }}
+                                                    aria-label="Edit"
+                                                    title="Edit"
+                                                >
+                                                    <IconPencil size={15} />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => initiateDelete(p.id, e)}
+                                                    className="w-8 h-8 flex items-center justify-center rounded-lg transition-all opacity-75 hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 active:scale-90 cursor-pointer"
+                                                    style={{ color: t(theme, 'text-secondary') }}
+                                                    aria-label="Delete"
+                                                    title="Delete"
+                                                >
+                                                    <IconTrash size={15} />
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                )
-                            })}
+                                    )
+                                })}
+                            </div>
                         </div>
                     )}
                 </main>
@@ -1123,48 +1233,272 @@ export default function LibraryPage({ duas, embedded = false, initialSection = n
 
             {/* Modals outside main scroll flow */}
             {showDeleteConfirm && (
-                <div className="fixed inset-0 z-[600] flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-fade-in">
-                    <div className="w-full max-w-sm p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up flex flex-col items-center text-center"
-                        style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
-                        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-8" style={{ background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)', color: '#ef4444' }}><IconTrash size={32} /></div>
-                        <h3 className="text-[24px] font-medium tracking-tight mb-4 italic" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>Delete Supplication?</h3>
-                        <p className="text-[14px] leading-relaxed opacity-50 mb-10 max-w-[240px]">Are you sure you want to remove this prayer from your list?</p>
-                        <div className="flex flex-col gap-3 w-full">
-                            <button onClick={confirmDelete} className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] transition-all active:scale-[0.98]" style={{ background: '#ef4444', color: '#ffffff' }}>Delete</button>
-                            <button onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }} className="w-full py-4 rounded-full font-bold text-[12px] tracking-[0.1em] uppercase transition-all active:scale-[0.98] border" style={{ background: 'transparent', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', color: t(theme, 'text-primary') }}>Cancel</button>
+                <div className="fixed inset-0 z-[600] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+                    <div
+                        className="w-full max-w-sm p-6 rounded-2xl border shadow-xl animate-modal-slide-up flex flex-col items-center text-center gap-3"
+                        style={{
+                            background: t(theme, 'surface-0'),
+                            borderColor: t(theme, 'border'),
+                        }}
+                    >
+                        <div
+                            className="w-12 h-12 rounded-xl flex items-center justify-center mb-1"
+                            style={{
+                                background: 'rgba(239, 68, 68, 0.1)',
+                                color: '#ef4444',
+                            }}
+                        >
+                            <IconTrash size={22} />
+                        </div>
+                        <h3
+                            className="text-base font-semibold tracking-tight"
+                            style={{ color: t(theme, 'text-primary') }}
+                        >
+                            Delete Supplication?
+                        </h3>
+                        <p className="text-xs leading-relaxed max-w-[240px]" style={{ color: t(theme, 'text-secondary') }}>
+                            This personal prayer will be permanently removed from your device.
+                        </p>
+                        <div className="flex items-center gap-2.5 w-full mt-2">
+                            <button
+                                type="button"
+                                onClick={() => { setShowDeleteConfirm(false); setPrayerToDeleteId(null); }}
+                                className="flex-1 py-2.5 rounded-xl border text-xs font-semibold transition-all hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 cursor-pointer"
+                                style={{
+                                    borderColor: t(theme, 'border'),
+                                    color: t(theme, 'text-primary'),
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={confirmDelete}
+                                className="flex-1 py-2.5 rounded-xl text-xs font-semibold text-white bg-red-500 hover:bg-red-600 transition-all active:scale-95 cursor-pointer shadow-xs"
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
+
             {showAddModal && (
-                <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-fade-in">
-                    <div className="w-full max-w-lg p-10 rounded-[3rem] shadow-2xl animate-modal-slide-up" style={{ background: t(theme, 'surface-0'), border: `1px solid ${t(theme, 'border')}` }}>
-                        <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-2xl font-medium" style={{ color: t(theme, 'text-primary'), fontFamily: 'var(--font-serif-body)' }}>{editingPrayerId ? 'Edit Personal Prayer' : 'New Personal Prayer'}</h3>
-                            <button onClick={() => setShowAddModal(false)} className="opacity-40 hover:opacity-100 transition-opacity"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+                <div
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setShowAddModal(false);
+                    }}
+                    className="fixed inset-0 z-[500] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md animate-fade-in"
+                >
+                    <div
+                        className="w-full max-w-lg rounded-2xl sm:rounded-3xl border shadow-2xl animate-modal-slide-up flex flex-col overflow-hidden"
+                        style={{
+                            background: t(theme, 'surface-0'),
+                            borderColor: t(theme, 'border'),
+                            boxShadow: isDark
+                                ? '0 24px 60px -12px rgba(0, 0, 0, 0.85), 0 2px 4px rgba(255, 255, 255, 0.04)'
+                                : '0 24px 60px -12px rgba(15, 23, 42, 0.18), 0 2px 4px rgba(0, 0, 0, 0.04)',
+                        }}
+                    >
+                        {/* Header */}
+                        <div
+                            className="flex items-start justify-between p-5 sm:p-6 pb-4 border-b"
+                            style={{ borderColor: t(theme, 'border') }}
+                        >
+                            <div className="min-w-0 pr-3">
+                                <h3
+                                    className="text-xl sm:text-2xl font-normal tracking-tight"
+                                    style={{
+                                        color: t(theme, 'text-primary'),
+                                        fontFamily: 'var(--font-serif-heading)',
+                                    }}
+                                >
+                                    {editingPrayerId ? 'Edit Supplication' : 'New Supplication'}
+                                </h3>
+                                <p className="text-xs font-medium mt-1" style={{ color: t(theme, 'text-secondary') }}>
+                                    Saved privately on this device. Only you can view these.
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setShowAddModal(false)}
+                                type="button"
+                                className="w-8 h-8 rounded-full flex items-center justify-center opacity-70 hover:opacity-100 transition-all active:scale-95 cursor-pointer flex-shrink-0"
+                                style={{
+                                    background: t(theme, 'surface-2'),
+                                    color: t(theme, 'text-primary'),
+                                    border: `1px solid ${t(theme, 'border')}`,
+                                }}
+                                aria-label="Close"
+                                title="Close"
+                            >
+                                <IconX size={15} />
+                            </button>
                         </div>
-                        <div className="flex flex-col gap-8">
-                            <div className="space-y-6">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black tracking-widest opacity-40">Arabic Text (Optional)</label>
-                                    <textarea placeholder="بِسْمِ اللَّهِ..." value={newPrayer.arabic} onChange={e => setNewPrayer({ ...newPrayer, arabic: e.target.value })} className="w-full p-5 rounded-[1.5rem] text-right min-h-[120px] outline-none transition-all focus:ring-2 focus:ring-accent/20 resize-none text-xl" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary'), direction: 'rtl', fontFamily: 'var(--font-serif-arabic)' }} />
+
+                        {/* Form Body */}
+                        <div className="p-5 sm:p-6 flex flex-col gap-4 overflow-y-auto max-h-[calc(85vh-160px)]">
+                            {/* 1. Arabic Text Inscription (Textarea) */}
+                            <div className="flex flex-col gap-1.5">
+                                <div className="flex items-center justify-between">
+                                    <label className="text-xs font-semibold" style={{ color: t(theme, 'text-primary') }}>
+                                        Arabic Text
+                                    </label>
+                                    <span
+                                        className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md"
+                                        style={{
+                                            background: t(theme, 'surface-2'),
+                                            color: t(theme, 'text-secondary'),
+                                            border: `1px solid ${t(theme, 'border')}`,
+                                        }}
+                                    >
+                                        Optional
+                                    </span>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-[10px] font-black tracking-widest opacity-40">Transliteration</label>
-                                        <input placeholder="Transliteration" value={newPrayer.transliteration} onChange={e => setNewPrayer({ ...newPrayer, transliteration: e.target.value })} className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }} />
+                                <textarea
+                                    placeholder="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ..."
+                                    value={newPrayer.arabic}
+                                    onChange={e => setNewPrayer({ ...newPrayer, arabic: e.target.value })}
+                                    rows={3}
+                                    className="w-full px-4 py-3 rounded-xl sm:rounded-2xl text-right outline-none transition-all resize-none text-base sm:text-lg leading-[2.1] border focus:ring-2 placeholder:text-stone-400 dark:placeholder:text-stone-400"
+                                    style={{
+                                        background: t(theme, 'surface-1'),
+                                        borderColor: t(theme, 'border'),
+                                        color: t(theme, 'text-primary'),
+                                        direction: 'rtl',
+                                        fontFamily: 'var(--script-font)',
+                                    }}
+                                />
+                            </div>
+
+                            {/* 2. Transliteration & Reference (Responsive Grid) */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                {/* Transliteration */}
+                                <div className="flex flex-col gap-1.5">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-xs font-semibold" style={{ color: t(theme, 'text-primary') }}>
+                                            Transliteration
+                                        </label>
+                                        <span
+                                            className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md"
+                                            style={{
+                                                background: t(theme, 'surface-2'),
+                                                color: t(theme, 'text-secondary'),
+                                                border: `1px solid ${t(theme, 'border')}`,
+                                            }}
+                                        >
+                                            Optional
+                                        </span>
                                     </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-[10px] font-black tracking-widest opacity-40">Reference</label>
-                                        <input placeholder="Reference (Optional)" value={newPrayer.reference} onChange={e => setNewPrayer({ ...newPrayer, reference: e.target.value })} className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }} />
-                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Rabbana atina fid-dunya hasanatan..."
+                                        value={newPrayer.transliteration}
+                                        onChange={e => setNewPrayer({ ...newPrayer, transliteration: e.target.value })}
+                                        className="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm outline-none transition-all border focus:ring-2 placeholder:text-stone-400 dark:placeholder:text-stone-400"
+                                        style={{
+                                            background: t(theme, 'surface-1'),
+                                            borderColor: t(theme, 'border'),
+                                            color: t(theme, 'text-primary'),
+                                        }}
+                                    />
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-black tracking-widest opacity-40">Translation</label>
-                                    <input placeholder="Translation" value={newPrayer.translation} onChange={e => setNewPrayer({ ...newPrayer, translation: e.target.value })} className="w-full p-4 rounded-[1.25rem] outline-none transition-all focus:ring-2 focus:ring-accent/20" style={{ background: t(theme, 'surface-1'), color: t(theme, 'text-primary') }} />
+
+                                {/* Reference */}
+                                <div className="flex flex-col gap-1.5">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-xs font-semibold" style={{ color: t(theme, 'text-primary') }}>
+                                            Reference / Source
+                                        </label>
+                                        <span
+                                            className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md"
+                                            style={{
+                                                background: t(theme, 'surface-2'),
+                                                color: t(theme, 'text-secondary'),
+                                                border: `1px solid ${t(theme, 'border')}`,
+                                            }}
+                                        >
+                                            Optional
+                                        </span>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Surah 2:201, Sahih Muslim, or personal note"
+                                        value={newPrayer.reference}
+                                        onChange={e => setNewPrayer({ ...newPrayer, reference: e.target.value })}
+                                        className="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm outline-none transition-all border focus:ring-2 placeholder:text-stone-400 dark:placeholder:text-stone-400"
+                                        style={{
+                                            background: t(theme, 'surface-1'),
+                                            borderColor: t(theme, 'border'),
+                                            color: t(theme, 'text-primary'),
+                                        }}
+                                    />
                                 </div>
                             </div>
-                            <button onClick={savePrayer} className="w-full py-5 rounded-[1.5rem] font-bold text-[14px] tracking-[0.05em] transition-all active:scale-[0.98] shadow-lg hover:shadow-xl group" style={{ background: t(theme, 'text-primary'), color: t(theme, 'surface-0'), boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.4)' : '0 8px 20px rgba(0,0,0,0.1)' }}>Save Prayer</button>
+
+                            {/* 3. Translation & Meaning */}
+                            <div className="flex flex-col gap-1.5">
+                                <div className="flex items-center justify-between">
+                                    <label className="text-xs font-semibold" style={{ color: t(theme, 'text-primary') }}>
+                                        Translation / Notes
+                                    </label>
+                                    <span
+                                        className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md"
+                                        style={{
+                                            background: t(theme, 'accent-soft'),
+                                            color: t(theme, 'accent'),
+                                            border: `1px solid ${t(theme, 'accent')}`,
+                                        }}
+                                    >
+                                        Required
+                                    </span>
+                                </div>
+                                <textarea
+                                    rows={2}
+                                    placeholder="Write the English translation or meaning of this supplication..."
+                                    value={newPrayer.translation}
+                                    onChange={e => setNewPrayer({ ...newPrayer, translation: e.target.value })}
+                                    className="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm outline-none transition-all resize-none border focus:ring-2 leading-relaxed placeholder:text-stone-400 dark:placeholder:text-stone-400"
+                                    style={{
+                                        background: t(theme, 'surface-1'),
+                                        borderColor: t(theme, 'border'),
+                                        color: t(theme, 'text-primary'),
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Footer Action Bar */}
+                        <div
+                            className="p-4 sm:p-5 pt-3 border-t flex items-center justify-end gap-2.5"
+                            style={{
+                                borderColor: t(theme, 'border'),
+                                background: t(theme, 'surface-0'),
+                            }}
+                        >
+                            <button
+                                type="button"
+                                onClick={() => setShowAddModal(false)}
+                                className="px-4 py-2.5 rounded-xl text-xs font-semibold transition-all active:scale-95 cursor-pointer border hover:opacity-90"
+                                style={{
+                                    background: t(theme, 'surface-2'),
+                                    borderColor: t(theme, 'border'),
+                                    color: t(theme, 'text-primary'),
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={savePrayer}
+                                className="px-5 py-2.5 rounded-xl text-xs font-semibold transition-all active:scale-95 shadow-md hover:shadow-lg cursor-pointer flex items-center gap-1.5"
+                                style={{
+                                    background: t(theme, 'accent'),
+                                    color: isDark ? '#0c0f14' : '#ffffff',
+                                    boxShadow: `0 4px 14px ${t(theme, 'accent-glow')}`,
+                                }}
+                            >
+                                <span>{editingPrayerId ? 'Update Dua' : 'Save Dua'}</span>
+                            </button>
                         </div>
                     </div>
                 </div>

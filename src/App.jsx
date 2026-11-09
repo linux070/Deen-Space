@@ -16,6 +16,7 @@ import TasbihPage from './pages/TasbihPage'
 import DailyPage from './pages/DailyPage'
 import QuranPage from './pages/QuranPage'
 import SurahReaderPage from './pages/SurahReaderPage'
+import UpdatePrompt from './components/UpdatePrompt'
 
 function ScrollToTop() {
     const { pathname } = useLocation()
@@ -49,6 +50,7 @@ function AppContent() {
     return (
         <>
             <Navigation />
+            <UpdatePrompt />
             <div className="max-w-5xl mx-auto min-h-screen">
                 <Routes>
                     <Route path="/" element={<HomePage duas={duas} asma={asma} />} />

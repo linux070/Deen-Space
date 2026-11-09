@@ -53,16 +53,38 @@ export function IconHeartFill({ size = 22 }) {
 
 export function IconBookmark({ size = 22, className = '', style }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.65"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+        >
+            <path d="M17.5 21L12 16.8L6.5 21V6.2C6.5 4.43269 7.93269 3 9.7 3H14.3C16.0673 3 17.5 4.43269 17.5 6.2V21Z" />
         </svg>
     )
 }
 
 export function IconBookmarkFill({ size = 22, className = '', style }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth="1.65"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+        >
+            <path d="M17.5 21L12 16.8L6.5 21V6.2C6.5 4.43269 7.93269 3 9.7 3H14.3C16.0673 3 17.5 4.43269 17.5 6.2V21Z" />
         </svg>
     )
 }
@@ -230,11 +252,22 @@ export function IconCompass({ size = 22 }) {
     )
 }
 
-export function IconUser({ size = 22 }) {
+export function IconUser({ size = 22, className = '', style }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.65"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+        >
+            <circle cx="12" cy="7.5" r="4.25" />
+            <path d="M19.5 20.5C19.5 17.1863 16.1421 14.5 12 14.5C7.85786 14.5 4.5 17.1863 4.5 20.5" />
         </svg>
     )
 }
