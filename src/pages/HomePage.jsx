@@ -16,6 +16,9 @@ import {
     IconBookmarkFill,
     IconCopy,
     IconCheck,
+    IconSun,
+    IconMoon,
+    IconScroll,
     RubElHizbBadge,
 } from '../components/Icons'
 import { useQuranList, useLastRead } from '../hooks/useQuran'
@@ -193,8 +196,23 @@ const VERSES = [
 
 export default function HomePage({ duas = [], asma = [] }) {
     const navigate = useNavigate()
-    const { theme } = useSettings()
+    const { theme, update } = useSettings()
     const isDark = theme === 'dark'
+
+    const NEXT_THEME = {
+        light: 'cream',
+        cream: 'dark',
+        dark: 'light',
+    }
+    const ThemeIcon = theme === 'dark' ? IconMoon : theme === 'cream' ? IconScroll : IconSun
+    const themeLabel = theme === 'dark' ? 'Dark' : theme === 'cream' ? 'Sepia' : 'Light'
+    const nextThemeLabel = theme === 'dark' ? 'Light' : theme === 'cream' ? 'Dark' : 'Sepia'
+
+    const handleCycleTheme = () => {
+        const next = NEXT_THEME[theme] || 'cream'
+        update('theme', next)
+    }
+
     const { lastRead } = useLastRead()
     const { surahs } = useQuranList()
 
@@ -291,6 +309,68 @@ export default function HomePage({ duas = [], asma = [] }) {
             className="pb-36 md:pb-20 px-4 sm:px-6 md:px-8 flex flex-col gap-6 max-w-5xl lg:max-w-7xl mx-auto"
             style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}
         >
+            {/* ── Mobile Brand Masthead ── */}
+            <div className="md:hidden flex items-center justify-between pb-2.5 border-b animate-fade-in" style={{ borderColor: t(theme, 'border') }}>
+                <div className="flex items-center gap-2.5">
+                    <div
+                        className="w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center p-1 shadow-xs"
+                        style={{
+                            background: t(theme, 'surface-1'),
+                            border: `1px solid ${t(theme, 'border')}`,
+                        }}
+                    >
+                        <img
+                            src="/deen-space-logo.png"
+                            alt="Deen Space"
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
+                    <span
+                        className="text-lg font-normal tracking-tight"
+                        style={{
+                            color: t(theme, 'text-primary'),
+                            fontFamily: 'var(--font-serif-heading)',
+                            fontWeight: 400,
+                        }}
+                    >
+                        Deen Space
+                    </span>
+                </div>
+
+                {/* Modern Interactive Theme Capsule Button */}
+                <button
+                    type="button"
+                    onClick={handleCycleTheme}
+                    className="group relative flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-300 active:scale-95 cursor-pointer shadow-xs hover:border-amber-500/50"
+                    style={{
+                        background: t(theme, 'surface-1'),
+                        borderColor: t(theme, 'border'),
+                        color: t(theme, 'text-primary'),
+                    }}
+                    title={`Current theme: ${themeLabel}. Tap to switch to ${nextThemeLabel}.`}
+                    aria-label={`Current theme: ${themeLabel}. Tap to switch to ${nextThemeLabel}.`}
+                >
+                    <div
+                        className="w-5 h-5 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-12 flex-shrink-0"
+                        style={{
+                            background: t(theme, 'accent-soft'),
+                            color: t(theme, 'accent'),
+                        }}
+                    >
+                        <ThemeIcon size={12} />
+                    </div>
+                    <span
+                        className="text-[12px] font-medium tracking-tight pr-0.5"
+                        style={{
+                            color: t(theme, 'text-primary'),
+                            fontFamily: 'var(--font-sans)',
+                        }}
+                    >
+                        {themeLabel}
+                    </span>
+                </button>
+            </div>
+
             {/* ── 1. Editorial Greeting Header ── */}
             <header className="animate-fade-in flex flex-col pt-1">
                 <h1

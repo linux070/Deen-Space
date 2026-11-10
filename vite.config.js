@@ -43,6 +43,8 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: [
         'favicon.png',
+        'apple-touch-icon.png',
+        'deen-space-logo.png',
         'version.json',
         'data/duas.json',
         'data/asma.json',

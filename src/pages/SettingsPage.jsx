@@ -597,6 +597,37 @@ export default function SettingsPage() {
                 <section>
                     <SectionHeader title="App Info" theme={theme} />
                     <SectionCard theme={theme}>
+                        {/* App Brand Header Row */}
+                        <div className="p-4 sm:p-5 flex items-center gap-3.5 border-b" style={{ borderColor: t(theme, 'border') }}>
+                            <div
+                                className="w-12 h-12 rounded-2xl overflow-hidden p-1 flex items-center justify-center shadow-xs flex-shrink-0"
+                                style={{
+                                    background: t(theme, 'surface-2'),
+                                    border: `1px solid ${t(theme, 'border')}`,
+                                }}
+                            >
+                                <img
+                                    src="/deen-space-logo.png"
+                                    alt="Deen Space"
+                                    className="w-full h-full object-contain"
+                                />
+                            </div>
+                            <div className="flex flex-col min-w-0">
+                                <span
+                                    className="text-base font-bold tracking-tight"
+                                    style={{
+                                        color: t(theme, 'text-primary'),
+                                        fontFamily: 'var(--font-serif-heading)',
+                                    }}
+                                >
+                                    Deen Space
+                                </span>
+                                <span className="text-xs truncate mt-0.5" style={{ color: t(theme, 'text-secondary') }}>
+                                    Your personal spiritual companion
+                                </span>
+                            </div>
+                        </div>
+
                         <SettingRow label="App Version" description="Installed and ready for offline use" theme={theme}>
                             <span
                                 className="text-[11px] font-mono font-medium px-2.5 py-1 rounded-lg border leading-none"

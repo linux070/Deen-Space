@@ -117,6 +117,16 @@ export default function SurahReaderPage() {
         setSelectedAyah(null)
     }, [currentId, searchParams])
 
+    // Dismiss selected ayah tray on Escape key
+    useEffect(() => {
+        if (!selectedAyah) return
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') setSelectedAyah(null)
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [selectedAyah])
+
     // Clean Ayah 1 text (strip duplicate Bismillah if API prepended it)
     const getCleanAyahText = (ayah) => {
         if (!ayah) return ''
@@ -571,26 +581,48 @@ export default function SurahReaderPage() {
 
                 {/* Mushaf Selected Ayah Modal/Tray */}
                 {settings.viewMode === 'mushaf' && selectedAyah && (
-                    <div
-                        className="fixed bottom-20 md:bottom-6 left-4 right-4 max-w-xl mx-auto rounded-2xl p-4 shadow-2xl border z-40 animate-slide-up"
+                    <aside
+                        role="dialog"
+                        aria-label={`Ayah ${selectedAyah.numberInSurah} details`}
+                        className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+4.75rem)] md:bottom-8 left-3.5 right-3.5 sm:left-auto sm:right-6 max-w-lg sm:w-[28rem] rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xl border z-[60] flex flex-col animate-slide-up backdrop-blur-xl"
                         style={{
-                            background: t(theme, 'surface-1'),
-                            borderColor: t(theme, 'accent'),
+                            background: isDark ? 'rgba(18, 22, 28, 0.96)' : 'rgba(255, 255, 255, 0.98)',
+                            borderColor: isDark ? 'rgba(245, 158, 11, 0.35)' : 'rgba(217, 119, 6, 0.35)',
+                            boxShadow: isDark
+                                ? '0 16px 40px -8px rgba(0, 0, 0, 0.75), 0 0 20px rgba(245, 158, 11, 0.12)'
+                                : '0 16px 40px -8px rgba(0, 0, 0, 0.16), 0 0 20px rgba(217, 119, 6, 0.08)',
+                            maxHeight: 'min(26rem, calc(100dvh - 11rem))',
                         }}
                     >
-                        <div className="flex items-center justify-between pb-2 mb-2 border-b" style={{ borderColor: t(theme, 'border') }}>
-                            <div className="flex items-center gap-2">
+                        {/* Header: Ayah Badge, Title & Actions */}
+                        <div
+                            className="flex items-center justify-between pb-3 mb-2.5 border-b flex-shrink-0"
+                            style={{ borderColor: t(theme, 'border') }}
+                        >
+                            <div className="flex items-center gap-2.5">
                                 <RubElHizbBadge
                                     number={selectedAyah.numberInSurah}
-                                    size={24}
+                                    size={26}
                                     theme={theme}
                                 />
-                                <span className="text-xs font-semibold" style={{ color: t(theme, 'accent'), fontFamily: 'var(--font-serif-body)' }}>
-                                    Ayah {selectedAyah.numberInSurah}
-                                </span>
+                                <div className="flex flex-col">
+                                    <span
+                                        className="text-xs sm:text-[13px] font-bold tracking-tight leading-tight"
+                                        style={{ color: t(theme, 'accent'), fontFamily: 'var(--font-serif-body)' }}
+                                    >
+                                        Ayah {selectedAyah.numberInSurah}
+                                    </span>
+                                    <span
+                                        className="text-[10px] opacity-55 font-mono leading-tight mt-0.5"
+                                        style={{ color: t(theme, 'text-muted') }}
+                                    >
+                                        Surah {surah.number}: {surah.englishName}
+                                    </span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
                                 <button
+                                    type="button"
                                     onClick={() => toggle({
                                         id: `ayah-${surah.number}-${selectedAyah.numberInSurah}`,
                                         type: 'ayah',
@@ -601,40 +633,66 @@ export default function SurahReaderPage() {
                                         translation: selectedAyah.translation,
                                         transliteration: selectedAyah.transliteration,
                                     })}
-                                    className="p-1.5 rounded-lg text-xs"
+                                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs transition-all active:scale-90 cursor-pointer"
                                     style={{
                                         background: isFavorite(`ayah-${surah.number}-${selectedAyah.numberInSurah}`) ? t(theme, 'accent-soft') : t(theme, 'surface-2'),
                                         color: isFavorite(`ayah-${surah.number}-${selectedAyah.numberInSurah}`) ? t(theme, 'accent') : t(theme, 'text-primary'),
+                                        border: `1px solid ${t(theme, 'border')}`,
                                     }}
                                     title="Bookmark Ayah"
+                                    aria-label="Bookmark Ayah"
                                 >
-                                    {isFavorite(`ayah-${surah.number}-${selectedAyah.numberInSurah}`) ? <IconBookmarkFill size={15} /> : <IconBookmark size={15} />}
+                                    {isFavorite(`ayah-${surah.number}-${selectedAyah.numberInSurah}`) ? <IconBookmarkFill size={14} /> : <IconBookmark size={14} />}
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={() => handleCopy(selectedAyah)}
-                                    className="p-1.5 rounded-lg text-xs"
-                                    style={{ background: t(theme, 'surface-2'), color: t(theme, 'text-primary') }}
-                                    title="Copy Ayah"
+                                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs transition-all active:scale-90 cursor-pointer"
+                                    style={{
+                                        background: copiedAyah === selectedAyah.numberInSurah ? t(theme, 'accent-soft') : t(theme, 'surface-2'),
+                                        color: copiedAyah === selectedAyah.numberInSurah ? t(theme, 'accent') : t(theme, 'text-primary'),
+                                        border: `1px solid ${t(theme, 'border')}`,
+                                    }}
+                                    title={copiedAyah === selectedAyah.numberInSurah ? "Copied to clipboard" : "Copy Ayah text"}
+                                    aria-label="Copy Ayah"
                                 >
-                                    <IconCopy size={15} />
+                                    {copiedAyah === selectedAyah.numberInSurah ? <IconCheck size={14} /> : <IconCopy size={14} />}
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={() => setSelectedAyah(null)}
-                                    className="text-xs font-bold opacity-60 hover:opacity-100 px-1"
+                                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs opacity-60 hover:opacity-100 transition-all active:scale-90 cursor-pointer"
+                                    style={{
+                                        background: t(theme, 'surface-2'),
+                                        color: t(theme, 'text-muted'),
+                                        border: `1px solid ${t(theme, 'border')}`,
+                                    }}
+                                    title="Close"
+                                    aria-label="Close"
                                 >
-                                    ✕
+                                    <IconX size={14} />
                                 </button>
                             </div>
                         </div>
-                        {selectedAyah.transliteration && (
-                            <p className="text-xs italic font-serif mb-1.5" style={{ color: t(theme, 'accent') }}>
-                                {selectedAyah.transliteration}
+
+                        {/* Scrollable Verse Content */}
+                        <div className="overflow-y-auto overscroll-contain pr-1 flex-1 space-y-2 select-text">
+                            {selectedAyah.transliteration && (
+                                <p
+                                    className="text-xs sm:text-[13px] italic font-serif leading-relaxed"
+                                    style={{ color: t(theme, 'accent') }}
+                                >
+                                    {selectedAyah.transliteration}
+                                </p>
+                            )}
+                            <p
+                                className="text-xs sm:text-[13px] leading-relaxed"
+                                style={{ color: t(theme, 'text-primary') }}
+                            >
+                                {selectedAyah.translation}
                             </p>
-                        )}
-                        <p className="text-xs sm:text-sm leading-relaxed" style={{ color: t(theme, 'text-secondary') }}>
-                            {selectedAyah.translation}
-                        </p>
-                    </div>
+                        </div>
+                    </aside>
                 )}
 
                 {/* ── Next & Upcoming Chapters Section ── */}

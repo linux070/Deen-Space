@@ -1,37 +1,37 @@
-/* Modern Lucide-inspired SVG icons — zero dependency, rounded style */
+/* Official Hugeicons component integrations */
+import { HugeiconsIcon } from '@hugeicons/react'
+import HandPrayerIcon from '@hugeicons/core-free-icons/HandPrayerIcon'
+import PrayerRug02Icon from '@hugeicons/core-free-icons/PrayerRug02Icon'
+import Quran02Icon from '@hugeicons/core-free-icons/Quran02Icon'
+import BookOpen01Icon from '@hugeicons/core-free-icons/BookOpen01Icon'
+import SunriseIcon from '@hugeicons/core-free-icons/SunriseIcon'
+import SunsetIcon from '@hugeicons/core-free-icons/SunsetIcon'
+import Sun02Icon from '@hugeicons/core-free-icons/Sun02Icon'
+import Moon02Icon from '@hugeicons/core-free-icons/Moon02Icon'
+import StarIcon from '@hugeicons/core-free-icons/StarIcon'
+import StarsIcon from '@hugeicons/core-free-icons/StarsIcon'
+import FlowerIcon from '@hugeicons/core-free-icons/FlowerIcon'
+import UserIcon from '@hugeicons/core-free-icons/UserIcon'
+import Bookmark02Icon from '@hugeicons/core-free-icons/Bookmark02Icon'
+import ArrowRight01Icon from '@hugeicons/core-free-icons/ArrowRight01Icon'
+import ArrowLeft01Icon from '@hugeicons/core-free-icons/ArrowLeft01Icon'
 
-export function IconSun({ size = 20 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-        </svg>
-    )
+/* Modern Hugeicons-powered SVG icons — pixel-aligned, 1.5px stroke */
+
+export function IconSun({ size = 20, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={Sun02Icon} size={size} className={className} style={style} {...props} />
 }
 
-export function IconMoon({ size = 20 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
-        </svg>
-    )
+export function IconMoon({ size = 20, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={Moon02Icon} size={size} className={className} style={style} {...props} />
 }
 
-export function IconStar({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a.53.53 0 0 0 .4.29l5.16.753a.53.53 0 0 1 .294.904l-3.733 3.638a.53.53 0 0 0-.153.469l.882 5.14a.53.53 0 0 1-.77.56L12.267 16.3a.53.53 0 0 0-.494 0l-4.614 2.425a.53.53 0 0 1-.77-.56l.882-5.14a.53.53 0 0 0-.152-.47L3.385 8.921a.53.53 0 0 1 .294-.906l5.16-.751a.53.53 0 0 0 .4-.29z" />
-        </svg>
-    )
+export function IconStar({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={StarIcon} size={size} className={className} style={style} {...props} />
 }
 
-export function IconBook({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-        </svg>
-    )
+export function IconBook({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={BookOpen01Icon} size={size} className={className} style={style} {...props} />
 }
 
 export function IconHeart({ size = 22 }) {
@@ -51,23 +51,8 @@ export function IconHeartFill({ size = 22 }) {
 }
 
 
-export function IconBookmark({ size = 22, className = '', style }) {
-    return (
-        <svg
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.65"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={className}
-            style={style}
-        >
-            <path d="M17.5 21L12 16.8L6.5 21V6.2C6.5 4.43269 7.93269 3 9.7 3H14.3C16.0673 3 17.5 4.43269 17.5 6.2V21Z" />
-        </svg>
-    )
+export function IconBookmark({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={Bookmark02Icon} size={size} className={className} style={style} {...props} />
 }
 
 export function IconBookmarkFill({ size = 22, className = '', style }) {
@@ -156,20 +141,12 @@ export function IconPlus({ size = 20 }) {
     )
 }
 
-export function IconChevronLeft({ size = 20 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m15 18-6-6 6-6" />
-        </svg>
-    )
+export function IconChevronLeft({ size = 20, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={ArrowLeft01Icon} size={size} className={className} style={style} {...props} />
 }
 
-export function IconChevronRight({ size = 20 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m9 18 6-6-6-6" />
-        </svg>
-    )
+export function IconChevronRight({ size = 20, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={ArrowRight01Icon} size={size} className={className} style={style} {...props} />
 }
 
 export function IconGrid({ size = 22 }) {
@@ -202,16 +179,8 @@ export function IconDua({ size = 22 }) {
     )
 }
 
-export function IconHands({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
-            <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
-            <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
-            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.8-6.6-2.4l-3.4-2.6" />
-            <path d="M2 10a2 2 0 0 1 4 0v1" />
-        </svg>
-    )
+export function IconHands({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={HandPrayerIcon} size={size} className={className} style={style} {...props} />
 }
 
 export function IconMosque({ size = 22 }) {
@@ -237,30 +206,53 @@ export function IconSalah({ size = 22 }) {
     )
 }
 
-export function IconTasbih({ size = 22 }) {
+export function IconTasbih({ size = 22, className = '', style }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="11" r="7" />
-            <circle cx="12" cy="4" r="1.2" fill="currentColor" stroke="none" />
-            <circle cx="17" cy="6" r="1.2" fill="currentColor" stroke="none" />
-            <circle cx="19" cy="11" r="1.2" fill="currentColor" stroke="none" />
-            <circle cx="17" cy="16" r="1.2" fill="currentColor" stroke="none" />
-            <circle cx="12" cy="18" r="1.2" fill="currentColor" stroke="none" />
-            <circle cx="7" cy="16" r="1.2" fill="currentColor" stroke="none" />
-            <circle cx="5" cy="11" r="1.2" fill="currentColor" stroke="none" />
-            <circle cx="7" cy="6" r="1.2" fill="currentColor" stroke="none" />
-            <path d="M12 18v3" />
-            <path d="M10 22h4" />
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+        >
+            {/* Prayer Beads Loop (Tasbih / Masbaha) — Hugeicons style */}
+            <circle cx="12" cy="9" r="6" />
+            <circle cx="12" cy="3" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="16.2" cy="4.8" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="18" cy="9" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="16.2" cy="13.2" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="7.8" cy="13.2" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="6" cy="9" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="7.8" cy="4.8" r="1.1" fill="currentColor" stroke="none" />
+            <path d="M12 15v3" />
+            <path d="M9.5 21.5l2.5-3.5 2.5 3.5" />
+            <path d="M12 18v3.5" />
         </svg>
     )
 }
 
-export function IconCrescent({ size = 20 }) {
+export function IconCrescent({ size = 22, className = '', style }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
-            <path d="M19 3l.5 1.5.5-1.5-.5-1.5z" />
-            <path d="M16 5l.3 1 .3-1-.3-1z" />
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+        >
+            {/* Ramadan Crescent & Radiant Celestial Star — Hugeicons style */}
+            <path d="M19 12.8A7.8 7.8 0 1 1 11.2 5a6.2 6.2 0 0 0 7.8 7.8Z" />
+            <path d="M17.5 3.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7.7-1.6Z" />
         </svg>
     )
 }
@@ -274,24 +266,8 @@ export function IconCompass({ size = 22 }) {
     )
 }
 
-export function IconUser({ size = 22, className = '', style }) {
-    return (
-        <svg
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.65"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={className}
-            style={style}
-        >
-            <circle cx="12" cy="7.5" r="4.25" />
-            <path d="M19.5 20.5C19.5 17.1863 16.1421 14.5 12 14.5C7.85786 14.5 4.5 17.1863 4.5 20.5" />
-        </svg>
-    )
+export function IconUser({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={UserIcon} size={size} className={className} style={style} {...props} />
 }
 
 export function IconCalendar({ size = 22 }) {
@@ -323,14 +299,8 @@ export function IconClock({ size = 20 }) {
         </svg>
     )
 }
-export function IconSparkles({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m12 3 1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3Z" />
-            <path d="m5 3 1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z" />
-            <path d="m17 17 1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z" />
-        </svg>
-    )
+export function IconSparkles({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={StarsIcon} size={size} className={className} style={style} {...props} />
 }
 export function IconPencil({ size = 20 }) {
     return (
@@ -360,88 +330,73 @@ export function IconTrash({ size = 20 }) {
     )
 }
 
-export function IconNinetyNine({ size = 22 }) {
+export function IconNinetyNine({ size = 22, className = '', style }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <text x="50%" y="54%" textAnchor="middle" dominantBaseline="central" fontSize="15" fontWeight="700" fill="currentColor" stroke="none" style={{ fontFamily: 'var(--font-sans)', letterSpacing: '-0.5px' }}>99</text>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+        >
+            {/* Sacred 8-Pointed Rub-el-Hizb Rosette (Asma-ul-Husna Divine Seal) — Hugeicons style */}
+            <rect x="4.5" y="4.5" width="15" height="15" rx="2" />
+            <rect x="4.5" y="4.5" width="15" height="15" rx="2" transform="rotate(45 12 12)" />
+            <circle cx="12" cy="12" r="3.2" />
+            <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
         </svg>
     )
 }
 
-export function IconFlower({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-            <path d="M12 9V3" />
-            <path d="M12 21v-6" />
-            <path d="M15 12h6" />
-            <path d="M3 12h6" />
-            <path d="M18.36 5.64l-4.24 4.24" />
-            <path d="M9.88 14.12l-4.24 4.24" />
-            <path d="M18.36 18.36l-4.24-4.24" />
-            <path d="M9.88 9.88l-4.24-4.24" />
-        </svg>
-    )
+export function IconFlower({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={FlowerIcon} size={size} className={className} style={style} {...props} />
 }
 
 /* ─── Premium Daily Guidance icons ─── */
 
-export function IconPrayerMat({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 20h16" />
-            <path d="M4 20V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12" />
-            <path d="M12 6v2" />
-            <path d="M12 11a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
-            <path d="M8 6l-2 2" />
-            <path d="M16 6l2 2" />
-        </svg>
-    )
+export function IconPrayerMat({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={PrayerRug02Icon} size={size} className={className} style={style} {...props} />
 }
 
-export function IconSunrise({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2v4" />
-            <path d="m4.93 5.93 1.41 1.41" />
-            <path d="M2 13h4" />
-            <path d="m17.66 7.34 1.41-1.41" />
-            <path d="M18 13h4" />
-            <path d="M6.34 13a6 6 0 0 1 11.32 0" />
-            <path d="M2 17h20" />
-            <path d="M4 21h16" />
-        </svg>
-    )
+export function IconSunrise({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={SunriseIcon} size={size} className={className} style={style} {...props} />
 }
 
-export function IconSunset({ size = 22 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 10v-4" />
-            <path d="m4.93 5.93 1.41 1.41" />
-            <path d="M2 13h4" />
-            <path d="m17.66 7.34 1.41-1.41" />
-            <path d="M18 13h4" />
-            <path d="M6.34 13a6 6 0 0 1 11.32 0" />
-            <path d="M2 17h20" />
-            <path d="M4 21h16" />
-        </svg>
-    )
+export function IconSunset({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={SunsetIcon} size={size} className={className} style={style} {...props} />
 }
 
-export function IconBeads({ size = 22 }) {
+export function IconBeads({ size = 22, className = '', style }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="4" r="1.5" />
-            <circle cx="17.5" cy="6.5" r="1.5" />
-            <circle cx="20" cy="12" r="1.5" />
-            <circle cx="17.5" cy="17.5" r="1.5" />
-            <circle cx="12" cy="20" r="1.5" />
-            <circle cx="6.5" cy="17.5" r="1.5" />
-            <circle cx="4" cy="12" r="1.5" />
-            <circle cx="6.5" cy="6.5" r="1.5" />
-            <path d="M12 5.5a7.5 7.5 0 0 1 0 13" />
-            <path d="M12 5.5a7.5 7.5 0 0 0 0 13" />
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+        >
+            {/* Prayer Beads Loop (Tasbih / Masbaha) — Hugeicons style */}
+            <circle cx="12" cy="9" r="6" />
+            <circle cx="12" cy="3" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="16.2" cy="4.8" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="18" cy="9" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="16.2" cy="13.2" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="7.8" cy="13.2" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="6" cy="9" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="7.8" cy="4.8" r="1.1" fill="currentColor" stroke="none" />
+            <path d="M12 15v3" />
+            <path d="M9.5 21.5l2.5-3.5 2.5 3.5" />
+            <path d="M12 18v3.5" />
         </svg>
     )
 }
@@ -489,18 +444,8 @@ export function IconCheck({ size = 20 }) {
     )
 }
 
-export function IconQuran({ size = 22, className = "" }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            {/* The Holy Quran: Book Cover with embossed border, silk ribbon, and Rub el Hizb 8-pointed star */}
-            <path d="M4.5 19.5V5a2.5 2.5 0 0 1 2.5-2.5h11a1.5 1.5 0 0 1 1.5 1.5v16a1.5 1.5 0 0 1-1.5 1.5H7a2.5 2.5 0 0 1-2.5-2.5Z" />
-            <path d="M7 2.5v19" />
-            <rect x="9.5" y="5.5" width="7" height="11" rx="1" strokeWidth="1" opacity="0.6" />
-            <rect x="11.25" y="9.25" width="3.5" height="3.5" rx="0.3" transform="rotate(45 13 11)" fill="currentColor" fillOpacity="0.25" />
-            <rect x="11.25" y="9.25" width="3.5" height="3.5" rx="0.3" fill="currentColor" fillOpacity="0.25" />
-            <path d="M12 2.5v3.5l1-0.8 1 0.8V2.5" strokeWidth="1.2" fill="currentColor" fillOpacity="0.3" />
-        </svg>
-    )
+export function IconQuran({ size = 22, className = '', style, ...props }) {
+    return <HugeiconsIcon icon={Quran02Icon} size={size} className={className} style={style} {...props} />
 }
 
 export function IconScroll({ size = 20, className = '', style }) {

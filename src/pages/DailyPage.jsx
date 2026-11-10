@@ -10,10 +10,10 @@ import { toTitleCase } from '../utils/text'
 
 // ─── Landing categories (top-level) ───
 const CATEGORIES = [
-    { key: 'solah', label: 'Solah', subtitle: 'Complete Prayer Guide', icon: IconPrayerMat },
-    { key: 'morning', label: 'Morning', subtitle: 'Adhkar As-Sabah', icon: IconSunrise },
-    { key: 'evening', label: 'Evening', subtitle: 'Adhkar Al-Masa', icon: IconSunset },
-    { key: 'remembrance', label: 'Remembrance of Allah', subtitle: 'General Dhikr', icon: IconBeads },
+    { key: 'solah', label: 'Solah', subtitle: 'Complete Prayer Guide', icon: IconPrayerMat, badge: 'Guide' },
+    { key: 'morning', label: 'Morning', subtitle: 'Adhkar As-Sabah', icon: IconSunrise, badge: '6 Adhkar' },
+    { key: 'evening', label: 'Evening', subtitle: 'Adhkar Al-Masa', icon: IconSunset, badge: '4 Adhkar' },
+    { key: 'remembrance', label: 'Remembrance of Allah', subtitle: 'General Dhikr', icon: IconBeads, badge: '25 Dhikr' },
 ]
 
 // ─── Unique dua titles ───
@@ -224,14 +224,22 @@ export default function DailyPage({ duas }) {
     const renderContent = () => {
         if (viewMode === 'landing') {
             return (
-                <main className="px-4 sm:px-6 flex flex-col pb-16 mt-4 animate-fade-in max-w-3xl mx-auto w-full">
-                    {/* Continuous list format without individual button cards */}
+                <main className="px-4 sm:px-6 flex flex-col pb-16 mt-2 animate-fade-in max-w-3xl mx-auto w-full">
+                    {/* Section Header */}
+                    <h2
+                        className="text-[11px] font-bold uppercase tracking-[0.16em] px-2 mb-2 select-none"
+                        style={{ color: t(theme, 'text-secondary') }}
+                    >
+                        Daily Adhkar & Prayer Guide
+                    </h2>
+
+                    {/* Continuous Inset Container with Hairline Dividers & Elevated Depth */}
                     <div
                         className="rounded-2xl border overflow-hidden transition-all duration-200"
                         style={{
                             background: t(theme, 'surface-1'),
                             borderColor: t(theme, 'border'),
-                            boxShadow: theme === 'dark' ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
+                            boxShadow: theme === 'dark' ? 'none' : '0 2px 14px rgba(0,0,0,0.025)',
                         }}
                     >
                         {CATEGORIES.map((cat, idx) => {
@@ -245,37 +253,56 @@ export default function DailyPage({ duas }) {
                                         setActiveCategory(cat.key)
                                         setViewMode('sublist')
                                     }}
-                                    className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                    className="group w-full flex items-center justify-between gap-3 px-3.5 py-3.5 sm:px-5 sm:py-4 text-left transition-all hover:bg-black/[0.02] dark:hover:bg-white/[0.02] active:bg-black/[0.04] active:scale-[0.995] cursor-pointer"
                                     style={{
                                         borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
                                     }}
                                 >
-                                    <div className="flex items-center gap-3.5 min-w-0 flex-1 pr-3">
-                                        <div
-                                            className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-300 relative overflow-hidden"
-                                            style={{
-                                                background: t(theme, 'surface-2'),
-                                                color: t(theme, 'text-primary'),
-                                            }}
-                                        >
-                                            <div className="absolute inset-0 opacity-[0.08]" style={{ background: t(theme, 'text-primary') }} />
-                                            <Icon size={20} className="relative z-10 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
+                                    {/* Left: Icon Squircle */}
+                                    <div
+                                        className="w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 flex items-center justify-center rounded-2xl transition-all duration-200 group-hover:scale-105 shadow-xs"
+                                        style={{
+                                            background: t(theme, 'accent-soft'),
+                                            color: t(theme, 'accent'),
+                                            border: `1px solid ${t(theme, 'border')}`,
+                                        }}
+                                    >
+                                        <Icon size={20} />
+                                    </div>
+
+                                    {/* Middle: Title with Inline Metadata Chip + Unrestricted Subtitle */}
+                                    <div className="min-w-0 flex-1 flex flex-col justify-center pr-1">
+                                        <div className="flex items-center gap-2">
                                             <h3
-                                                className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                className="text-[14.5px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
                                                 style={{ color: t(theme, 'text-primary') }}
                                             >
                                                 {cat.label}
                                             </h3>
-                                            <p
-                                                className="text-[12px] font-normal tracking-tight truncate mt-0.5"
-                                                style={{ color: t(theme, 'text-secondary') }}
+                                            <span
+                                                className="text-[9.5px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none whitespace-nowrap transition-colors flex-shrink-0"
+                                                style={{
+                                                    background: t(theme, 'surface-2'),
+                                                    color: t(theme, 'accent'),
+                                                    border: `1px solid ${t(theme, 'border')}`,
+                                                }}
                                             >
-                                                {cat.subtitle}
-                                            </p>
+                                                {cat.badge}
+                                            </span>
                                         </div>
+                                        <p
+                                            className="text-[12px] sm:text-[12.5px] font-normal leading-normal mt-0.5 line-clamp-1"
+                                            style={{ color: t(theme, 'text-secondary') }}
+                                        >
+                                            {cat.subtitle}
+                                        </p>
                                     </div>
+
+                                    {/* Right: Subtle Chevron */}
+                                    <IconChevronRight
+                                        size={18}
+                                        className="text-stone-400/60 dark:text-stone-500/60 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all flex-shrink-0"
+                                    />
                                 </button>
                             )
                         })}
@@ -366,8 +393,8 @@ export default function DailyPage({ duas }) {
                                                     )}
                                                 </div>
 
-                                                {dua.repeat > 1 && (
-                                                    <div className="flex items-center flex-shrink-0">
+                                                <div className="flex items-center gap-2 flex-shrink-0">
+                                                    {dua.repeat > 1 && (
                                                         <span
                                                             className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
                                                             style={{
@@ -378,8 +405,12 @@ export default function DailyPage({ duas }) {
                                                         >
                                                             {dua.repeat}×
                                                         </span>
-                                                    </div>
-                                                )}
+                                                    )}
+                                                    <IconChevronRight
+                                                        size={16}
+                                                        className="text-stone-400/60 dark:text-stone-500/60 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all"
+                                                    />
+                                                </div>
                                             </button>
                                         )
                                     })}
@@ -441,8 +472,8 @@ export default function DailyPage({ duas }) {
                                             )}
                                         </div>
 
-                                        {dua.repeat > 1 && (
-                                            <div className="flex items-center flex-shrink-0">
+                                        <div className="flex items-center gap-2 flex-shrink-0">
+                                            {dua.repeat > 1 && (
                                                 <span
                                                     className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none"
                                                     style={{
@@ -453,8 +484,12 @@ export default function DailyPage({ duas }) {
                                                 >
                                                     {dua.repeat}×
                                                 </span>
-                                            </div>
-                                        )}
+                                            )}
+                                            <IconChevronRight
+                                                size={16}
+                                                className="text-stone-400/60 dark:text-stone-500/60 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all"
+                                            />
+                                        </div>
                                     </button>
                                 )
                             })}

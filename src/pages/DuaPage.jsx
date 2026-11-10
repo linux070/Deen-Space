@@ -5,7 +5,7 @@ import { t } from '../utils/theme'
 import {
     IconHands,
     IconBook,
-    IconStar,
+    IconQuran,
     IconNinetyNine,
     IconFlower,
     IconCrescent,
@@ -37,7 +37,7 @@ export default function DuaPage() {
                 {
                     id: 'duas',
                     title: 'Dua Library',
-                    subtitle: 'Spiritual state, daily duas & life events',
+                    subtitle: 'Daily supplications & life events',
                     badge: '120+ Duas',
                     icon: IconHands,
                     action: () => navigate('/library/general'),
@@ -53,9 +53,9 @@ export default function DuaPage() {
                 {
                     id: 'robbana',
                     title: '40 Robbana',
-                    subtitle: 'Direct Quranic prayers of the Prophets',
+                    subtitle: 'Quranic prayers of the Prophets',
                     badge: '40 Verses',
-                    icon: IconStar,
+                    icon: IconQuran,
                     action: () => navigate('/library/robbana'),
                 },
             ],
@@ -66,7 +66,7 @@ export default function DuaPage() {
                 {
                     id: 'names',
                     title: 'Asma-ul-Husna',
-                    subtitle: 'The 99 Beautiful Names & attributes of Allah',
+                    subtitle: 'The 99 Beautiful Names & Attributes',
                     badge: '99 Names',
                     icon: IconNinetyNine,
                     action: () => navigate('/praise'),
@@ -74,7 +74,7 @@ export default function DuaPage() {
                 {
                     id: 'salawat',
                     title: 'Salawat',
-                    subtitle: 'Prophetic blessings upon Prophet Muhammad ﷺ',
+                    subtitle: 'Blessings upon the Prophet ﷺ',
                     badge: 'Blessings',
                     icon: IconFlower,
                     action: () => navigate('/library/salawat'),
@@ -129,13 +129,13 @@ export default function DuaPage() {
                             {group.title}
                         </h2>
 
-                        {/* Continuous Inset Container with Hairline Dividers */}
+                        {/* Continuous Inset Container with Hairline Dividers & Elevated Depth */}
                         <div
                             className="rounded-2xl border overflow-hidden transition-all duration-200"
                             style={{
                                 background: t(theme, 'surface-1'),
                                 borderColor: t(theme, 'border'),
-                                boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.015)',
+                                boxShadow: isDark ? 'none' : '0 2px 14px rgba(0,0,0,0.025)',
                             }}
                         >
                             {group.items.map((cat, idx) => {
@@ -147,55 +147,56 @@ export default function DuaPage() {
                                         key={cat.id}
                                         type="button"
                                         onClick={cat.action}
-                                        className="group w-full flex items-center justify-between gap-3 px-3.5 py-3 sm:px-5 sm:py-4 text-left transition-all hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] active:scale-[0.995] cursor-pointer"
+                                        className="group w-full flex items-center justify-between gap-3 px-3.5 py-3.5 sm:px-5 sm:py-4 text-left transition-all hover:bg-black/[0.02] dark:hover:bg-white/[0.02] active:bg-black/[0.04] active:scale-[0.995] cursor-pointer"
                                         style={{
                                             borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
                                         }}
                                     >
-                                        {/* Left: Icon Emblem + Titles */}
-                                        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 pr-1 flex-1">
-                                            <div
-                                                className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-105 shadow-xs"
-                                                style={{
-                                                    background: t(theme, 'accent-soft'),
-                                                    color: t(theme, 'accent'),
-                                                    border: `1px solid ${t(theme, 'border')}`,
-                                                }}
-                                            >
-                                                <Icon size={19} />
-                                            </div>
+                                        {/* Left: Icon Squircle */}
+                                        <div
+                                            className="w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 flex items-center justify-center rounded-2xl transition-all duration-200 group-hover:scale-105 shadow-xs"
+                                            style={{
+                                                background: t(theme, 'accent-soft'),
+                                                color: t(theme, 'accent'),
+                                                border: `1px solid ${t(theme, 'border')}`,
+                                            }}
+                                        >
+                                            <Icon size={20} />
+                                        </div>
 
-                                            <div className="min-w-0 flex-1">
+                                        {/* Middle: Title with Inline Metadata Chip + Unrestricted Subtitle */}
+                                        <div className="min-w-0 flex-1 flex flex-col justify-center pr-1">
+                                            <div className="flex items-center gap-2">
                                                 <h3
-                                                    className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                    className="text-[14.5px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
                                                     style={{ color: t(theme, 'text-primary') }}
                                                 >
                                                     {cat.title}
                                                 </h3>
-                                                <p
-                                                    className="text-[11.5px] sm:text-[12px] font-normal leading-tight mt-0.5 line-clamp-1 sm:line-clamp-none"
-                                                    style={{ color: t(theme, 'text-secondary') }}
+                                                <span
+                                                    className="text-[9.5px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded-md leading-none whitespace-nowrap transition-colors flex-shrink-0"
+                                                    style={{
+                                                        background: t(theme, 'surface-2'),
+                                                        color: t(theme, 'accent'),
+                                                        border: `1px solid ${t(theme, 'border')}`,
+                                                    }}
                                                 >
-                                                    {cat.subtitle}
-                                                </p>
+                                                    {cat.badge}
+                                                </span>
                                             </div>
+                                            <p
+                                                className="text-[12px] font-normal leading-normal mt-0.5 line-clamp-1 sm:line-clamp-none"
+                                                style={{ color: t(theme, 'text-secondary') }}
+                                            >
+                                                {cat.subtitle}
+                                            </p>
                                         </div>
 
-                                        {/* Right: Badge Pill + Chevron Indicator */}
-                                        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                                            <span
-                                                className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md leading-none whitespace-nowrap transition-colors"
-                                                style={{
-                                                    background: t(theme, 'surface-2'),
-                                                    color: t(theme, 'accent'),
-                                                    border: `1px solid ${t(theme, 'border')}`,
-                                                }}
-                                            >
-                                                {cat.badge}
-                                            </span>
+                                        {/* Right: Clean, Unified Chevron Navigation Indicator */}
+                                        <div className="flex items-center pl-1 flex-shrink-0">
                                             <IconChevronRight
-                                                size={13}
-                                                className="opacity-40 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100 flex-shrink-0"
+                                                size={15}
+                                                className="opacity-40 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100"
                                                 style={{ color: t(theme, 'text-secondary') }}
                                             />
                                         </div>
@@ -205,6 +206,35 @@ export default function DuaPage() {
                         </div>
                     </section>
                 ))}
+
+                {/* ── Inspiring Contemplation Anchor Card (Balanced Bottom Fill) ── */}
+                <div
+                    className="w-full lg:col-span-2 mt-1 sm:mt-2 p-5 sm:p-6 rounded-2xl border text-center animate-fade-in relative overflow-hidden"
+                    style={{
+                        background: t(theme, 'surface-1'),
+                        borderColor: t(theme, 'border'),
+                        boxShadow: isDark ? 'none' : '0 2px 14px rgba(0,0,0,0.02)',
+                    }}
+                >
+                    <p
+                        className="text-base sm:text-lg leading-relaxed italic max-w-md mx-auto"
+                        style={{
+                            color: t(theme, 'text-primary'),
+                            fontFamily: 'var(--font-serif-body)',
+                        }}
+                    >
+                        &ldquo;And your Lord says: Call upon Me; I will respond to you.&rdquo;
+                    </p>
+                    <span
+                        className="inline-block text-[10px] font-bold tracking-[0.2em] uppercase mt-2.5 opacity-65"
+                        style={{
+                            color: t(theme, 'accent'),
+                            fontFamily: 'var(--font-sans)',
+                        }}
+                    >
+                        Surah Ghafir 40:60
+                    </span>
+                </div>
             </main>
         </div>
     )

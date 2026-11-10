@@ -57,7 +57,7 @@ const DEFAULTS = {
     language: 'en',         // 'en' only
 }
 
-const THEME_CYCLE = ['dark', 'cream', 'light']
+const THEME_CYCLE = ['light', 'cream', 'dark']
 
 export function SettingsProvider({ children }) {
     const [settings, setSettings] = useState(() => {

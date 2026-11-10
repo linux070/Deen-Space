@@ -58,14 +58,17 @@ export default function Navigation() {
                         className="flex items-center gap-3 group transition-transform active:scale-95 flex-shrink-0"
                     >
                         <div
-                            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-sm"
+                            className="w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-sm p-1"
                             style={{
-                                background: t(theme, 'accent-soft'),
-                                color: t(theme, 'accent'),
+                                background: t(theme, 'surface-1'),
                                 border: `1px solid ${t(theme, 'border')}`,
                             }}
                         >
-                            <IconQuran size={19} />
+                            <img
+                                src="/deen-space-logo.png"
+                                alt="Deen Space"
+                                className="w-full h-full object-contain"
+                            />
                         </div>
                         <span
                             className="text-lg font-bold tracking-tight transition-colors group-hover:text-amber-500"
