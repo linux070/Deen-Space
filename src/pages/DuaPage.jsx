@@ -10,6 +10,7 @@ import {
     IconFlower,
     IconCrescent,
     IconUser,
+    IconChevronRight,
 } from '../components/Icons'
 import PageHeader from '../components/PageHeader'
 
@@ -35,17 +36,17 @@ export default function DuaPage() {
             items: [
                 {
                     id: 'duas',
-                    title: 'Dua',
-                    subtitle: 'Spiritual State, Daily Duas and Life Events',
-                    badge: 'Supplications',
+                    title: 'Dua Library',
+                    subtitle: 'Spiritual state, daily duas & life events',
+                    badge: '120+ Duas',
                     icon: IconHands,
                     action: () => navigate('/library/general'),
                 },
                 {
                     id: 'daily',
                     title: 'Daily Guidance',
-                    subtitle: 'Morning & evening adhkar, solah & remembrance',
-                    badge: 'Adhkar',
+                    subtitle: 'Morning & evening adhkar, solah & dhikr',
+                    badge: 'Daily',
                     icon: IconBook,
                     action: () => navigate('/daily'),
                 },
@@ -81,7 +82,7 @@ export default function DuaPage() {
                 {
                     id: 'ramadan',
                     title: 'Ramadan Special',
-                    subtitle: 'Supplications for fasting, suhoor & Laylat al-Qadr',
+                    subtitle: 'Supplications for fasting & Laylat al-Qadr',
                     badge: 'Fasting',
                     icon: IconCrescent,
                     action: () => navigate('/library/ramadan'),
@@ -94,7 +95,7 @@ export default function DuaPage() {
                 {
                     id: 'personal',
                     title: 'Personal Prayers',
-                    subtitle: 'Your private offline supplications & intimate notes',
+                    subtitle: 'Your private offline supplications & notes',
                     badge: customCount > 0 ? `${customCount} Saved` : 'Private',
                     icon: IconUser,
                     action: () => navigate('/library/custom-prayers'),
@@ -105,24 +106,24 @@ export default function DuaPage() {
 
     return (
         <div
-            className="pb-36 md:pb-20 flex flex-col gap-5 max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto px-4 sm:px-6"
-            style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1.25rem)' }}
+            className="pb-36 md:pb-20 flex flex-col gap-4 sm:gap-5 max-w-xl md:max-w-3xl lg:max-w-5xl mx-auto px-3.5 sm:px-6"
+            style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 0.75rem)' }}
         >
             {/* ── Modern App Masthead ── */}
             <PageHeader
                 title="Dhikr & Dua"
                 showBack={false}
-                padding="px-0 pt-2 pb-1"
+                padding="px-0.5 pt-1 pb-1"
                 sticky={false}
             />
 
             {/* ── Curated Grouped Inset Sections (Single-col mobile, 2-col desktop) ── */}
-            <main className="flex flex-col lg:grid lg:grid-cols-2 gap-6 animate-fade-in mt-1 items-start">
+            <main className="flex flex-col lg:grid lg:grid-cols-2 gap-5 sm:gap-6 animate-fade-in mt-0.5 items-start">
                 {GROUPS.map((group, gIdx) => (
-                    <section key={gIdx} className={gIdx === 2 ? 'lg:col-span-2' : ''}>
+                    <section key={gIdx} className={`w-full ${gIdx === 2 ? 'lg:col-span-2' : ''}`}>
                         {/* Section Header */}
                         <h2
-                            className="text-[11px] font-bold uppercase tracking-[0.16em] px-2 mb-2.5 select-none"
+                            className="text-[11px] font-bold uppercase tracking-[0.16em] px-2 mb-2 select-none"
                             style={{ color: t(theme, 'text-secondary') }}
                         >
                             {group.title}
@@ -146,15 +147,15 @@ export default function DuaPage() {
                                         key={cat.id}
                                         type="button"
                                         onClick={cat.action}
-                                        className="group w-full flex items-center justify-between px-4 py-3.5 sm:px-5 sm:py-4 text-left transition-colors hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] cursor-pointer"
+                                        className="group w-full flex items-center justify-between gap-3 px-3.5 py-3 sm:px-5 sm:py-4 text-left transition-all hover:bg-black/[0.025] dark:hover:bg-white/[0.025] active:bg-black/[0.04] active:scale-[0.995] cursor-pointer"
                                         style={{
                                             borderBottom: isLast ? 'none' : `1px solid ${t(theme, 'border')}`,
                                         }}
                                     >
                                         {/* Left: Icon Emblem + Titles */}
-                                        <div className="flex items-center gap-3.5 min-w-0 pr-3 flex-1">
+                                        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 pr-1 flex-1">
                                             <div
-                                                className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-105 shadow-xs"
+                                                className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-105 shadow-xs"
                                                 style={{
                                                     background: t(theme, 'accent-soft'),
                                                     color: t(theme, 'accent'),
@@ -165,16 +166,14 @@ export default function DuaPage() {
                                             </div>
 
                                             <div className="min-w-0 flex-1">
-                                                <div className="flex items-center gap-2">
-                                                    <h3
-                                                        className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
-                                                        style={{ color: t(theme, 'text-primary') }}
-                                                    >
-                                                        {cat.title}
-                                                    </h3>
-                                                </div>
+                                                <h3
+                                                    className="text-[14px] sm:text-[15px] font-semibold tracking-tight truncate leading-tight group-hover:text-amber-500 transition-colors"
+                                                    style={{ color: t(theme, 'text-primary') }}
+                                                >
+                                                    {cat.title}
+                                                </h3>
                                                 <p
-                                                    className="text-[12px] font-normal truncate leading-tight mt-0.5"
+                                                    className="text-[11.5px] sm:text-[12px] font-normal leading-tight mt-0.5 line-clamp-1 sm:line-clamp-none"
                                                     style={{ color: t(theme, 'text-secondary') }}
                                                 >
                                                     {cat.subtitle}
@@ -182,10 +181,10 @@ export default function DuaPage() {
                                             </div>
                                         </div>
 
-                                        {/* Right: Badge Pill */}
-                                        <div className="flex items-center gap-2.5 flex-shrink-0">
+                                        {/* Right: Badge Pill + Chevron Indicator */}
+                                        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                                             <span
-                                                className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md leading-none transition-colors"
+                                                className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md leading-none whitespace-nowrap transition-colors"
                                                 style={{
                                                     background: t(theme, 'surface-2'),
                                                     color: t(theme, 'accent'),
@@ -194,6 +193,11 @@ export default function DuaPage() {
                                             >
                                                 {cat.badge}
                                             </span>
+                                            <IconChevronRight
+                                                size={13}
+                                                className="opacity-40 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-100 flex-shrink-0"
+                                                style={{ color: t(theme, 'text-secondary') }}
+                                            />
                                         </div>
                                     </button>
                                 )
