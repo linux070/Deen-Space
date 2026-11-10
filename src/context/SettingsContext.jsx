@@ -110,29 +110,15 @@ export function SettingsProvider({ children }) {
     }, [settings, applyTheme])
 
     const update = useCallback((key, value) => {
-        if (key === 'theme' && typeof document !== 'undefined' && document.startViewTransition) {
-            document.startViewTransition(() => {
-                setSettings(prev => ({ ...prev, [key]: value }))
-            })
-        } else {
-            setSettings(prev => ({ ...prev, [key]: value }))
-        }
+        setSettings(prev => ({ ...prev, [key]: value }))
     }, [])
 
     const toggleTheme = useCallback(() => {
-        const runToggle = () => {
-            setSettings(prev => {
-                const currentIndex = THEME_CYCLE.indexOf(prev.theme)
-                const nextIndex = (currentIndex + 1) % THEME_CYCLE.length
-                return { ...prev, theme: THEME_CYCLE[nextIndex] }
-            })
-        }
-
-        if (typeof document !== 'undefined' && document.startViewTransition) {
-            document.startViewTransition(runToggle)
-        } else {
-            runToggle()
-        }
+        setSettings(prev => {
+            const currentIndex = THEME_CYCLE.indexOf(prev.theme)
+            const nextIndex = (currentIndex + 1) % THEME_CYCLE.length
+            return { ...prev, theme: THEME_CYCLE[nextIndex] }
+        })
     }, [])
 
     return (
